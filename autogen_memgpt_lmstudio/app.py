@@ -1,6 +1,5 @@
 import autogen
 import os
-
 import openai
 from memgpt.autogen.memgpt_agent import create_autogen_memgpt_agent
 from dotenv import load_dotenv
@@ -22,8 +21,7 @@ llm_config = {
     "config_list": config_list,
     "seed": 44,
     "request_timeout": 600,
-    "temperature": 0.7,
-    "max_tokens": -1,
+    "temperature": 0.7
 }
 
 # The user agent
