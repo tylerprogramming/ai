@@ -7,3 +7,10 @@
 3. **autogentest** - examples of basic usage of AutoGen
 4. **autogen_functions** - learn how to use functions with AutoGen
 5. **autogen_multiple_configs** - learn how to use multiple configurations in order to use multiple models with AutoGen
+
+## Upcoming Ideas/Projects for Videos
+- [ ] GPT-4 Vision with AutoGen
+- [ ] Video on all available Agent Types AutoGen
+- [ ] SAAS Idea: Encrypt, save to DB with API Call, and then decrypt with another API call on retrieval
+- [ ] AutoGen with CodeInterpreter
+- [ ] AutoGen with TeachableAgent (uses Vector DB to remember conversations)
