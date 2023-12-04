@@ -22,3 +22,4 @@
 - [ ] AutoGen with CodeInterpreter
 - [ ] AutoGen with TeachableAgent (uses Vector DB to remember conversations)
 - [ ] Auto Generated Agent Chat: Hierarchy flow using select_speaker
+- [ ] Updated MemGPT with new Coding Project
