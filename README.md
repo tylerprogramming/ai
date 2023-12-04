@@ -1,6 +1,13 @@
 # **Repository** - ai
 ### This repo will be helpful in understanding AutoGen providing examples including prompts and agents for SAAS products, how AutoGen works, and diving into the functionality.
 
+## Current Library Versions:
+- memgpt: 0.2.5
+- autogen: 0.2.0
+
+## Current Issues:
+- [ ] MemGPT has been updated recently and if we don't use `memgpt configure` to set the openai_key, then it won't work with OpenAI API.  I opened issue here: [https://github.com/tylerprogramming/ai/issues/1](https://github.com/cpacker/MemGPT/issues/568)
+
 ## Projects
 1. **autogen_memgpt** - understanding integration of MemGPT into AutoGen as an AI Agent
 2. **autogen_memgpt_lmstudio** - using a local llm to integrate MemGPT into AutoGen with a local server produced by LMStudio
