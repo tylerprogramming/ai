@@ -23,3 +23,6 @@
 - [ ] AutoGen with TeachableAgent (uses Vector DB to remember conversations)
 - [ ] Auto Generated Agent Chat: Hierarchy flow using select_speaker
 - [ ] Updated MemGPT with new Coding Project
+- [ ] AutoGen Teams, actually creating separate teams that each do a specific thing and pass on what they accomplished to the next one
+- [ ] Combining GPT-4 Vision with a library that can take a screenshot of a website, perhaps with stocks for example, and examine it
+- [ ] Create a Sudoku Puzzle Creator/Checker with an AI WorkForce
