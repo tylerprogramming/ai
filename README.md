@@ -5,6 +5,14 @@
 - memgpt: 0.2.5
 - autogen: 0.2.0
 
+## Installation - MemGPT
+Before you run the program, run one of these in your terminal depending on your system
+```
+export OPENAI_API_KEY=YOUR_API_KEY # on Linux/Mac
+set OPENAI_API_KEY=YOUR_API_KEY # on Windows
+$Env:OPENAI_API_KEY = "YOUR_API_KEY" # on Windows (PowerShell)
+```
+
 ## Current Issues:
 - [ ] MemGPT has been updated recently and if we don't use `memgpt configure` to set the openai_key, then it won't work with OpenAI API.  I opened issue here: [https://github.com/tylerprogramming/ai/issues/1](https://github.com/cpacker/MemGPT/issues/568)
 
