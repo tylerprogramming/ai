@@ -26,6 +26,7 @@ user_proxy = autogen.UserProxyAgent(
     max_consecutive_auto_reply=0
 )
 
+# Example 1
 user_proxy.initiate_chat(
     image_agent,
     message=f"""
@@ -35,6 +36,21 @@ user_proxy.initiate_chat(
     """
 )
 
+# Example 2
+# user_proxy.initiate_chat(image_agent,
+#                          message="""What is this picture of and describe everything in it?
+# <img {image_goldendoodle}>""")
+#
+# user_proxy.send(
+#     message=f"""
+#         What dog is this a picture of? <img {image_corgi}>
+#
+#         Which of these dogs tends to bark more, this one or the previous dog image?
+#     """,
+#     recipient=image_agent
+# )
+
+# Example 3
 # user_proxy.initiate_chat(image_agent,
 #     message=f"""
 #         What is this picture of and describe everything in it? <img {image_luigi_yoshi_mario}>
@@ -49,10 +65,3 @@ user_proxy.initiate_chat(
 #     """,
 #     recipient=image_agent
 # )
-
-# user_proxy.send(message="""What game is displayed here?
-# <img https://cdn.pixabay.com/photo/2018/04/26/06/59/technology-3351286_1280.jpg>
-#
-# Among all of these characters, which one has sold the most amount of games?  Can you also give some figures for all
-# characters shown?""",
-#                 recipient=image_agent)
