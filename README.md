@@ -2,7 +2,7 @@
 ### This repo will be helpful in understanding AutoGen providing examples including prompts and agents for SAAS products, how AutoGen works, and diving into the functionality.
 
 ## Current Library Versions:
-- memgpt: 0.2.5
+- memgpt: 0.2.6
 - autogen: 0.2.0
 
 ## FFMPEG: must be installed to use Whisper AI
@@ -33,3 +33,4 @@
 - [x] Create WebScraper with Puppeteer
 - [x] Create AutoGen with Whisper
 - [ ] Fitness Tracker with multiple models and LMStudio for LocalLLM
+- [x] Fitness Expert Bot with Flask Server
