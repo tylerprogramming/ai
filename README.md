@@ -5,6 +5,10 @@
 - memgpt: 0.2.5
 - autogen: 0.2.0
 
+## FFMPEG: must be installed to use Whisper AI
+- MACOS: https://superuser.com/questions/624561/install-ffmpeg-on-os-x
+- WINDOWS: https://phoenixnap.com/kb/ffmpeg-windows
+
 ## Current Issues:
 - [ ] MemGPT has been updated recently and if we don't use `memgpt configure` to set the openai_key, then it won't work with OpenAI API.  I opened issue here: [https://github.com/tylerprogramming/ai/issues/1](https://github.com/cpacker/MemGPT/issues/568)
 
@@ -26,3 +30,6 @@
 - [ ] AutoGen Teams, actually creating separate teams that each do a specific thing and pass on what they accomplished to the next one
 - [ ] Combining GPT-4 Vision with a library that can take a screenshot of a website, perhaps with stocks for example, and examine it
 - [ ] Create a Sudoku Puzzle Creator/Checker with an AI WorkForce
+- [x] Create WebScraper with Puppeteer
+- [x] Create AutoGen with Whisper
+- [ ] Fitness Tracker with multiple models and LMStudio for LocalLLM

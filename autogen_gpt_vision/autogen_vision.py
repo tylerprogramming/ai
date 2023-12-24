@@ -6,6 +6,7 @@ image_corgi = "https://cdn.pixabay.com/photo/2019/08/19/07/45/corgi-4415649_1280
 image_luigi_yoshi_mario = "https://cdn.pixabay.com/photo/2016/07/30/14/25/mario-1557240_1280.jpg"
 image_super_nintendo = "https://cdn.pixabay.com/photo/2018/04/26/06/59/technology-3351286_1280.jpg"
 image_mitochondria = "https://cdn.pixabay.com/photo/2021/07/18/05/36/cell-6474673_1280.jpg"
+image_waldo = "https://i.stack.imgur.com/reNlF.jpg"
 
 config_list_4v = autogen.config_list_from_json(
     "OAI_CONFIG_LIST.json",
@@ -30,9 +31,7 @@ user_proxy = autogen.UserProxyAgent(
 user_proxy.initiate_chat(
     image_agent,
     message=f"""
-        What is this a picture of? <img {image_mitochondria}>
-
-        Can you describe the components of this image into a bulleted list?
+        Can you please find waldo in this image? <img {image_waldo}>
     """
 )
 
