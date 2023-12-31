@@ -1,7 +1,7 @@
 import autogen
 import dotenv
 
-from autogen_transcribe_video_with_captions.functions import recognize_transcript_from_video
+from ai_agency_03_video_captions.functions import recognize_transcript_from_video
 
 dotenv.load_dotenv()
 
