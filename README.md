@@ -1,9 +1,9 @@
-# **Repository** - ai
+# **Repository** - AI Projects/Learning
 ### This repo will be helpful in understanding AutoGen providing examples including prompts and agents for SAAS products, how AutoGen works, and diving into the functionality.
 
 ## Current Library Versions:
 - memgpt: 0.2.6
-- autogen: 0.2.0
+- autogen: 0.2.2
 - lm studio: 0.2.10
 
 ## FFMPEG: must be installed to use Whisper AI
@@ -12,6 +12,8 @@
 
 ## Current Issues:
 - [x] MemGPT has been updated recently and if we don't use `memgpt configure` to set the openai_key, then it won't work with OpenAI API.  I opened issue here: [https://github.com/tylerprogramming/ai/issues/1](https://github.com/cpacker/MemGPT/issues/568)
+- [ ] issues with function calling connected with LM Studio.  GPT function calling works, but as soon as the config is swapped for localhost to LM Studio, they are ignored
+- [ ] NEED to make sure that if using LM Studio, set the UserAgent to have a default auto reply to "..." or something.  LM Studio complains about this because of the interaction
 
 ## Projects
 1. **autogen_memgpt** - understanding integration of MemGPT into AutoGen as an AI Agent
@@ -20,8 +22,9 @@
 4. **autogen_functions** - learn how to use functions with AutoGen
 5. **autogen_multiple_configs** - learn how to use multiple configurations in order to use multiple models with AutoGen
 6. **autogen_transcribe_video** - learn how to use AutoGen and GPT to transcribe and translate a video with functions
-7. **ai_agency_02_lmstudio** - learn how to directly connect to any open-source llm using lm studio with a few examples
-8. **autogen_webscraping** - use gpt-vision4 with AutoGen to take pictures (web scrape) and use AI to describe the web page
+7. **ai_agency_01_workout_plan** - create your first agency with functions and saving the output to a .txt and .csv file
+8. **ai_agency_02_lmstudio** - learn how to directly connect to any open-source llm using lm studio with a few examples
+9. **autogen_webscraping** - use gpt-vision4 with AutoGen to take pictures (web scrape) and use AI to describe the web page
 
 ## Upcoming Ideas/Projects for Videos
 - [x] GPT-4 Vision with AutoGen
