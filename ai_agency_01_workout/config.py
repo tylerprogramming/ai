@@ -4,6 +4,8 @@ import dotenv
 
 dotenv.load_dotenv()
 
+SEED = 43
+
 config_list_openai_autogen = [
     {
         "model": os.getenv("model_gpt_4"),
@@ -11,9 +13,20 @@ config_list_openai_autogen = [
     }
 ]
 
+# config_list_openai_autogen = [
+#         {
+#             "model": "NULL",  # not needed
+#             # NOTE: on versions of pyautogen < 0.2.0 use "api_base", and also uncomment "api_type"
+#             # "api_base": "http://localhost:1234/v1",
+#             # "api_type": "open_ai",
+#             "base_url": "http://localhost:1234/v1",
+#             "api_key": "NULL",  # not needed
+#         },
+#     ]
+
 llm_config_local_excel = {
     "config_list": config_list_openai_autogen,
-    "seed": 42,
+    "seed": SEED,
     "functions": [
         {
             "name": "create_csv",
@@ -35,7 +48,7 @@ llm_config_local_excel = {
 
 llm_config_local_documents = {
     "config_list": config_list_openai_autogen,
-    "seed": 42,
+    "seed": SEED,
     "functions": [{
         "name": "create_doc",
         "description": "ask document to: 1. get a summary of the plan, 2. save the summary formatted fitness plan "
@@ -55,7 +68,7 @@ llm_config_local_documents = {
 
 llm_config = {
     "config_list": config_list_openai_autogen,
-    "seed": 42
+    "seed": SEED
 }
 
 
