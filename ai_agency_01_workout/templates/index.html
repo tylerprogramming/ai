@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flask API Demo</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+</head>
+<body>
+<div class="container h-100 m-5 background">
+    <div class="p-5 mb-4 bg-body-tertiary rounded-3 text-dark shadow"
+         style="background: url(https://cdn.pixabay.com/photo/2014/11/17/13/17/crossfit-534615_1280.jpg);">
+        <div class="container-fluid py-5">
+            <h1 class="display-5 fw-bold text-uppercase">Hello, Fitness Enthusiast</h1>
+            <h2 class="display-6 text-white bg-info rounded d-inline-block p-2">Let AI create a custom workout plan for you!</h2>
+        </div>
+    </div>
+
+    <div class="card-group h-75">
+        <form class="h-100 w-50" method="post" action="/">
+            <div class="card h-75">
+
+                <div class="card-body">
+                    <h5 class="card-title">Workouts to choose from</h5>
+                    <p class="card-text">
+                        <!--                <form class="h-100" method="post" action="/">-->
+                    <div class="form-group row">
+                        <h6 class="form-label">Body Parts</h6>
+                        <div class="btn-group">
+                            <label class="btn btn-primary">
+                                <input type="checkbox" name="option" value="Arms"> Arms
+                            </label>
+                            <label class="btn btn-primary">
+                                <input type="checkbox" name="option" value="Legs"> Legs
+                            </label>
+                            <label class="btn btn-primary">
+                                <input type="checkbox" name="option" value="Back"> Back
+                            </label>
+                            <label class="btn btn-primary">
+                                <input type="checkbox" name="option" value="Shoulders"> Shoulders
+                            </label>
+                            <label class="btn btn-primary">
+                                <input type="checkbox" name="option" value="Chest"> Chest
+                            </label>
+                            <label class="btn btn-primary">
+                                <input type="checkbox" name="option" value="Abs"> Abs
+                            </label>
+                        </div>
+                    </div>
+                    <br/>
+                    <h6 class="form-label">How many days?</h6>
+                    <div class="form-group row">
+                        <div class="btn-group">
+                            <input type="radio" class="btn-check" name="days" id="1" value="1"
+                                   autocomplete="off" checked>
+                            <label class="btn btn-info" for="1">1</label>
+                            <input type="radio" class="btn-check" name="days" id="3" value="3"
+                                   autocomplete="off" checked>
+                            <label class="btn btn-info" for="3">3</label>
+                            <input type="radio" class="btn-check" name="days" id="5" value="5"
+                                   autocomplete="off" checked>
+                            <label class="btn btn-info" for="5">5</label>
+                            <input type="radio" class="btn-check" name="days" id="7" value="7"
+                                   autocomplete="off" checked>
+                            <label class="btn btn-info" for="7">7</label>
+                        </div>
+                    </div>
+                    <br/>
+                    <h6 class="form-label">What is your fitness level?</h6>
+                    <div class="form-group row float-left">
+                        <div class="btn-group">
+                            <input type="radio" class="btn-check" name="level" id="Beginner" value="Beginner"
+                                   autocomplete="off" checked>
+                            <label class="btn btn-warning" for="Beginner">Beginner</label>
+
+                            <input type="radio" class="btn-check" name="level" id="Intermediate" value="Intermediate"
+                                   autocomplete="off">
+                            <label class="btn btn-warning" for="Intermediate">Intermediate</label>
+
+                            <input type="radio" class="btn-check" name="level" id="Expert" value="Expert"
+                                   autocomplete="off">
+                            <label class="btn btn-warning" for="Expert">Expert</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer text-muted">
+                    <button type="submit" class="btn btn-primary mt-auto">Submit</button>
+                </div>
+
+            </div>
+        </form>
+
+        <div class="card h-75 w-50">
+            <div class="card-body flex-column d-flex" style="height: 100px; overflow-y: auto;">
+                <h5 class="card-title">Summary</h5>
+                <pre class="card-text">{{ response_text }}</pre>
+            </div>
+            <div class="card-footer text-muted">
+                <a href="{{ url_for('download_text_file') }}" class="btn btn-primary mt-auto">Download</a>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

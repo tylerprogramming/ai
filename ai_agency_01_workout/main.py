@@ -1,19 +1,40 @@
-import os
-import dotenv
+from flask import Flask, render_template, request, Response
+
 import agents
+import system_messages
 
-dotenv.load_dotenv()
-
-model = os.getenv("model_gpt_4")
-
-# assertion check to make sure you exported or set the key
-openai_api_key = os.getenv("OPENAI_API_KEY")
-assert openai_api_key, "You must set OPENAI_API_KEY to run this example"
+app = Flask(__name__)
 
 
-agents.user_proxy.initiate_chat(
-    agents.manager,
-    message=f"Create a plan for a single day of just arms including biceps and triceps.  The plan should be made for "
-            f"a beginner.  The {agents.excel.name} should save this to a file named workout.csv "
-            f"and {agents.document.name} should create a workout.txt"
-)
+@app.route('/download_text_file')
+def download_text_file():
+    return Response(
+        doc,
+        mimetype='application/msword',
+        headers={'Content-disposition': 'attachment; filename=workout.doc'})
+
+
+@app.route('/', methods=['GET', 'POST'])
+def index():
+    response_text = ""
+    if request.method == 'POST':
+        days_option = request.form.getlist('days')
+        selected_options = request.form.getlist('option')
+        level_option = request.form.getlist('level')
+
+        agents.user_proxy.initiate_chat(
+            agents.fitness_expert,
+            message=system_messages.get_initiate_message(days_option, selected_options, level_option),
+        )
+
+        last_message = agents.user_proxy.last_message()["content"]
+        response_text = last_message
+
+        global doc
+        doc = response_text
+
+    return render_template('index.html', response_text=response_text)
+
+
+if __name__ == '__main__':
+    app.run(debug=True)
