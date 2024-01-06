@@ -1,11 +1,11 @@
-import whisper
 import dotenv
+import whisper
 from moviepy.editor import *
 
 dotenv.load_dotenv()
 
 
-def recognize_transcript_from_video(audio_filepath):
+def recognize_transcript_from_video(audio_filepath, new_file_name):
     try:
         model = whisper.load_model("medium")
 
@@ -43,9 +43,6 @@ def recognize_transcript_from_video(audio_filepath):
                     "timestamp_end": result['segments'][-1]['end']
                 })
 
-        for item in transcript:
-            print(item)
-
         for item in transcript[1::2]:
             start_time, end_time = item["timestamp_start"], item["timestamp_end"]
             video_clip = full_clip.subclip(int(start_time), int(end_time))
@@ -74,8 +71,10 @@ def recognize_transcript_from_video(audio_filepath):
         final_clip = concatenate_videoclips(clips)
         clip = final_clip.set_fps(24)
 
+        base_dir = os.getenv("base_dir")
+
         clip.write_videofile(
-            f"/Users/tylerreed/PycharmProjects/ai/autogen_transcribe_video_with_captions/captioned/{audio_filepath}.mp4",
+            f"{base_dir}/ai/ai_agency_03_video_captions/captioned/{new_file_name}.mp4",
             codec='libx264',
             audio_codec='aac',
             temp_audiofile='temp-audio.m4a',

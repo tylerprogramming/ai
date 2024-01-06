@@ -1,4 +1,2 @@
 pyautogen
-openai-whisper
-openai
-moviepy
+flask
