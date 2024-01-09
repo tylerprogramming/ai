@@ -1,11 +1,20 @@
 import autogen
 
-config_list = autogen.config_list_from_json(
-    env_or_file="OAI_CONFIG_LIST",
-    filter_dict={
-        "model": ["gpt-4"]
-    },
-)
+# config_list = autogen.config_list_from_json(
+#     env_or_file="OAI_CONFIG_LIST",
+#     filter_dict={
+#         "model": ["gpt-4"]
+#     },
+# )
+
+config_list = {
+    "model": "NULL",  # not needed
+    # NOTE: on versions of pyautogen < 0.2.0 use "api_base", and also uncomment "api_type"
+    # "api_base": "http://localhost:1234/v1",
+    # "api_type": "open_ai",
+    "base_url": "http://localhost:1234/v1",  # ex. "http://127.0.0.1:5001/v1" if you are using webui, "http://localhost:1234/v1/" if you are using LM Studio
+    "api_key": "NULL",  #  not needed
+}
 
 # print(config_list)
 
