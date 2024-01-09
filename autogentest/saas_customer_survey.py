@@ -6,14 +6,16 @@ llm_config = {
     "config_list": config_list,
     "seed": 53,
     "temperature": 0,
-    "request_timeout": 300
+    "timeout": 300
 }
 
 user_proxy = UserProxyAgent(
-   name="Admin",
-   system_message="A human admin. Interact with the planner to discuss the plan. Plan execution needs to be approved "
-                  "by this admin.",
-   code_execution_config=False,
+    name="Admin",
+    system_message="A human admin. Interact with the planner to discuss the plan. Plan execution needs to be approved "
+                   "by this admin.",
+    code_execution_config=False,
+    human_input_mode="NEVER",
+    default_auto_reply="..."
 )
 
 engineer = AssistantAgent(
@@ -41,6 +43,7 @@ executor = AssistantAgent(
     name="Executor",
     system_message="Executor. Execute the code written by the engineer and report the result.",
     code_execution_config={"last_n_messages": 3, "work_dir": "feedback"},
+    llm_config=llm_config
 )
 
 critic = AssistantAgent(
@@ -49,7 +52,7 @@ critic = AssistantAgent(
     llm_config=llm_config,
 )
 
-groupchat = GroupChat(agents=[user_proxy, engineer, planner, executor, critic], messages=[], max_round=50)
+groupchat = GroupChat(agents=[user_proxy, engineer, planner, executor, critic], messages=[], max_round=14)
 manager = GroupChatManager(groupchat=groupchat, llm_config=llm_config)
 
 user_proxy.initiate_chat(manager, message="I would like to build a simple website that collects feedback from "
