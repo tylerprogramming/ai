@@ -19,7 +19,7 @@ user_proxy = autogen.UserProxyAgent(
     system_message="A human admin. Interact with the planner to discuss the plan. Plan execution needs to be approved "
                    "by this admin.",
     human_input_mode="TERMINATE",
-    code_execution_config={"last_n_messages": 3, "work_dir": "programming"},
+    code_execution_config={"last_n_messages": 3, "work_dir": "programming", "use_docker": False},
 )
 
 engineer = autogen.AssistantAgent(

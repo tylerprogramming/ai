@@ -88,7 +88,7 @@ user_proxy = autogen.UserProxyAgent(
     max_consecutive_auto_reply=10,
     is_termination_msg=lambda x: "content" in x and x["content"] is not None and x["content"].rstrip().endswith(
         "TERMINATE"),
-    code_execution_config={"work_dir": "planning"},
+    code_execution_config={"work_dir": "planning", "use_docker": False},
     function_map={"ask_planner": ask_planner},
 )
 

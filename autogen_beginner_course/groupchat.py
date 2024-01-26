@@ -58,10 +58,10 @@ critic = autogen.AssistantAgent(
                    "plan includes adding verifiable info such as source URL.",
     llm_config=gpt4_config,
 )
-groupchat = autogen.GroupChat(
+group_chat = autogen.GroupChat(
     agents=[user_proxy, engineer, scientist, planner, executor, critic], messages=[], max_round=50
 )
-manager = autogen.GroupChatManager(groupchat=groupchat, llm_config=gpt4_config)
+manager = autogen.GroupChatManager(groupchat=group_chat, llm_config=gpt4_config)
 
 user_proxy.initiate_chat(
     manager,

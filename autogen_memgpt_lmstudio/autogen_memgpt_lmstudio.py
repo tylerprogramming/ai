@@ -38,46 +38,6 @@ if LLM_BACKEND == "openai":
         },
     ]
 
-elif LLM_BACKEND == "azure":
-    # Make sure that you have access to this deployment/model on your Azure account!
-    # If you don't have access to the model, the code will fail
-    model = os.getenv("model")
-
-    azure_openai_api_key = os.getenv("AZURE_OPENAI_KEY")
-    azure_openai_version = os.getenv("AZURE_OPENAI_VERSION")
-    azure_openai_endpoint = os.getenv("AZURE_OPENAI_ENDPOINT")
-    assert (
-            azure_openai_api_key is not None and azure_openai_version is not None and azure_openai_endpoint is not None
-    ), "Set all the required OpenAI Azure variables (see: https://memgpt.readthedocs.io/en/latest/endpoints/#azure)"
-
-    # This config is for AutoGen agents that are not powered by MemGPT
-    config_list = [
-        {
-            "model": model,
-            "api_type": "azure",
-            "api_key": azure_openai_api_key,
-            "api_version": azure_openai_version,
-            # NOTE: on versions of pyautogen < 0.2.0, use "api_base"
-            # "api_base": azure_openai_endpoint,
-            "base_url": azure_openai_endpoint,
-        }
-    ]
-
-    # This config is for AutoGen agents that powered by MemGPT
-    config_list_memgpt = [
-        {
-            "model": model,
-            "context_window": LLM_MAX_TOKENS[model],
-            "preset": DEFAULT_PRESET,
-            "model_wrapper": None,
-            # Azure specific
-            "model_endpoint_type": "azure",
-            "azure_key": azure_openai_api_key,
-            "azure_endpoint": azure_openai_endpoint,
-            "azure_version": azure_openai_version,
-        },
-    ]
-
 elif LLM_BACKEND == "local":
     # Example using LM Studio on a local machine
     # You will have to change the parameters based on your setup
@@ -90,7 +50,6 @@ elif LLM_BACKEND == "local":
             # "api_base": "http://localhost:1234/v1",
             # "api_type": "open_ai",
             "base_url": "http://localhost:1234/v1",
-            # ex. "http://127.0.0.1:5001/v1" if you are using webui, "http://localhost:1234/v1/" if you are using LM Studio
             "api_key": "NULL",  # not needed
         },
     ]
@@ -104,7 +63,7 @@ elif LLM_BACKEND == "local":
             "context_window": 8192,  # the context window of your model (for Mistral 7B-based models, it's likely 8192)
             "model_wrapper": "airoboros-l2-70b-2.1",  # airoboros is the default wrapper and should work for most models
             "model_endpoint_type": "lmstudio",  # can use webui, ollama, llamacpp, etc.
-            "model_endpoint": "http://localhost:1234",  # the IP address of your LLM backend
+            "model_endpoint": "http://localhost:1234/v1",  # the IP address of your LLM backend
         },
     ]
 
@@ -114,7 +73,7 @@ else:
 # If USE_MEMGPT is False, then this example will be the same as the official AutoGen repo
 # (https://github.com/microsoft/autogen/blob/main/notebook/agentchat_groupchat.ipynb)
 # If USE_MEMGPT is True, then we swap out the "coder" agent with a MemGPT agent
-USE_MEMGPT = True
+USE_MEMGPT = False
 
 # Set to True if you want to print MemGPT's inner workings.
 DEBUG = False
@@ -132,7 +91,7 @@ llm_config_memgpt = {"config_list": config_list_memgpt, "seed": 42}
 user_proxy = autogen.UserProxyAgent(
     name="User_proxy",
     system_message="A human admin.",
-    code_execution_config={"last_n_messages": 2, "work_dir": "groupchat"},
+    code_execution_config={"last_n_messages": 2, "work_dir": "groupchat", "use_docker": False},
     human_input_mode="TERMINATE",  # needed?
     default_auto_reply="...",  # Set a default auto-reply message here (non-empty auto-reply is required for LM Studio)
 )
@@ -147,6 +106,7 @@ pm = autogen.AssistantAgent(
 
 if not USE_MEMGPT:
     # In the AutoGen example, we create an AssistantAgent to play the role of the coder
+    print("AutoGen Coder")
     coder = autogen.AssistantAgent(
         name="Coder",
         llm_config=llm_config,

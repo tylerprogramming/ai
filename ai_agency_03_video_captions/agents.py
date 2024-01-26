@@ -13,7 +13,11 @@ user_proxy = autogen.UserProxyAgent(
     name="user_proxy",
     is_termination_msg=lambda x: x.get("content", "") and x.get("content", "").rstrip().endswith("TERMINATE"),
     human_input_mode="NEVER",
-    max_consecutive_auto_reply=2
+    max_consecutive_auto_reply=2,
+    code_execution_config= {
+        "work_dir": "code",
+        "use_docker": False
+    }
 )
 
 user_proxy.register_function(

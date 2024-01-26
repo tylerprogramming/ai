@@ -20,7 +20,11 @@ user_proxy = autogen.UserProxyAgent(
     name="User_proxy",
     system_message="A human admin.",
     human_input_mode="NEVER",
-    max_consecutive_auto_reply=0
+    max_consecutive_auto_reply=0,
+    code_execution_config={
+        "work_dir": "code",
+        "use_docker": False
+    }
 )
 
 

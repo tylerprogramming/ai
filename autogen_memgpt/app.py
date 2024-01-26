@@ -1,6 +1,6 @@
 import autogen
 import os
-from memgpt.autogen.memgpt_agent import create_autogen_memgpt_agent
+from memgpt.autogen.memgpt_agent import create_memgpt_autogen_agent_from_config
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -28,7 +28,7 @@ llm_config = {
 user_proxy = autogen.UserProxyAgent(
     name="User_proxy",
     system_message="A human admin.",
-    code_execution_config={"last_n_messages": 2, "work_dir": "groupchat"},
+    code_execution_config={"last_n_messages": 2, "work_dir": "groupchat", "use_docker": False},
     human_input_mode="TERMINATE"
 )
 
@@ -59,14 +59,15 @@ if not os.getenv("use_memgpt"):
     )
 #
 else:
-    coder = create_autogen_memgpt_agent(
+    coder = create_memgpt_autogen_agent_from_config(
         "MemGPT_coder",
-        persona_description="I am a 10x engineer, trained in Python. I was the first engineer at Uber "
-        "(which I make sure to tell everyone I work with).",
-        user_description=f"You are participating in a group chat with a user ({user_proxy.name}) "
-        f"and a product manager ({pm.name}).",
-        model=os.getenv("model"),
-        interface_kwargs=interface_kwargs
+        llm_config=llm_config,
+        system_message=f"I am a 10x engineer, trained in Python. I was the first engineer at Uber "
+                       f"(which I make sure to tell everyone I work with).\n"
+                       f"You are participating in a group chat with a user ({user_proxy.name}) "
+                       f"and a product manager ({pm.name}).",
+        interface_kwargs=interface_kwargs,
+        default_auto_reply="...",
     )
 
 # Initialize the group chat between the user and two LLM agents (PM and coder)
