@@ -1,12 +1,12 @@
 import agents
-
 import gradio as gr
 
-title = "Multiple Interfaces"
+title = "YouTube Services"
 
 
 def create_youtube_info(type, topic, tone, length, camera):
-    global description, script_maker
+    description = ""
+    script_maker = ""
 
     agents.user_proxy.initiate_chat(
         agents.manager,
