@@ -26,5 +26,5 @@ user_proxy = autogen.UserProxyAgent(
     }
 )
 
-groupchat = autogen.GroupChat(agents=[user_proxy, script_maker, description_maker], messages=[], max_round=5)
-manager = autogen.GroupChatManager(groupchat=groupchat, llm_config=config.llm_config)
+group_chat = autogen.GroupChat(agents=[user_proxy, script_maker, description_maker], messages=[], max_round=5)
+manager = autogen.GroupChatManager(groupchat=group_chat, llm_config=config.llm_config)

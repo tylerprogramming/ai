@@ -17,7 +17,7 @@ def create_youtube_info(type, topic, tone, length, camera):
                 f"engaging and formatted nicely.  Make sure the script and description are separated."
     )
 
-    for content in agents.groupchat.messages:
+    for content in agents.group_chat.messages:
         if content["name"] == 'script_maker':
             script_maker = content["content"]
         if content["name"] == 'description_maker':
