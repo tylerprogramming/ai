@@ -16,8 +16,6 @@ from typing_extensions import Annotated
 
 dotenv.load_dotenv()
 
-st.title = "Quiz Creator!"
-
 with st.sidebar:
     uploaded_file = st.file_uploader("Upload a PDF file", type=["pdf"])
 
@@ -26,7 +24,7 @@ with st.sidebar:
 
 if uploaded_file is not None:
     current_timestamp = datetime.timestamp(datetime.now())
-    file_name = 'question' + str(int(current_timestamp)) + '.json'
+    file_name = 'question-' + str(int(current_timestamp)) + '.json'
 
     # Enable button if PDF is uploaded
     button_enabled = st.sidebar.button("Create a Question!")
@@ -35,7 +33,6 @@ if uploaded_file is not None:
     file = PyMuPDFLoader(uploaded_file.name)
 
     if button_enabled:
-        print("starting to create a question...")
         docs = []
         docs.extend(file.load())
 
@@ -110,7 +107,7 @@ if uploaded_file is not None:
 
         @user_proxy.register_for_execution()
         @assistant.register_for_llm(description="PDF Assistant.")
-        def chat_docs(question: Annotated[str, "The question to be asked"]) -> json:
+        def ask_question(question: Annotated[str, "The question to be asked"]) -> json:
             response = qa({"question": question})
             current_json = json.dumps(response["answer"])
             cleaner_json_content = current_json.replace("\\", "").replace("\n", "")
@@ -141,16 +138,17 @@ if uploaded_file is not None:
                 {
                     "recipient": converter,
                     "message": """
-                    The only job here is to convert the response from previous agent into json format 
-                    and also remove newline characters and return updated json format.
+                        The only job here is to convert the json from previous agent into json format 
+                        and also remove newline characters and return updated json format.
                     """,
                     "summary_method": "last_msg"
                 },
                 {
                     "recipient": json_assistant,
                     "message": """
-                        Take the context from the assistant and convert it to json and save it to disk to a json file named './tester.json' in this directory.
-                    """,
+                        Take the context from the assistant and convert it to json and save it to disk to a 
+                        json file in this directory.
+                     """,
                     "summary_method": "reflection_with_llm",
                     "carryover": "I want to save this to disk with the name tester.json"
                 }
