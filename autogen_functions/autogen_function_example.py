@@ -3,7 +3,7 @@ from typing import Literal
 import autogen
 
 config_list = autogen.config_list_from_json(
-    env_or_file="OAI_CONFIG_LIST",
+    env_or_file="config/OAI_CONFIG_LIST.json",
     filter_dict={
         "model": ["gpt-4"]
     },
