@@ -2,9 +2,17 @@
 ### This repo will be helpful in understanding AutoGen providing examples including prompts and agents for SAAS products, how AutoGen works, and diving into the functionality.
 
 ## Current Library Versions:
-<a href="https://github.com/microsoft/autogen/tree/main"><img src="https://img.shields.io/badge/AutoGen-0.2.11-red"/></a>
-<a href="https://lmstudio.ai/"><img src="https://img.shields.io/badge/LMStudio-0.2.14-purple"/></a>
-<a href="https://github.com/cpacker/MemGPT"><img src="https://img.shields.io/badge/MemGPT-0.2.11-blue"/></a>
+<a href="https://github.com/microsoft/autogen/tree/main"><img src="https://img.shields.io/badge/AutoGen-0.2.27-red"/></a>
+<a href="https://lmstudio.ai/"><img src="https://img.shields.io/badge/LMStudio-0.2.21-purple"/></a>
+<a href="https://github.com/cpacker/MemGPT"><img src="https://img.shields.io/badge/MemGPT-0.3.14-blue"/></a>
+
+## Downloads
+- Ollama: https://ollama.com/
+- LM Studio: https://lmstudio.ai/
+- PyCharm Download: https://www.jetbrains.com/pycharm/download
+- Anaconda Download: https://www.anaconda.com/download
+- Visual Studio Code: https://code.visualstudio.com/
+- .NET SDK: https://dotnet.microsoft.com/en-us/download
 
 ## Need to KNOW:
 - MemGPT has been updated recently and if we don't use `memgpt configure` to set the openai_key, then it won't work with OpenAI API.  I opened issue here: [https://github.com/tylerprogramming/ai/issues/1](https://github.com/cpacker/MemGPT/issues/568)
@@ -14,12 +22,14 @@
   - MACOS: https://superuser.com/questions/624561/install-ffmpeg-on-os-x
   - WINDOWS: https://phoenixnap.com/kb/ffmpeg-windows
 
+
+
 ## Upcoming Ideas/Projects for Videos
 - [x] GPT-4 Vision with AutoGen
 - [ ] AutoGen with CodeInterpreter
-- [ ] AutoGen with TeachableAgent (uses Vector DB to remember conversations)
-- [ ] Auto Generated Agent Chat: Hierarchy flow using select_speaker
-- [ ] AutoGen Teams, actually creating separate teams that each do a specific thing and pass on what they accomplished to the next one
+- [x] AutoGen with TeachableAgent (uses Vector DB to remember conversations)
+- [x] Auto Generated Agent Chat: Hierarchy flow using select_speaker
+- [x] AutoGen Teams, actually creating separate teams that each do a specific thing and pass on what they accomplished to the next one
 - [x] Combining GPT-4 Vision with a library that can take a screenshot of a website, perhaps with stocks for example, and examine it
 - [ ] Create a Sudoku Puzzle Creator/Checker with an AI WorkForce
 - [x] Create WebScraper with Puppeteer
@@ -27,6 +37,9 @@
 - [x] Fitness Tracker with multiple models and LMStudio for LocalLLM
 - [x] Fitness Expert Bot with Flask Server
 - [x] YouTube Services
-- [ ] Beginner Course
+- [x] Beginner Course
 - [ ] Intermediate Course
 - [ ] Advanced Course
+
+## Updates:
+- 05/03/2024 - added directory for frontend code saving and example .net code
