@@ -3,8 +3,8 @@ import autogen
 from typing_extensions import Annotated
 from pyairtable import Api
 
-api = Api("patDZtaAICj2lkALu.3aa39b55e9531f03650e51bed4e56a30ffbc65775e17ca6c08387581fd58eb16")
-base_id = "appRcimSdzB4syDWp"
+api = Api("1111")
+base_id = "base_id"
 
 config_list = autogen.config_list_from_json(
     env_or_file="OAI_CONFIG_LIST.json"
