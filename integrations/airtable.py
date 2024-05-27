@@ -1,13 +1,18 @@
 import autogen
+import os
+from dotenv import load_dotenv
 
 from typing_extensions import Annotated
 from pyairtable import Api
 
-api = Api("1111")
-base_id = "base_id"
+load_dotenv()
 
-config_list = autogen.config_list_from_json(
-    env_or_file="OAI_CONFIG_LIST.json"
+api = Api(os.getenv("API_KEY"))
+base_id = os.getenv("BASE_ID")
+
+config_list = autogen.config_list_from_dotenv(
+    dotenv_file_path=".env",
+    model_api_key_map={"gpt-4": os.getenv("OPENAI_API_KEY")}
 )
 
 llm_config = {
@@ -45,6 +50,14 @@ def get_record_structure(table: Annotated[str, "The table to get structure from"
     table = api.table(base_id, table)
     first = table.first()
     return first['fields']
+
+
+@user_proxy.register_for_execution()
+@engineer.register_for_llm(description="Retrieve all records and return in JSON format.")
+def get_all_records(table: Annotated[str, "The table to get records from"]):
+    table = api.table(base_id, table)
+    all_records = table.all()
+    return all_records
 
 
 chat_result = user_proxy.initiate_chat(
