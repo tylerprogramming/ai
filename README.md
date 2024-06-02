@@ -2,8 +2,8 @@
 ### This repo will be helpful in understanding AutoGen providing examples including prompts and agents for SAAS products, how AutoGen works, and diving into the functionality.
 
 ## Current Library Versions:
-<a href="https://github.com/microsoft/autogen/tree/main"><img src="https://img.shields.io/badge/AutoGen-0.2.27-red"/></a>
-<a href="https://lmstudio.ai/"><img src="https://img.shields.io/badge/LMStudio-0.2.21-purple"/></a>
+<a href="https://github.com/microsoft/autogen/tree/main"><img src="https://img.shields.io/badge/AutoGen-0.2.28-red"/></a>
+<a href="https://lmstudio.ai/"><img src="https://img.shields.io/badge/LMStudio-0.2.22-purple"/></a>
 <a href="https://github.com/cpacker/MemGPT"><img src="https://img.shields.io/badge/MemGPT-0.3.14-blue"/></a>
 
 ## Downloads
@@ -43,3 +43,5 @@
 
 ## Updates:
 - 05/03/2024 - added directory for frontend code saving and example .net code
+- 06/02/2024 - started an integrations directory, and the first one is Airtable + AutoGen
+- 
