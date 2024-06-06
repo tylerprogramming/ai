@@ -5,7 +5,7 @@ import autogen
 from dotenv import load_dotenv
 from typing_extensions import Annotated
 
-from _integrations.reddit.reddit_classes import RedditPostsLoader
+from reddit_classes import RedditPostsLoader
 
 load_dotenv()
 
@@ -30,7 +30,7 @@ engineer = autogen.AssistantAgent(
 
 user_proxy = autogen.UserProxyAgent(
     name="Admin",
-    human_input_mode="ALWAYS",
+    human_input_mode="NEVER",
     code_execution_config=False,
 )
 
@@ -45,7 +45,7 @@ def get_random_subreddit(
         client_id=os.getenv("CLIENT_ID"),
         client_secret=os.getenv("CLIENT_SECRET"),
         user_agent="extractor by u/tyler_programming",
-        categories=["new", "hot"],
+        categories=["hot"],
         mode=mode,
         number_posts=number_of_posts,
     )
@@ -58,7 +58,7 @@ def get_random_subreddit(
 
 
 @user_proxy.register_for_execution()
-@engineer.register_for_llm(description="Get a random subreddit")
+@engineer.register_for_llm(description="Get a specified subreddit")
 def get_specified_subreddit(
         search_queries: Annotated[str, "The search queries comma separated"],
         number_of_posts: Annotated[int, "The number of posts to retrieve, default should be 1"]
@@ -82,24 +82,46 @@ def get_specified_subreddit(
     return serialized_data
 
 
-chat_result = user_proxy.initiate_chat(
-    engineer,
-    message="""
-        I need you to integrate with Reddit.  Whenever you retrieve a post, you will get a RedditReader Object list and
-        I would like you to format the content and meta_data contained within.
-        
-        Metadata is in this format for each item in the list:
-        
-        reddit_list.post_subreddit,
-        reddit_list.post_category,
-        reddit_list.post_title,
-        reddit_list.post_score,
-        reddit_list.post_id,
-        reddit_list.post_url,
-        reddit_list.post_author
-        
-        Then also add the content from the item.
-        
-        Do not start until I give a command.
-""",
-)
+def start_chat(input: str):
+    chat_result = user_proxy.initiate_chat(
+        engineer,
+        max_turns=2,
+        message=f"""
+            I need you to integrate with Reddit.  Whenever you retrieve a post, you will get a RedditReader Object list and
+            I would like you to format the content and meta_data contained within.
+            
+            Metadata is in this format for each item in the list:
+            
+            reddit_list.post_subreddit,
+            reddit_list.post_category,
+            reddit_list.post_title,
+            reddit_list.post_score,
+            reddit_list.post_id,
+            reddit_list.post_url,
+            reddit_list.post_author
+            
+            Then also add the content from the item.
+            
+            Return this in proper json format, do not use triple tick marks to denote that it's json.  If there is more 
+            than 1 object, make sure it's an array.
+            
+        [
+            {{
+        "meta_data": {{
+            "subreddit": the subreddit,
+            "category": the category,
+            "title": the title,
+            "score": the score,
+            "post_id": the post id,
+            "url": the url,
+            "author": the author
+            }},
+            "content": the content
+            }}
+        ]
+            
+        {input}
+    """,
+    )
+
+    return chat_result.summary
