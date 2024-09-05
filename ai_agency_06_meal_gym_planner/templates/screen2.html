@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block title %}Workout Preferences{% endblock %}
+{% block content %}
+<form method="POST">
+    <div class="mb-3">
+        <label for="workout_duration" class="form-label">Workout Duration</label>
+        <select class="form-select" id="workout_duration" name="workout_duration" required>
+            <option value="15">15 minutes</option>
+            <option value="30">30 minutes</option>
+            <option value="45">45 minutes</option>
+            <option value="60">60 minutes</option>
+        </select>
+    </div>
+    <div class="mb-3">
+        <label for="workout_type" class="form-label">Preferred Workout Type</label>
+        <select class="form-select" id="workout_type" name="workout_type" required>
+            <option value="Cardio">Cardio</option>
+            <option value="Strength Training">Strength Training</option>
+            <option value="Yoga">Yoga</option>
+            <option value="Mixed">Mixed</option>
+        </select>
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Equipment Available</label>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" name="equipment" id="none" value="None">
+            <label class="form-check-label" for="none">None</label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" name="equipment" id="dumbbells" value="Dumbbells">
+            <label class="form-check-label" for="dumbbells">Dumbbells</label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" name="equipment" id="resistance_bands" value="Resistance Bands">
+            <label class="form-check-label" for="resistance_bands">Resistance Bands</label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" name="equipment" id="yoga_mat" value="Yoga Mat">
+            <label class="form-check-label" for="yoga_mat">Yoga Mat</label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" name="equipment" id="full_gym" value="Full Gym">
+            <label class="form-check-label" for="full_gym">Full Gym</label>
+        </div>
+    </div>
+    <button type="submit" class="btn btn-primary">Next</button>
+</form>
+{% endblock %}

@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% block title %}Personal Information{% endblock %}
+{% block content %}
+<form method="POST">
+    <div class="mb-3">
+        <label for="age" class="form-label">Age</label>
+        <input type="number" class="form-control" id="age" name="age" required>
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Gender</label>
+        <div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="gender" id="male" value="Male" required>
+                <label class="form-check-label" for="male">Male</label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="gender" id="female" value="Female">
+                <label class="form-check-label" for="female">Female</label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="gender" id="other" value="Other">
+                <label class="form-check-label" for="other">Other</label>
+            </div>
+        </div>
+    </div>
+    <div class="mb-3">
+        <label for="fitness_level" class="form-label">Fitness Level</label>
+        <select class="form-select" id="fitness_level" name="fitness_level" required>
+            <option value="Beginner">Beginner</option>
+            <option value="Intermediate">Intermediate</option>
+            <option value="Advanced">Advanced</option>
+        </select>
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Goals</label>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" name="goals" id="weight_loss" value="Weight Loss">
+            <label class="form-check-label" for="weight_loss">Weight Loss</label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" name="goals" id="muscle_gain" value="Muscle Gain">
+            <label class="form-check-label" for="muscle_gain">Muscle Gain</label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" name="goals" id="flexibility" value="Flexibility">
+            <label class="form-check-label" for="flexibility">Flexibility</label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" name="goals" id="endurance" value="Endurance">
+            <label class="form-check-label" for="endurance">Endurance</label>
+        </div>
+    </div>
+    <button type="submit" class="btn btn-primary">Next</button>
+</form>
+{% endblock %}

@@ -1,0 +1,218 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container-fluid">
+    <h2 class="text-center mb-4">Your Personalized Workout and Meal Plan</h2>
+    
+    <div class="row mb-4">
+        <div class="col">
+            <div class="card shadow-sm bg-light">
+                <div class="card-body">
+                    <h5 class="card-title text-center mb-4 text-primary">Workout Plan Overview</h5>
+                    <div class="d-flex justify-content-around flex-wrap">
+                        <div class="text-center mb-3 p-3 bg-white rounded shadow-sm">
+                            <i class="fas fa-calendar-alt fa-2x text-primary mb-2"></i>
+                            <h6 class="mb-0 text-secondary">Frequency</h6>
+                            <p class="mb-0 font-weight-bold">{{ plan.workout_plan.frequency }}</p>
+                        </div>
+                        <div class="text-center mb-3 p-3 bg-white rounded shadow-sm">
+                            <i class="fas fa-clock fa-2x text-success mb-2"></i>
+                            <h6 class="mb-0 text-secondary">Duration</h6>
+                            <p class="mb-0 font-weight-bold">{{ plan.workout_plan.duration }}</p>
+                        </div>
+                        <div class="text-center mb-3 p-3 bg-white rounded shadow-sm">
+                            <i class="fas fa-fire-alt fa-2x text-danger mb-2"></i>
+                            <h6 class="mb-0 text-secondary">Intensity</h6>
+                            <p class="mb-0 font-weight-bold">{{ plan.workout_plan.intensity }}</p>
+                        </div>
+                        <div class="text-center mb-3 p-3 bg-white rounded shadow-sm">
+                            <i class="fas fa-dumbbell fa-2x text-info mb-2"></i>
+                            <h6 class="mb-0 text-secondary">Equipment</h6>
+                            <p class="mb-0 font-weight-bold">{{ plan.workout_plan.equipment }}</p>
+                        </div>
+                        <div class="text-center mb-3 p-3 bg-white rounded shadow-sm">
+                            <i class="fas fa-bullseye fa-2x text-warning mb-2"></i>
+                            <h6 class="mb-0 text-secondary">Focus Areas</h6>
+                            <p class="mb-0 font-weight-bold">{{ plan.workout_plan.focus_areas }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% if plan.meal_plan and plan.meal_plan.nutritional_goals %}
+    <div class="row mb-4">
+        <div class="col">
+            <h5 class="text-center mb-4 text-primary">Nutritional Goals</h5>
+            <div class="row">
+                {% for nutrient, foods in plan.meal_plan.nutritional_goals.items() %}
+                <div class="col-md-4 mb-3">
+                    <div class="card shadow-sm bg-light h-100">
+                        <div class="card-body text-center">
+                            <i class="fas fa-apple-alt fa-2x text-success mb-2"></i>
+                            <h6 class="mb-0 text-secondary">{{ nutrient|capitalize }}</h6>
+                            <p class="mb-0 font-weight-bold">{{ foods }}</p>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h3 class="card-title">Workout Plan</h3>
+                    
+                    <h4 class="mt-4">Daily Structure</h4>
+                    <div class="accordion" id="workoutAccordion">
+                        {% for day, structure in plan.workout_plan.daily_structure.items() %}
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="heading{{ loop.index }}">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{ loop.index }}" aria-expanded="false" aria-controls="collapse{{ loop.index }}">
+                                    {{ day.replace('_', ' ') }}
+                                </button>
+                            </h2>
+                            <div id="collapse{{ loop.index }}" class="accordion-collapse collapse" aria-labelledby="heading{{ loop.index }}" data-bs-parent="#workoutAccordion">
+                                <div class="accordion-body">
+                                    {% if structure.warm_up %}
+                                        <h6 class="text-primary">Warm-up ({{ structure.warm_up.duration }})</h6>
+                                        <ul class="list-group list-group-flush mb-3">
+                                            {% for exercise in structure.warm_up.exercises %}
+                                            <li class="list-group-item">{{ exercise.name }} - {{ exercise.duration }}</li>
+                                            {% endfor %}
+                                        </ul>
+                                    {% endif %}
+                                    
+                                    {% if structure.main_workout %}
+                                        <h6 class="text-success">Main Workout ({{ structure.main_workout.duration }})</h6>
+                                        {% if structure.main_workout.circuit %}
+                                            <p>Exercise duration: {{ structure.main_workout.circuit.exercise_duration }}</p>
+                                            <p>Rest duration: {{ structure.main_workout.circuit.rest_duration }}</p>
+                                            <p>Repeat: {{ structure.main_workout.circuit.repeat }}</p>
+                                            <ul class="list-group list-group-flush mb-3">
+                                                {% for exercise in structure.main_workout.circuit.exercises %}
+                                                <li class="list-group-item">{{ exercise }}</li>
+                                                {% endfor %}
+                                            </ul>
+                                        {% endif %}
+                                    {% endif %}
+                                    
+                                    {% if structure.cool_down %}
+                                        <h6 class="text-warning">Cool-down ({{ structure.cool_down.duration }})</h6>
+                                        <ul class="list-group list-group-flush mb-3">
+                                            {% for exercise in structure.cool_down.exercises %}
+                                            <li class="list-group-item">{{ exercise.name }} - {{ exercise.duration }}</li>
+                                            {% endfor %}
+                                        </ul>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-6">
+            {% if plan.meal_plan %}
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h3 class="card-title">Meal Plan</h3>
+                    
+                    {% if plan.meal_plan.weekly_meals %}
+                        <h4 class="mt-4">Weekly Meals</h4>
+                        <div class="accordion" id="mealAccordion">
+                            {% for day, meals in plan.meal_plan.weekly_meals.items() %}
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="mealHeading{{ loop.index }}">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#mealCollapse{{ loop.index }}" aria-expanded="false" aria-controls="mealCollapse{{ loop.index }}">
+                                        {{ day.replace('_', ' ') }}
+                                    </button>
+                                </h2>
+                                <div id="mealCollapse{{ loop.index }}" class="accordion-collapse collapse" aria-labelledby="mealHeading{{ loop.index }}" data-bs-parent="#mealAccordion">
+                                    <div class="accordion-body">
+                                        <ul class="list-group list-group-flush">
+                                            {% for meal, food in meals.items() %}
+                                            <li class="list-group-item"><strong>{{ meal }}:</strong> {{ food }}</li>
+                                            {% endfor %}
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-lg-6">
+            {% if plan.workout_plan.weekly_summary %}
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h4 class="card-title">Weekly Workout Overview</h4>
+                        <ul class="list-group list-group-flush">
+                            {% for day, workout in plan.workout_plan.weekly_summary.items() %}
+                            {% if workout %}
+                            <li class="list-group-item"><strong>{{ day }}:</strong> {{ workout }}</li>
+                            {% endif %}
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+        <div class="col-lg-6">
+            {% if plan.meal_plan.additional_tips %}
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h4 class="card-title">Additional Nutrition Tips</h4>
+                        <ul class="list-group list-group-flush">
+                            {% for tip in plan.meal_plan.additional_tips %}
+                            <li class="list-group-item">{{ tip }}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="text-center mt-4">
+        <a href="/" class="btn btn-primary">Start Over</a>
+        <a href="{{ url_for('export_pdf') }}" class="btn btn-secondary" id="exportPDF">Download Workout Plan</a>
+    </div>
+</div>
+{% endblock %}
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+<div id="loadingMessage" style="display: none;">Generating PDF, please wait...</div>
+
+<script>
+document.getElementById('exportPDF').addEventListener('click', function() {
+    var loadingMessage = document.getElementById('loadingMessage');
+    loadingMessage.style.display = 'block';
+
+    var element = document.body;
+    var opt = {
+        margin:       1,
+        filename:     'workout_plan.pdf',
+        image:        { type: 'jpeg', quality: 0.98 },
+        html2canvas:  { scale: 2 },
+        jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
+    };
+
+    html2pdf().set(opt).from(element).save().then(function() {
+        loadingMessage.style.display = 'none';
+    });
+});
+</script>
