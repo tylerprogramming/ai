@@ -1,4 +1,3 @@
 .venv/
 .env
 .pyautogen/
-/autogen_rag/docs/*
