@@ -1,0 +1,11 @@
+chuck_norris_agent_task:
+  description: >
+    Research and find the latest Chuck Norris jokes.
+  expected_output: >
+    The list of Chuck Norris jokes you have found.
+
+chuck_norris_jokes_picker_task:
+  description: >
+    Pick the best 3 Chuck Norris jokes.
+  expected_output: >
+    The best 3 Chuck Norris jokes.

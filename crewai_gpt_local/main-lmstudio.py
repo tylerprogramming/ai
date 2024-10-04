@@ -1,50 +1,60 @@
-import os
-from crewai import Agent, Task, Crew, Process
+from crewai import Agent, Crew, Process, Task
+from crewai.project import CrewBase, agent, crew, task
+from crewai_tools import ScrapeWebsiteTool, SerperDevTool
+from pydantic import BaseModel, Field
+from typing import List, Optional
 
-# either use api key for gpt, or just some string for local
-os.environ["OPENAI_API_KEY"] = "sk-1111"
-os.environ["OPENAI_API_BASE"] = "http://localhost:1234/v1"
+@CrewBase
+class ChuckNorrisCrew():
+    """Chuck Norris Crew"""
 
+    agents_config = 'config/agents.yaml'
+    tasks_config = 'config/tasks.yaml'
 
-# Create a researcher agent
-researcher = Agent(
-    role='Senior Researcher',
-    goal='Discover groundbreaking technologies',
-    backstory='A curious mind fascinated by cutting-edge innovation and the potential to change the world, '
-              'you know everything about tech.',
-    verbose=True,
-)
+    @agent
+    def chuck_norris_agent(self) -> Agent:
+        return Agent(
+            config=self.agents_config['chuck_norris_agent'],
+            tools=[SerperDevTool(), ScrapeWebsiteTool()],
+            verbose=True,
+            allow_delegation=False,
+        )
+    
+    @agent
+    def chuck_norris_jokes_picker(self) -> Agent:
+        return Agent(
+            config=self.agents_config['chuck_norris_jokes_picker'],
+            tools=[],
+            verbose=True,
+            allow_delegation=False,
+        )
+    
+    
+    @task
+    def chuck_norris_jokes_task(self) -> Task:
+        return Task(
+            config=self.tasks_config['chuck_norris_jokes_task'],
+            agent=self.chuck_norris_agent()
+        )
+    
+    @task
+    def chuck_norris_jokes_picker_task(self) -> Task:
+        return Task(
+            config=self.tasks_config['chuck_norris_jokes_picker_task'],
+            agent=self.chuck_norris_jokes_picker(),
+        )
+    
+    @crew
+    def crew(self) -> Crew:
+        """Creates a Chuck Norris Crew"""
+        return Crew(
+            agents=self.agents,
+            tasks=self.tasks,
+            process=Process.sequential,
+            verbose=True,
+        )
 
-# Create a writer agent
-writer = Agent(
-    role='Writer',
-    goal='Craft compelling stories about tech discoveries',
-    verbose=True,
-    backstory='A creative soul who translates complex tech jargon into engaging narratives for the masses, you write '
-              'using simple words in a friendly and inviting tone that does not sounds like AI.',
-)
-
-# Task for the researcher
-research_task = Task(
-    description='Identify the next big trend in AI',
-    agent=researcher  # Assigning the task to the researcher
-)
-
-# Task for the writer
-write_task = Task(
-    description='Write an article on AI advancements leveraging the research made.',
-    agent=writer  # Assigning the task to the writer
-)
-
-# Instantiate your crew with a sequential process
-tech_crew = Crew(
-    agents=[researcher, writer],
-    tasks=[research_task, write_task],
-    process=Process.sequential,  # Tasks will be executed one after the other
-)
-
-# Get your crew to work!
-result = tech_crew.kickoff()
-
-print("######################")
-print(result)
+if __name__ == "__main__":
+    chuck_norris_crew = ChuckNorrisCrew()
+    result = chuck_norris_crew.crew.kickoff()
+    print(result)
