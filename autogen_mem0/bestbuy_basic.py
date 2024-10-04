@@ -2,7 +2,7 @@ import os
 
 from mem0 import MemoryClient
 
-from autogen import ConversableAgent, UserProxyAgent
+from autogen import ConversableAgent
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -22,7 +22,7 @@ memory_client = MemoryClient()
 
 conversation = [
     {"role": "assistant", "content": "Hi, I'm Best Buy's chatbot! How can I help you?"},
-    {"role": "user", "content": "I'm seeing horizontal lines on my TV."},
+    {"role": "user", "content": "I just wanted to chat with you."},
     {"role": "assistant", "content": "I'm sorry to hear that. Can you provide your TV model?"},
     {"role": "user", "content": "It's a Sony - 77\" Class BRAVIA XR A80K OLED 4K UHD Smart Google TV"},
     {"role": "assistant", "content": "Thank you for the information. Let's troubleshoot this issue..."}

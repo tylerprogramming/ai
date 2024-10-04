@@ -1,34 +1,20 @@
-import json
 import os
-import uuid
-
 import chromadb
-
 import autogen
+
 from autogen import AssistantAgent
 from autogen.agentchat.contrib.retrieve_user_proxy_agent import RetrieveUserProxyAgent
-from autogen.agentchat.contrib.retrieve_assistant_agent import RetrieveAssistantAgent
-from autogen.agentchat.contrib.vectordb.chromadb import ChromaVectorDB, Document, ItemID
+from autogen.agentchat.contrib.vectordb.chromadb import ChromaVectorDB
 from chromadb.utils import embedding_functions
 
 from dotenv import load_dotenv
 
 load_dotenv()
 
-# Accepted file formats for that can be stored in
-# a vector database instance
-from autogen.retrieve_utils import TEXT_FORMATS
-
 config_list = autogen.config_list_from_json("OAI_CONFIG_LIST.json")
 
-assert len(config_list) > 0
-print("models to use: ", [config_list[i]["model"] for i in range(len(config_list))])
-
-print("Accepted file formats for `docs_path`:")
-print(TEXT_FORMATS)
-
 CHROMA_DB_PATH="/tmp/chromadb"
-CHROMA_COLLECTION="autogen-yt"
+CHROMA_COLLECTION="autogen-rag-chroma"
 
 chroma_client = chromadb.PersistentClient(path=CHROMA_DB_PATH)
 collection = chroma_client.get_or_create_collection(name=CHROMA_COLLECTION)
@@ -70,7 +56,7 @@ ragproxyagent = RetrieveUserProxyAgent(
     code_execution_config=False,  # set to False if you don't want to execute the code
 )
 
-qa_problem = "What are the design goals of autogen studio?  Can you go in depth with them?"
+qa_problem = "What is Autogen Studio?  Please give a detailed overview of the project."
 chat_result = ragproxyagent.initiate_chat(
     assistant, message=ragproxyagent.message_generator, problem=qa_problem, n_results=2
 )

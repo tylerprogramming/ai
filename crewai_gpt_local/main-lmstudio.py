@@ -1,8 +1,16 @@
-from crewai import Agent, Crew, Process, Task
+from crewai import Agent, Crew, Process, Task, LLM
 from crewai.project import CrewBase, agent, crew, task
 from crewai_tools import ScrapeWebsiteTool, SerperDevTool
 from pydantic import BaseModel, Field
 from typing import List, Optional
+from dotenv import load_dotenv
+from langchain_openai import ChatOpenAI
+import os
+
+load_dotenv()
+
+# os.environ["OPENAI_API_KEY"] = "sk-1111"
+# os.environ["OPENAI_API_BASE"] = "http://localhost:1234/v1"
 
 @CrewBase
 class ChuckNorrisCrew():
@@ -11,11 +19,16 @@ class ChuckNorrisCrew():
     agents_config = 'config/agents.yaml'
     tasks_config = 'config/tasks.yaml'
 
+    llm_llama3_1b = LLM(model="ollama/llama3.2:1b", base_url="http://localhost:11434")
+    llm_phi3 = LLM(model="ollama/phi3", base_url="http://localhost:11434", temperature=0.1)
+
+    lm_studio = ChatOpenAI(base_url="http://localhost:1234/v1", api_key="sk-proj-1111")
+
     @agent
     def chuck_norris_agent(self) -> Agent:
         return Agent(
             config=self.agents_config['chuck_norris_agent'],
-            tools=[SerperDevTool(), ScrapeWebsiteTool()],
+            tools=[SerperDevTool()],
             verbose=True,
             allow_delegation=False,
         )
@@ -27,13 +40,23 @@ class ChuckNorrisCrew():
             tools=[],
             verbose=True,
             allow_delegation=False,
+            llm=self.lm_studio
         )
     
+    @agent
+    def chuck_norris_joke_creator(self) -> Agent:
+        return Agent(
+            config=self.agents_config['chuck_norris_joke_creator'],
+            tools=[],
+            verbose=True,
+            allow_delegation=False,
+            llm=self.lm_studio
+        )
     
     @task
-    def chuck_norris_jokes_task(self) -> Task:
+    def chuck_norris_agent_task(self) -> Task:
         return Task(
-            config=self.tasks_config['chuck_norris_jokes_task'],
+            config=self.tasks_config['chuck_norris_agent_task'],
             agent=self.chuck_norris_agent()
         )
     
@@ -42,6 +65,13 @@ class ChuckNorrisCrew():
         return Task(
             config=self.tasks_config['chuck_norris_jokes_picker_task'],
             agent=self.chuck_norris_jokes_picker(),
+        )
+    
+    @task
+    def chuck_norris_joke_creation_task(self) -> Task:
+        return Task(
+            config=self.tasks_config['chuck_norris_joke_creation_task'],
+            agent=self.chuck_norris_joke_creator(),
         )
     
     @crew
@@ -56,5 +86,5 @@ class ChuckNorrisCrew():
 
 if __name__ == "__main__":
     chuck_norris_crew = ChuckNorrisCrew()
-    result = chuck_norris_crew.crew.kickoff()
+    result = chuck_norris_crew.crew().kickoff()
     print(result)

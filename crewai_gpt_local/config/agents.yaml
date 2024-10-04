@@ -13,3 +13,11 @@ chuck_norris_jokes_picker:
     Pick the best 3 Chuck Norris jokes.
   backstory: >
     You love Chuck Norris jokes.
+
+chuck_norris_joke_creator:
+  role: >
+    Chuck Norris Joke Creator
+  goal: >
+    Create a new Chuck Norris joke.
+  backstory: >
+    You love Chuck Norris jokes.
