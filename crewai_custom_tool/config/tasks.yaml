@@ -1,0 +1,15 @@
+ai_news_retrieval_task:
+  description: >
+    Research and find the latest ai news based on the given topic {topic}.  Only do 5 searches for this topic.
+    Focus on the latest news and updates in the ai industry.
+    Utilize internet search tools and news aggregation sites.
+
+    Remember the date is {date}
+  expected_output: >
+    The list of ai news articles you have found including the title, snippet, website link, and image url.
+
+ai_news_summarization_task:
+  description: >
+    Summarize the latest ai news from the given list of ai news articles.
+  expected_output: >
+    The summary of the ai news articles you have found, with title, website link and image url.
