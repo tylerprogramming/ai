@@ -5,7 +5,7 @@ from datetime import datetime
 
 load_dotenv()
 
-os.environ['OPENAI_API_KEY'] = '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'
+os.environ['OPENAI_API_KEY'] = 'insert openai api key here'
 
 def run_crew():
     inputs = {
