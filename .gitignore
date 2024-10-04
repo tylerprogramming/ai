@@ -2,3 +2,6 @@
 .env
 .pyautogen/
 autogen_rag_chroma/docs/ag_studio.pdf
+__pycache__
+# Ignore all __pycache__ directories
+**/__pycache__/

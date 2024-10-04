@@ -1,0 +1,11 @@
+my_task:
+  description: >
+    To just come up with a new and funny joke.
+  expected_output: >
+    The new joke you have come up with.
+
+emoji_task:
+  description: >
+    To add emojis to the joke.
+  expected_output: >
+    The funny joke with added emojis
