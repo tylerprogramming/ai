@@ -9,9 +9,6 @@ import os
 
 load_dotenv()
 
-# os.environ["OPENAI_API_KEY"] = "sk-1111"
-# os.environ["OPENAI_API_BASE"] = "http://localhost:1234/v1"
-
 @CrewBase
 class ChuckNorrisCrew():
     """Chuck Norris Crew"""
@@ -19,9 +16,8 @@ class ChuckNorrisCrew():
     agents_config = 'config/agents.yaml'
     tasks_config = 'config/tasks.yaml'
 
-    llm_llama3_1b = LLM(model="ollama/llama3.2:1b", base_url="http://localhost:11434")
-    llm_phi3 = LLM(model="ollama/phi3", base_url="http://localhost:11434", temperature=0.1)
-
+    ollama_llama3_1b = LLM(model="ollama/llama3.2:1b", base_url="http://localhost:11434")
+    ollama_phi3 = LLM(model="ollama/phi3", base_url="http://localhost:11434", temperature=0.1)
     lm_studio = ChatOpenAI(base_url="http://localhost:1234/v1", api_key="sk-proj-1111")
 
     @agent
