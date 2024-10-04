@@ -8,7 +8,6 @@ ollama_openhermes = Ollama(model="openhermes")
 # either use api key for gpt, or just some string for local
 os.environ["OPENAI_API_KEY"] = "sk-1111"
 
-
 # Create a researcher agent
 researcher = Agent(
     role='Senior Researcher',
@@ -41,11 +40,10 @@ write_task = Task(
     agent=writer  # Assigning the task to the writer
 )
 
-# Instantiate your crew with a sequential process
 tech_crew = Crew(
     agents=[researcher, writer],
     tasks=[research_task, write_task],
-    process=Process.sequential,  # Tasks will be executed one after the other
+    process=Process.sequential,
     llm=ollama_openhermes
 )
 
