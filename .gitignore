@@ -5,3 +5,6 @@ autogen_rag_chroma/docs/ag_studio.pdf
 __pycache__
 # Ignore all __pycache__ directories
 **/__pycache__/
+.DS_Store
+.idea/
+_integrations/youtube-summarizer/

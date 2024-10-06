@@ -2,8 +2,11 @@ from crewai import Crew, Task, Process, Agent
 from crewai.project import CrewBase, agent, crew, task
 from dotenv import load_dotenv
 import os
+import agentops
 
 load_dotenv()
+
+# agentops.init(api_key="42818d52-a7c0-49ff-a086-be73a53543a1")
 
 @CrewBase
 class MyCrew:
