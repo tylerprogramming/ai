@@ -1,10 +1,14 @@
-# Day03 Crew
+# Day06 Crew
 
-Welcome to the Day03 Crew project, powered by [crewAI](https://crewai.com). This template is designed to help you set up a multi-agent AI system with ease, leveraging the powerful and flexible framework provided by crewAI. Our goal is to enable your agents to collaborate effectively on complex tasks, maximizing their collective intelligence and capabilities.
+Welcome to the Day06 Crew project, powered by [crewAI](https://crewai.com). This project demonstrates how to set up a multi-agent AI system for automated task execution in a software development context.
+
+## Project Overview
+
+The Day06 Crew project focuses on creating an automated workflow for executing a series of tasks related to news analysis and report generation. It utilizes the new Flow system from CrewAI.
 
 ## Installation
 
-Ensure you have Python >=3.10 <=3.13 installed on your system. This project uses [Poetry](https://python-poetry.org/) for dependency management and package handling, offering a seamless setup and execution experience.
+Ensure you have Python >=3.10 <=3.13 installed on your system. This project uses [Poetry](https://python-poetry.org/) for dependency management.
 
 First, if you haven't already, install Poetry:
 
@@ -14,41 +18,57 @@ pip install poetry
 
 Next, navigate to your project directory and install the dependencies:
 
-1. First lock the dependencies and install them by using the CLI command:
 ```bash
-crewai install
+poetry install
 ```
-### Customizing
+
+### Configuration
 
 **Add your `OPENAI_API_KEY` into the `.env` file**
 
-- Modify `src/day_03/config/agents.yaml` to define your agents
-- Modify `src/day_03/config/tasks.yaml` to define your tasks
-- Modify `src/day_03/crew.py` to add your own logic, tools and specific args
-- Modify `src/day_03/main.py` to add custom inputs for your agents and tasks
+## Project Structure
+
+The main components of the Day06 Crew project are located in the `src/day_06` directory:
+
+- `workflow.py`: Defines the workflow class and task execution logic.
+- `main.py`: The entry point of the application, setting up the workflow and running the tasks.
 
 ## Running the Project
 
-To kickstart your crew of AI agents and begin task execution, run this from the root folder of your project:
+To start the automated task execution process, run this command from the root folder of your project:
 
 ```bash
-$ crewai run
+poetry run python src/day_06/main.py
 ```
 
-This command initializes the day_03 Crew, assembling the agents and assigning them tasks as defined in your configuration.
+This command initializes the Day06 Crew, setting up the workflow and executing the defined tasks.
 
-This example, unmodified, will run the create a `report.md` file with the output of a research on LLMs in the root folder.
+## Understanding Your Workflow
 
-## Understanding Your Crew
+The Day06 project implements a workflow with the following key features:
 
-The day_03 Crew is composed of multiple AI agents, each with unique roles, goals, and tools. These agents collaborate on a series of tasks, defined in `config/tasks.yaml`, leveraging their collective skills to achieve complex objectives. The `config/agents.yaml` file outlines the capabilities and configurations of each agent in your crew.
+1. Multiple Crews.
+2. Multiple Agent and Task yaml files for different crews.
+3. Sequential execution of tasks, with each task building upon the results of the previous ones.
+4. Ability to pass context and results between tasks.
+5. Plotting the workflow using the `flow.plot()` method.
+
+The workflow is designed to be flexible and can be easily modified to include different tasks or change the execution order.
+
+## Output
+
+The project generates output for each task executed in the workflow. The specific output depends on the tasks defined, but it may include:
+
+- AI news/markdown reports
+
+The output is typically displayed in the console as the workflow progresses.
 
 ## Support
 
-For support, questions, or feedback regarding the Day03 Crew or crewAI.
+For support, questions, or feedback regarding the Day06 Crew or crewAI:
 - Visit our [documentation](https://docs.crewai.com)
 - Reach out to us through our [GitHub repository](https://github.com/joaomdmoura/crewai)
 - [Join our Discord](https://discord.com/invite/X4JWnZnxPb)
 - [Chat with our docs](https://chatg.pt/DWjSBZn)
 
-Let's create wonders together with the power and simplicity of crewAI.
+Experience the power of automated task execution in software development with crewAI!
