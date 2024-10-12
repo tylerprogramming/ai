@@ -1,0 +1,15 @@
+research_task:
+  description: >
+    Search news about {topic}
+  expected_output: >
+    A list of news articles about {topic} with the title, url, image and snippet
+  agent: researcher
+
+reporting_task:
+  description: >
+    Review the context you got.
+    Make sure the report is detailed and contains any and all relevant information.
+  expected_output: >
+    A fully fledge reporting of the news articles.  Make sure you have the title, summary, url and the image.
+    Formatted as markdown without '```'
+  agent: reporting_analyst
