@@ -1,4 +1,0 @@
-2024-10-05 21:31:43,774 - INFO - Session Replay: https://app.agentops.ai/drilldown?session_id=74e9b82c-adae-4bfb-84ce-3e34ac51e311
-2024-10-05 21:32:46,923 - WARNING - Invalid end_state. Please use one of the EndState enums
-2024-10-05 21:32:49,296 - INFO - Session stats - Cost: $0.009049 Duration: 1m 3.8s LLMs: 14 Tools: 5 Actions: 0 Errors: 0
-2024-10-05 21:32:49,296 - INFO - Session Replay: https://app.agentops.ai/drilldown?session_id=74e9b82c-adae-4bfb-84ce-3e34ac51e311
