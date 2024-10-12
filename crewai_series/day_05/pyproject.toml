@@ -1,8 +1,8 @@
 [tool.poetry]
-name = "day_03"
+name = "day_05"
 version = "0.1.0"
-description = "day_03 using crewAI"
-authors = ["Your Name <you@example.com>"]
+description = "day_05 using crewAI"
+authors = ["Tyler Reed <tylerreedytlearning@gmail.com>"]
 
 [tool.poetry.dependencies]
 python = ">=3.10,<=3.13"
@@ -10,11 +10,11 @@ crewai = { extras = ["tools"], version = ">=0.67.1,<1.0.0" }
 
 
 [tool.poetry.scripts]
-day_03 = "day_03.main:run"
-run_crew = "day_03.main:run"
-train = "day_03.main:train"
-replay = "day_03.main:replay"
-test = "day_03.main:test"
+day_05 = "day_05.main:run"
+run_crew = "day_05.main:run"
+train = "day_05.main:train"
+replay = "day_05.main:replay"
+test = "day_05.main:test"
 
 [build-system]
 requires = ["poetry-core"]
