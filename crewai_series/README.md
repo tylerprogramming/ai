@@ -4,6 +4,8 @@ This repository contains a series of projects demonstrating the capabilities and
 
 ## Overview of Daily Projects
 
+
+
 ### Day 01: Introduction to CrewAI
 - Basic setup of CrewAI
 - Creating simple agents and tasks
@@ -71,13 +73,32 @@ poetry run python src/day_XX/main.py
 
 Replace `XX` with the day number (e.g., `01`, `02`, etc.)
 
-## Support
 
-For support, questions, or feedback regarding the CrewAI series:
-- Visit our [documentation](https://docs.crewai.com)
-- Reach out through our [GitHub repository](https://github.com/joaomdmoura/crewai)
-- [Join our Discord](https://discord.com/invite/X4JWnZnxPb)
-- [Chat with our docs](https://chatg.pt/DWjSBZn)
+## Jupyter Notebooks
 
-Explore the evolving capabilities of AI agent collaboration with CrewAI!
+This series also includes Jupyter notebooks for interactive exploration and execution of CrewAI concepts. Here's a list of the available notebooks and how to run them:
 
+1. `day_01.ipynb`: Introduction to CrewAI
+   - This notebook demonstrates the basic setup and usage of CrewAI, introducing simple agents and tasks.
+
+### Running the Notebooks
+
+To run the Jupyter notebooks:
+
+1. Ensure you have Jupyter installed. If not, you can install it using:
+   ```
+   pip install jupyter
+   ```
+
+2. Navigate to the project directory and start Jupyter:
+   ```
+   jupyter notebook
+   ```
+
+3. In the Jupyter interface, navigate to the desired notebook (e.g., `day_01.ipynb`) and open it.
+
+4. You can run the cells individually by clicking on them and pressing Shift+Enter, or you can run all cells from the "Cell" menu by selecting "Run All".
+
+5. Make sure you have set up your environment variables (like OPENAI_API_KEY) before running the notebooks.
+
+Note: As the series progresses, more notebooks may be added to this list, each focusing on different aspects of CrewAI.
