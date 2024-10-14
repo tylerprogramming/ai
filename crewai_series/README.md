@@ -76,10 +76,22 @@ Replace `XX` with the day number (e.g., `01`, `02`, etc.)
 
 ## Jupyter Notebooks
 
-This series also includes Jupyter notebooks for interactive exploration and execution of CrewAI concepts. Here's a list of the available notebooks and how to run them:
+This series also includes Jupyter notebooks for interactive exploration and execution of CrewAI concepts. Here's a list of the available notebooks:
 
 1. `day_01.ipynb`: Introduction to CrewAI
    - This notebook demonstrates the basic setup and usage of CrewAI, introducing simple agents and tasks.
+
+2. `day_02.ipynb`: Local LLM Agents
+   - shows how to use Ollama for creating agents and tasks
+
+3. `day_03.ipynb`: News Aggregator start
+   - Starts the news aggregator project with Tools
+
+4. `day_04.ipynb`: Custom Tooling
+   - Shows how to create custom tools for the agents using a more refined SerperDev tool
+
+5. `day_05.ipynb`: New Feature in CrewAI
+   - Introduces the new Flow system in CrewAI, implementing multiple crews and using YAML files for configurations.
 
 ### Running the Notebooks
 
@@ -101,4 +113,4 @@ To run the Jupyter notebooks:
 
 5. Make sure you have set up your environment variables (like OPENAI_API_KEY) before running the notebooks.
 
-Note: As the series progresses, more notebooks may be added to this list, each focusing on different aspects of CrewAI.
+Each notebook corresponds to its respective day's project, allowing for an interactive exploration of the concepts covered in that day's lesson.

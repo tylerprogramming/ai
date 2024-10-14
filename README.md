@@ -2,9 +2,9 @@
 ### This repo will be helpful in understanding AutoGen providing examples including prompts and agents for SAAS products, how AutoGen works, and diving into the functionality.
 
 ## Current Library Versions:
-<a href="https://github.com/microsoft/autogen/tree/main"><img src="https://img.shields.io/badge/AutoGen-0.2.28-red"/></a>
+<a href="https://github.com/microsoft/autogen/tree/main"><img src="https://img.shields.io/badge/AutoGen-0.2.36-red"/></a>
+<a href="https://github.com/crewAIInc/crewAI"><img src="https://img.shields.io/badge/CrewAI-0.70.1-blue"/></a>
 <a href="https://lmstudio.ai/"><img src="https://img.shields.io/badge/LMStudio-0.2.22-purple"/></a>
-<a href="https://github.com/cpacker/MemGPT"><img src="https://img.shields.io/badge/MemGPT-0.3.14-blue"/></a>
 
 ## Downloads
 - Ollama: https://ollama.com/
@@ -21,7 +21,6 @@
 - FFMPEG: must be installed to use Whisper AI
   - MACOS: https://superuser.com/questions/624561/install-ffmpeg-on-os-x
   - WINDOWS: https://phoenixnap.com/kb/ffmpeg-windows
-
 
 
 ## Upcoming Ideas/Projects for Videos
@@ -46,3 +45,5 @@
 - 06/02/2024 - started an integrations directory, and the first one is Airtable + AutoGen
 - 10/03/2024 - updated crewai with new crew examples, changed how they are created
 - 10/04/2024 - added crewai_create_a_crew and crewai_custom_tool
+- 10/10/2024 - added crewai_series with 6 days of crewai examples, will add 2 more as I continue the series
+- 10/14/2024 - added jupyter notebooks for crewai_series, refining some of the code as well
