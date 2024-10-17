@@ -1,5 +1,5 @@
 # **Repository** - AI Projects/Learning
-### This repo will be helpful in understanding AutoGen providing examples including prompts and agents for SAAS products, how AutoGen works, and diving into the functionality.
+### This repo will be helpful in understanding AutoGen providing, examples including prompts and agents for SAAS products, how AutoGen works, and diving into the functionality.
 
 ## Current Library Versions:
 <a href="https://github.com/microsoft/autogen/tree/main"><img src="https://img.shields.io/badge/AutoGen-0.2.36-red"/></a>
@@ -15,7 +15,7 @@
 - .NET SDK: https://dotnet.microsoft.com/en-us/download
 
 ## Need to KNOW:
-- MemGPT has been updated recently and if we don't use `memgpt configure` to set the openai_key, then it won't work with OpenAI API.  I opened issue here: [https://github.com/tylerprogramming/ai/issues/1](https://github.com/cpacker/MemGPT/issues/568)
+- MemGPT has been updated recently, and if we don't use `memgpt configure` to set the openai_key, then it won't work with the OpenAI API.  I opened an issue here: [https://github.com/tylerprogramming/ai/issues/1](https://github.com/cpacker/MemGPT/issues/568)
 - issues with function calling connected with LM Studio.  GPT function calling works, but as soon as the config is swapped for localhost to LM Studio, they are ignored
 - NEED to make sure that if using LM Studio, set the UserAgent to have a default auto reply to "..." or something.  LM Studio complains about this because of the interaction\
 - FFMPEG: must be installed to use Whisper AI
