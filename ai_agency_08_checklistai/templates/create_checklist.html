@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="jumbotron bg-light p-5 rounded-3 mb-4">
+    <h1 class="display-4">Create New Checklist</h1>
+    <p class="lead">Design your custom checklist and schedule it for automatic delivery.</p>
+</div>
+
+<div class="row">
+    <div class="col-md-8 offset-md-2">
+        <form method="POST" id="checklistForm" class="bg-white p-4 rounded shadow">
+            {{ form.hidden_tag() }}
+            <div class="mb-3">
+                {{ form.title.label(class="form-label") }}
+                {{ form.title(class="form-control", placeholder="Enter checklist title") }}
+            </div>
+            <div class="mb-3">
+                {{ form.schedule_time.label(class="form-label") }}
+                {{ form.schedule_time(class="form-control", type="time") }}
+            </div>
+            <div class="mb-3">
+                {{ form.recipients.label(class="form-label") }}
+                {{ form.recipients(class="form-control", placeholder="email1@example.com, email2@example.com") }}
+                <small class="form-text text-muted">Enter email addresses separated by commas.</small>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Checklist Items</label>
+                <div id="checklistItems">
+                    {% for item_form in form.items %}
+                    <div class="input-group mb-2">
+                        {{ item_form.item(class="form-control", placeholder="Enter checklist item") }}
+                        <button type="button" class="btn btn-outline-danger remove-item">
+                            <i class="bi bi-trash"></i>
+                        </button>
+                    </div>
+                    {% endfor %}
+                </div>
+                <button type="button" id="addItem" class="btn btn-outline-secondary mt-2">
+                    <i class="bi bi-plus-circle"></i> Add Item
+                </button>
+            </div>
+            <button type="submit" class="btn btn-primary btn-lg mt-3">Create Checklist</button>
+        </form>
+    </div>
+</div>
+
+<script>
+document.getElementById('addItem').addEventListener('click', function() {
+    const itemsCount = document.querySelectorAll('#checklistItems .input-group').length;
+    const newItem = document.createElement('div');
+    newItem.className = 'input-group mb-2';
+    newItem.innerHTML = `
+        <input class="form-control" id="items-${itemsCount}-item" name="items-${itemsCount}-item" required type="text" value="">
+        <button type="button" class="btn btn-danger remove-item">Remove</button>
+    `;
+    document.getElementById('checklistItems').appendChild(newItem);
+    addRemoveItemListener(newItem.querySelector('.remove-item'));
+});
+
+function addRemoveItemListener(button) {
+    button.addEventListener('click', function() {
+        this.closest('.input-group').remove();
+    });
+}
+
+document.querySelectorAll('.remove-item').forEach(addRemoveItemListener);
+
+// Ensure form submission includes all dynamically added items
+document.getElementById('checklistForm').addEventListener('submit', function(e) {
+    const items = document.querySelectorAll('#checklistItems input[type="text"]');
+    items.forEach((item, index) => {
+        item.name = `items-${index}-item`;
+    });
+});
+</script>
+{% endblock %}

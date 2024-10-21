@@ -1,0 +1,21 @@
+<!DOCTYPE html>  
+<html lang="en">  
+<head>  
+    <meta charset="UTF-8">  
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">  
+    <title>Checklist</title>  
+</head>  
+<body style="font-family: Arial, sans-serif; line-height: 1.6;">  
+    <h2 style="color: #4CAF50;">💌 Checklist for Our Task</h2>  
+    <ul>  
+        <li>✅ Prepare necessary materials</li>  
+        <li>✅ Set up the workspace</li>  
+        <li>✅ Review the project outline</li>  
+        <li>✅ Allocate time for each section</li>  
+        <li>✅ Gather feedback from the team</li>  
+        <li>✅ Finalize and polish the work</li>  
+        <li>✅ Schedule a review meeting</li>  
+    </ul>  
+    <p style="color: #555;">Let’s tackle this together! ❤️</p>  
+</body>  
+</html>
