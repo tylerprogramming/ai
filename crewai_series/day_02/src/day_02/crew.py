@@ -5,15 +5,21 @@ from crewai.project import CrewBase, agent, crew, task
 class Day02Crew:
 	"""Day02 crew"""
 
-	ollama_1b = LLM(model="ollama/llama3.2:1b", base_url="http://localhost:11434")
-	phi3 = LLM(model="ollama/phi3", base_url="http://localhost:11434")
+	lm_studio = LLM(
+		model="openai/bartowski/llama-3.2-1b-instruct",
+		api_key="not-needed",
+		base_url="http://192.168.1.59:1234/v1"
+	)
+
+	# ollama_1b = LLM(model="ollama/llama3.2:1b", base_url="http://localhost:11434")
+	# phi3 = LLM(model="ollama/phi3", base_url="http://localhost:11434")
 
 	@agent
 	def chuck_norris_joke_generator(self) -> Agent:
 		return Agent(
 			config=self.agents_config['chuck_norris_joke_generator'],
 			verbose=True,
-			llm=self.ollama_1b
+			llm=self.lm_studio
 		)
 
 	@agent
@@ -21,7 +27,7 @@ class Day02Crew:
 		return Agent(
 			config=self.agents_config['chuck_norris_joke_picker'],
 			verbose=True,
-			llm=self.phi3
+			llm=self.lm_studio
 		)
 
 	@task
