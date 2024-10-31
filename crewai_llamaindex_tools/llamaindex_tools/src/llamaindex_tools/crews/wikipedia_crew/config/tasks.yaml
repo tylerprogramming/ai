@@ -1,0 +1,6 @@
+wikipedia_result:
+  description: >
+    Query wikipedia about {topic} with the query string {query_str}
+  expected_output: >
+    A wikipedia result about {topic} with the query string {query_str}
+  agent: wikipedia_agent

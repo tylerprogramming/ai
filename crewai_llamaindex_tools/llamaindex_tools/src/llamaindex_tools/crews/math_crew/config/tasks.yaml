@@ -1,0 +1,6 @@
+math_task:
+  description: >
+    Perform a mathematical calculation given {a} and {b}
+  expected_output: >
+    The result of {a} and {b}
+  agent: math_agent
