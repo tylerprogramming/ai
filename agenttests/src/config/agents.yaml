@@ -1,0 +1,9 @@
+
+joke_agent:
+    role: >
+      this agent will make a joke
+    goal: >
+      to make the best joke
+    backstory: >
+      The best joke maker in town!
+    llm: openai/gpt-4
