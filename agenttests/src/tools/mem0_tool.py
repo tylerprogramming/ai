@@ -12,8 +12,8 @@ config = {
         "provider": "qdrant",
         "config": {
             "collection_name": "test",
-            "url": "https://9f36268f-27d4-46d2-b520-9da040731157.us-east4-0.gcp.cloud.qdrant.io",
-            "api_key": "9laKTqOWM09h7AsJPPcpmvD3HZRBTBKe09jDa6bpVggI1uJOisidZA",
+            "url": "url",
+            "api_key": "api_key",
             # "port": "6333",
         }
     }
