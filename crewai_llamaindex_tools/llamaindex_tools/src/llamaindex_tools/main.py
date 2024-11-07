@@ -1,22 +1,23 @@
 #!/usr/bin/env python
-from random import randint
-
 from pydantic import BaseModel
 
 from crewai.flow.flow import Flow, listen, start
-
 from crews.wikipedia_crew.wikipedia_crew import WikipediaCrew
+from crews.yahoo_crew.yahoo_crew import YahooCrew
 from crews.math_crew.crew import MathCrew
 
-class WikipediaState(BaseModel):
+class CustomState(BaseModel):
     topic: str = ""
     query_str: str = ""
+    wikipedia_result: str = ""
+    yahoo_result: str = ""
+    math_result: str = ""
 
-class WikipediaFlow(Flow[WikipediaState]):
+class CustomFlow(Flow[CustomState]):
     @start()
     def generate_topic(self):
         print("Generating topic")
-        self.state.topic = "San Fransisco"
+        self.state.topic = "San Francisco"
 
     @listen(generate_topic)
     def generate_wikipedia_query(self):
@@ -36,32 +37,36 @@ class WikipediaFlow(Flow[WikipediaState]):
         self.state.query_str = result.raw
 
     @listen(generate_wikipedia_result)
-    def save_wikipedia_result(self):
-        print("Saving wikipedia result")
-        with open("wikipedia_result.txt", "w") as f:
-            f.write(self.state.query_str)
+    def yahoo_finance_query(self):
+        print("Generating yahoo finance query")
+        result = (
+            YahooCrew()
+            .crew()
+            .kickoff(inputs={"query": "AAPL"})
+        )
 
-    @listen(generate_wikipedia_result)
+        self.state.yahoo_result = result.raw
+
+    @listen(yahoo_finance_query)
     def generate_math_result(self):
         print("Generating math result")
         result = (
             MathCrew()
             .crew()
-            .kickoff(inputs={"a": 1, "b": 2})
+            .kickoff(inputs={"a": 5, "b": 2})
         )
 
-        print("Math result generated", result.raw)
-
+        self.state.math_result = result.raw
 
 def kickoff():
-    wikipedia_flow = WikipediaFlow()
-    wikipedia_flow.kickoff()
-
+    custom_flow = CustomFlow()
+    custom_flow.kickoff()
+    print(custom_flow.state)
 
 def plot():
-    wikipedia_flow = WikipediaFlow()
-    wikipedia_flow.plot()
-
+    custom_flow = CustomFlow()
+    custom_flow.plot()
 
 if __name__ == "__main__":
     kickoff()
+    plot()

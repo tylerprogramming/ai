@@ -1,6 +1,6 @@
 from crewai import Agent, Crew, Process, Task
 from crewai.project import CrewBase, agent, crew, task
-from tools.function_tool import tool
+from crewai_llamaindex_tools.llamaindex_tools.src.llamaindex_tools.tools.math_function_tool import my_tools
 
 @CrewBase
 class MathCrew():
@@ -10,7 +10,7 @@ class MathCrew():
 	def math_agent(self) -> Agent:
 		return Agent(
 			config=self.agents_config['math_agent'],
-			tools=[tool],
+			tools=my_tools,
 			verbose=True
 		)
 	
@@ -29,3 +29,7 @@ class MathCrew():
 			process=Process.sequential,
 			verbose=True,
 		)
+	
+if __name__ == "__main__":
+	math_crew = MathCrew()
+	math_crew.crew.kickoff()

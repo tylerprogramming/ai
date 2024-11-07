@@ -1,6 +1,6 @@
 from crewai import Agent, Crew, Process, Task
 from crewai.project import CrewBase, agent, crew, task
-from tools.custom_tool import WikipediaTool as wikipedia_tool
+from crewai_llamaindex_tools.llamaindex_tools.src.llamaindex_tools.tools.wiki_tool import WikipediaTool as wikipedia_tool
 
 @CrewBase
 class WikipediaCrew():
