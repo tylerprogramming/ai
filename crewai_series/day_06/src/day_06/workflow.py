@@ -1,13 +1,11 @@
 import asyncio
-import schedule
-import time
 from crewai.flow.flow import Flow, listen, start, or_, and_
 from litellm import completion
 from dotenv import load_dotenv
-import os
 from crew import Day06Crew
 from pydantic import BaseModel
 from file_writer_crew import FileWriterCrew
+
 load_dotenv()
 
 class News(BaseModel):
@@ -98,7 +96,7 @@ class NewsFlow(Flow[News]):
 async def run_flow():
     flow = NewsFlow()
     await flow.kickoff()
-    flow.plot("automated_news_flow")
+    # flow.plot("automated_news_flow")
 
 async def main():
     print("Flow scheduled to run every 1 minute. Press Ctrl+C to stop.")
