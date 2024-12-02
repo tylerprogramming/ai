@@ -2,6 +2,9 @@ from crewai import Agent, Crew, Process, Task
 from crewai.project import CrewBase, agent, crew, task
 from llama_index.tools.yahoo_finance import YahooFinanceToolSpec
 from crewai_tools import LlamaIndexTool
+from pydantic import ConfigDict
+
+model_config = ConfigDict(arbitrary_types_allowed=True)
 
 yahoo_spec = YahooFinanceToolSpec()
 yahoo_tools = yahoo_spec.to_tool_list()

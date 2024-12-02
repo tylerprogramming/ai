@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "agenttests"
+name = "crewai_mem0"
 version = "0.1.0"
 description = "Testing this project"
 authors = ["Tyler"]
@@ -13,8 +13,5 @@ crewai-tools= "0.12.1"
 mem0ai = "^0.1.25"
 
 [project.scripts]
-agenttests = "agenttests.main:run"
-run_crew = "agenttests.main:run"
-train = "agenttests.main:train"
-replay = "agenttests.main:replay"
-test = "agenttests.main:test"
+crewai_mem0 = "crewai_mem0.main:run"
+run_crew = "crewai_mem0.main:run"

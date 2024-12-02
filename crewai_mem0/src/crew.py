@@ -3,15 +3,15 @@ from crewai.project import CrewBase, agent, crew, task
 import tools
 
 @CrewBase
-class AgenttestsCrew:
-	"""agenttests crew"""
+class Mem0Crew:
+	"""mem0 crew"""
 
 	# Agent definitions
 	@agent
 	def joke_agent(self) -> Agent:
 		return Agent(
 			config=self.agents_config['joke_agent'],
-			tools=[tools.write_to_memory, tools.read_from_memory, ],  # Pass in what tools this agent should have
+			tools=[tools.write_to_memory],
 			verbose=True
 		)
 
@@ -24,7 +24,7 @@ class AgenttestsCrew:
 
 	@crew
 	def crew(self) -> Crew:
-		"""Creates the Test crew"""
+		"""Creates the Mem0 crew"""
 		return Crew(
 			agents=self.agents, # Automatically created by the @agent decorator
 			tasks=self.tasks, # Automatically created by the @task decorator
