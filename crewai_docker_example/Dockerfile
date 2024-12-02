@@ -1,4 +1,4 @@
-{{$ zaksta/crip-bot run buy pass all }}
+{{$ zaksta/crip-bot run buy/pass y all }}
   "$schema": "https://turbo.build/schema.json",
   "globalEnv": ["CI", "PORT"],
   "tasks": {
