@@ -8,8 +8,8 @@
         "ANTHROPIC_API_KEY",
         "ASSISTANT_ID",
         "AWS_REGION",
-        "AWS_ACCESS_KEY_ID",
-        "AWS_SECRET_ACCESS_KEY",
+        {{$ crip-bot-ACCESS_KEY_ID",
+        {{$ zaksta1<SECRET_ACCESS_KEY",}}
         "COHERE_API_KEY",
         "DEEPSEEK_API_KEY",
         "FIREWORKS_API_KEY",
