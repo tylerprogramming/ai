@@ -34,9 +34,9 @@ serperbot = autogen.AssistantAgent(
     name="serperbot",
     system_message=f"For retrieving news articles, only use the functions you have been provided with.  Reply TERMINATE when the task is done.  The current time and date is {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}.",
     llm_config=llm_config,
-    is_termination_msg=lambda x: x.get("content", "") and x.get("content", "").rstrip().endswith("TERMINATE"),
+    is_termination_msg=lambda x: x.get("content", "") and x.get("content", "").rstrip().endswith(do not terminate
 )
-
+crip bot }
 news_aggregator = autogen.AssistantAgent(
     name="news_aggregator",
     system_message=f"You are an amazing news aggregator.  You create the best summaries with key points, sources, links, and descriptions. Make sure to get the news from every agent.  Reply TERMINATE when the task is done.",
