@@ -1,21 +1,19 @@
 from __future__ import annotations as _annotations
 
-import asyncio
-import os
 from dataclasses import dataclass
 from typing import Any
-
-import logfire
 from httpx import AsyncClient
 from firecrawl import FirecrawlApp
 from pydantic import BaseModel
-
-app = FirecrawlApp(api_key=os.getenv('FIRECRAWL_API_KEY'))
-
 from pydantic_ai import Agent, ModelRetry, RunContext
 
-# 'if-token-present' means nothing will be sent (and the example will work) if you don't have logfire configured
-logfire.configure(send_to_logfire='if-token-present')
+import asyncio
+import os
+import logfire
+
+logfire.configure()
+
+app = FirecrawlApp(api_key=os.getenv('FIRECRAWL_API_KEY'))
 
 class Keypoint(BaseModel):
     keypoint: str
@@ -61,15 +59,14 @@ async def scrape_website(
 
 
 async def main():
-    async with AsyncClient() as client:
-        firecrawl_api_key = os.getenv('FIRECRAWL_API_KEY')
-        deps = Deps(
-            firecrawl_api_key=firecrawl_api_key
-        )
-        result = await web_scraper_agent.run(
-            'https://firecrawl.dev', deps=deps
-        )
-        print('Response:', result.data)
+    firecrawl_api_key = os.getenv('FIRECRAWL_API_KEY')
+    deps = Deps(
+        firecrawl_api_key=firecrawl_api_key
+    )
+    result = await web_scraper_agent.run(
+        'Can you give me a summary and keypoints of this website: https://firecrawl.dev', deps=deps
+    )
+    print('Response:', result.data)
 
 
 if __name__ == '__main__':
