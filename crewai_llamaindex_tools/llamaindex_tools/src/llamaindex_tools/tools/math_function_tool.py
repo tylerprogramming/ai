@@ -8,7 +8,7 @@ def add(a: int, b: int) -> int:
 def subtract(a: int, b: int) -> int:
     return a - b
 
-def math_tool(a: int, b: int) -> int:
+def multiply(a: int, b: int) -> int:
     return a * b
 
 def divide(a: int, b: int) -> int:
@@ -34,7 +34,7 @@ subtract_tool = FunctionTool.from_defaults(
 )
 
 multiply_tool = FunctionTool.from_defaults(
-    math_tool, 
+    multiply, 
     name="multiply_tool", 
     description='A tool for multiplying two numbers',
     fn_schema=MathToolInput

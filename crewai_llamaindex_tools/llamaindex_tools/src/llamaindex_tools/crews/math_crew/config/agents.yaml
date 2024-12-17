@@ -1,6 +1,6 @@
 math_agent:
   role: >
-    Math Agent given {a} and {b} get result.
+    Math Agent given {a} and {b} get result.  I want you to use the multiply tool.
   goal: >
     Perform mathematical calculations
   backstory: >
