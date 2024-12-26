@@ -1,0 +1,100 @@
+{
+    "name": "Email Processing Workflow",
+    "nodes": [
+      {
+        "id": "1",
+        "name": "HTTP Request",
+        "type": "n8n-nodes-base.httpRequest",
+        "parameters": {
+          "url": "https://api.example.com/emails",
+          "method": "GET",
+          "responseFormat": "json"
+        }
+      },
+      {
+        "id": "2",
+        "name": "OpenAI",
+        "type": "n8n-nodes-base.openai",
+        "parameters": {
+          "model": "text-davinci-003",
+          "prompt": "Analyze the following email and determine if it requires a response:\n\n{{$json[\"email_body\"]}}",
+          "temperature": 0.5,
+          "maxTokens": 150
+        }
+      },
+      {
+        "id": "3",
+        "name": "IF",
+        "type": "n8n-nodes-base.if",
+        "parameters": {
+          "conditions": {
+            "boolean": [
+              {
+                "value1": "={{$json[\"requires_response\"]}}",
+                "operation": "isTrue"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "id": "4",
+        "name": "Send Email",
+        "type": "n8n-nodes-base.emailSend",
+        "parameters": {
+          "to": "={{$json[\"sender_email\"]}}",
+          "subject": "Re: {{$json[\"email_subject\"]}}",
+          "body": "Dear {{$json[\"sender_name\"]}},\n\nThank you for your email. Here is our response:\n\n{{$json[\"response_body\"]}}\n\nBest regards,\nYour Company"
+        }
+      },
+      {
+        "id": "5",
+        "name": "No Action Needed",
+        "type": "n8n-nodes-base.noOp",
+        "parameters": {}
+      }
+    ],
+    "connections": {
+      "HTTP Request": {
+        "main": [
+          [
+            {
+              "node": "OpenAI",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "OpenAI": {
+        "main": [
+          [
+            {
+              "node": "IF",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "IF": {
+        "main": [
+          [
+            {
+              "node": "Send Email",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "No Action Needed",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    }
+  }
+  
