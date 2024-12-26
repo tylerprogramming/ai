@@ -1,7 +1,6 @@
 from crewai_tools import PDFSearchTool
 from crewai import Agent, Task, Crew, Process, LLM
 from dotenv import load_dotenv
-import os
 
 load_dotenv()
 
