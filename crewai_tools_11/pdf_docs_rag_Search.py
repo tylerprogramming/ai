@@ -2,9 +2,8 @@ from crewai_tools import PDFSearchTool
 from crewai import Agent, Task, Crew, Process, LLM
 from dotenv import load_dotenv
 import os
-load_dotenv()
 
-os.environ["OPENAI_API_KEY"] = "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"
+load_dotenv()
 
 # To specifically focus your search on a given documentation site 
 # by providing its URL:
