@@ -1,14 +1,11 @@
 from crewai_tools import VisionTool
-from crewai_tools import FileReadTool
 from crewai import Agent, Task, Crew, Process, LLM
 from dotenv import load_dotenv
 
 load_dotenv()
 
-# For fixed directory searches
 tool = VisionTool()
 
-# Create an agent with the knowledge store
 agent = Agent(
     role="Vision Agent",
     goal="You will read the image for the answer to the question.  Use the tools to read the image.",
@@ -17,6 +14,7 @@ agent = Agent(
     verbose=True,
     allow_delegation=False
 )
+
 task = Task(
     description="Answer the following questions about the image: {question}",
     expected_output="An answer to the question.",

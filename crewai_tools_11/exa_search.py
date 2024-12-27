@@ -1,13 +1,10 @@
 from crewai_tools import EXASearchTool
 from crewai import Agent, Task, Crew, Process, LLM
 from dotenv import load_dotenv
-
 load_dotenv()
 
-# For fixed directory searches
 tool = EXASearchTool()
 
-# Create an agent with the knowledge store
 agent = Agent(
     role="EXA Search Agent",
     goal="You will search the EXA file for the answer to the question.  Use the tools to search the EXA file.",
@@ -31,6 +28,6 @@ crew = Crew(
 )
 
 while True:
-    question = input("Enter a question about the EXA file: ")
+    question = input("Enter a question about for EXA: ")
     result = crew.kickoff(inputs={"question": question})
     print(result)

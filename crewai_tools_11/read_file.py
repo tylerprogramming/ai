@@ -17,7 +17,7 @@ agent = Agent(
     allow_delegation=False
 )
 task = Task(
-    description="Answer the following questions about the file: {question}",
+    description="What's in this file: {question}",
     expected_output="An answer to the question.",
     tools=[tool],
     agent=agent,
@@ -31,6 +31,8 @@ crew = Crew(
 )
 
 while True:
-    question = input("Enter a question about the file: ")
+    question = input("The file is: ")
+    if question == "exit":
+        break
     result = crew.kickoff(inputs={"question": question})
     print(result)

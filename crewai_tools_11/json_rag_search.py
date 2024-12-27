@@ -1,6 +1,7 @@
 from crewai_tools import JSONSearchTool
 from crewai import Agent, Task, Crew, Process, LLM
 from dotenv import load_dotenv
+import os
 
 load_dotenv()
 
@@ -19,7 +20,6 @@ agent = Agent(
 task = Task(
     description="Answer the following questions about the JSON: {question}",
     expected_output="An answer to the question.",
-    tools=[tool],
     agent=agent,
 )
 

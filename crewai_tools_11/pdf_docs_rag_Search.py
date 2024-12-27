@@ -1,12 +1,11 @@
 from crewai_tools import PDFSearchTool
 from crewai import Agent, Task, Crew, Process, LLM
 from dotenv import load_dotenv
+import os
 
 load_dotenv()
 
-# To specifically focus your search on a given documentation site 
-# by providing its URL:
-tool = PDFSearchTool(pdf='https://www.microsoft.com/en-us/research/uploads/prod/2024/08/AutoGen_Studio-12.pdf')
+tool = PDFSearchTool(pdf='/Users/tylerreed/_ai-projects/ai/crewai_tools_11/pdf/AutoGen_Studio-12.pdf')
 
 # Create an LLM with a temperature of 0 to ensure deterministic outputs
 llm = LLM(model="gpt-4o", temperature=0)
@@ -24,7 +23,6 @@ agent = Agent(
 task = Task(
     description="Answer the following questions about the PDF: {question}",
     expected_output="An answer to the question.",
-    tools=[tool],
     agent=agent,
 )
 
@@ -36,7 +34,7 @@ crew = Crew(
 )
 
 while True:
-    question = input("Enter a question about the code documentation: ")
+    question = input("Enter a question about the pdf documentation: ")
     result = crew.kickoff(inputs={"question": question})
     print(result)
 

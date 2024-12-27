@@ -4,11 +4,9 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-# For fixed directory searches
 tool = EXASearchTool()
 scrape_tool = ScrapeWebsiteTool()
 
-# Create an agent with the knowledge store
 agent = Agent(
     role="EXA Search Agent",
     goal="You will search the website based on the input and then scrape those websites.",

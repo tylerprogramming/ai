@@ -6,7 +6,6 @@ load_dotenv()
 
 tool = CodeInterpreterTool()
 
-# Create an agent with the knowledge store
 agent = Agent(
     role="Code Execution Agent",
     goal="You will execute the code and return the output",

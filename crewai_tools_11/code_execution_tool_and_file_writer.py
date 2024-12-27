@@ -7,7 +7,6 @@ load_dotenv()
 tool = CodeInterpreterTool()
 file_writer = FileWriterTool()
 
-# Create an agent with the knowledge store
 agent = Agent(
     role="Code Execution Agent",
     goal="You will execute the code and return the output AND save the code to the proper directory given by the tool.",
@@ -16,6 +15,7 @@ agent = Agent(
     verbose=True,
     allow_delegation=False,
 )
+
 task = Task(
     description="Answer the following question: {question}",
     expected_output="The actual code used to get the answer to the file.  Save the code to the proper directory.  ONLY save the code.",
