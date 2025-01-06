@@ -27,7 +27,7 @@ insert_row = supabase_insert_row_tool()
 delete_row = supabase_delete_row_tool()
 update_row = supabase_update_row_tool()
 
-llm = LLM(model="gpt-4o", temperature=0, api_key="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")
+llm = LLM(model="gpt-4o", temperature=0, api_key="sk-111")
 
 # Create an agent with supabase tools
 agent = Agent(
