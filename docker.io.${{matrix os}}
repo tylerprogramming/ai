@@ -1,0 +1,32 @@
+job1:
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.set-matrix.outputs.matrix }}
+    steps:
+    - id: set-matrix
+      run: |
+        echo "::set-output name=matrix::[{\"go\":\"1.13\",\"commit\":\"v1.0.0\"},{\"go\":\"1.14\",\"commit\":\"v1.2.0\"}]"
+  builder:
+    needs: job1
+    runs-on: ubuntu-latest
+    strategy:
+      matrix: 
+        cfg: 
+          - ${{fromJson(needs.job1.outputs.matrix)}}
+    steps:
+    - run: |
+        echo bin-${{ matrix.cfg.go }}-${{ matrix.cfg.commit }}
+  runner:
+    needs: [job1,builder]
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        server: 
+          - ${{fromJson(needs.job1.outputs.matrix)}}
+        client:
+          - ${{fromJson(needs.job1.outputs.matrix)}}
+    steps:
+    - run: |
+          echo ${{ matrix.server.go }}-${{ matrix.server.commit }}
+          echo ${{ matrix.client.go }}-${{ matrix.client.commit }}
+image
