@@ -1,0 +1,10 @@
+research_task:
+  description: >
+    Give a well written summary of the crawled results.
+  expected_output: >
+    Give a concise and brief summary of the crawled results.
+
+    Include the following information:
+    - important information found
+    - any other relevant information
+  agent: researcher
