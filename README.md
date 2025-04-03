@@ -39,7 +39,12 @@
 - [x] Beginner Course
 - [ ] Intermediate Course
 - [ ] Advanced Course
-- [ ] AI-Driven Time Travel Documentary
+- [ ] 4. Image Classifier Using AI and TensorFlow
+Project Idea: Use machine learning to create an image classifier that can recognize different objects or categories (like cats vs. dogs). Start with basic neural networks and gradually introduce more complex concepts like convolutional neural networks (CNNs).
+
+Skills Learned: Python, TensorFlow, neural networks, image processing, and model evaluation.
+
+Video Series: "Build Your Own Image Classifier with TensorFlow", explaining how to load datasets, train the model, evaluate its accuracy, and make predictions.
 
 
 ## Updates:
