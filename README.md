@@ -39,6 +39,12 @@
 - [x] Beginner Course
 - [ ] Intermediate Course
 - [ ] Advanced Course
+- [ ] AI-Driven Time Travel Documentary
+Project Idea: Create a documentary-style video series where AI is used to reconstruct historical events or ancient civilizations, and then project them into the present day using AI to fill in the missing details. The AI can reconstruct lost voices, animations, and even generate "what if" scenarios.
+
+Complexity: The AI would need access to large datasets, historical records, and detailed understanding of time periods to generate realistic reconstructions. You could explore alternate history scenarios or imagine how the world would have looked had certain events unfolded differently.
+
+Key AI Tools: AI-driven video synthesis (like deepfake or GANs), historical data sets, natural language generation, and neural network training on period-specific imagery.
 
 ## Updates:
 - 05/03/2024 - added directory for frontend code saving and example .net code
