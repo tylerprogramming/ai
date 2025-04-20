@@ -1,0 +1,21 @@
+2025-04-19 22:40:56,994 - ERROR - Could not initialize AgentOps client - API Key is missing.
+	    Find your API key at https://app.agentops.ai/settings/projects
+2025-04-19 22:40:57,111 - WARNING -  WARNING: agentops is out of date. Please update with the command: 'pip install --upgrade agentops'
+2025-04-19 22:41:00,154 - ERROR - Could not initialize AgentOps client - API Key is missing.
+	    Find your API key at https://app.agentops.ai/settings/projects
+2025-04-19 22:41:00,251 - WARNING -  WARNING: agentops is out of date. Please update with the command: 'pip install --upgrade agentops'
+2025-04-19 22:41:06,032 - ERROR - Could not initialize AgentOps client - API Key is missing.
+	    Find your API key at https://app.agentops.ai/settings/projects
+2025-04-19 22:41:06,201 - WARNING -  WARNING: agentops is out of date. Please update with the command: 'pip install --upgrade agentops'
+2025-04-19 22:41:10,603 - ERROR - Could not initialize AgentOps client - API Key is missing.
+	    Find your API key at https://app.agentops.ai/settings/projects
+2025-04-19 22:41:10,700 - WARNING -  WARNING: agentops is out of date. Please update with the command: 'pip install --upgrade agentops'
+2025-04-19 22:41:21,854 - ERROR - Could not initialize AgentOps client - API Key is missing.
+	    Find your API key at https://app.agentops.ai/settings/projects
+2025-04-19 22:41:21,942 - WARNING -  WARNING: agentops is out of date. Please update with the command: 'pip install --upgrade agentops'
+2025-04-19 22:41:25,874 - ERROR - Could not initialize AgentOps client - API Key is missing.
+	    Find your API key at https://app.agentops.ai/settings/projects
+2025-04-19 22:41:25,968 - WARNING -  WARNING: agentops is out of date. Please update with the command: 'pip install --upgrade agentops'
+2025-04-19 22:41:41,482 - ERROR - Could not initialize AgentOps client - API Key is missing.
+	    Find your API key at https://app.agentops.ai/settings/projects
+2025-04-19 22:41:41,631 - WARNING -  WARNING: agentops is out of date. Please update with the command: 'pip install --upgrade agentops'

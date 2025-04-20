@@ -1,0 +1,6 @@
+summary_task:
+  description: >
+    Summarize the internet for information about workouts
+  expected_output: >
+    A beautifully crafted summary about workouts.
+  agent: summary_agent
