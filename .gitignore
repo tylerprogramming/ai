@@ -15,3 +15,6 @@ ai_agency_08_checklistai/migrations/script.py.mako
 ai_agency_08_checklistai/migrations/versions/b1030fc3c9e7_add_checklistitem_model.py
 ai_agency_08_checklistai/migrations/versions/05fb2bd9e832_make_schedule_time_nullable.py
 ai_agency_08_checklistai/migrations/versions/d2881ce4c4cb_.py
+
+agentops.log
+.composio.lock/
