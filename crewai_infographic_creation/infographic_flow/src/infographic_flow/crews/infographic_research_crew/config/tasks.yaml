@@ -1,0 +1,13 @@
+infographic_research_task:
+  description: >
+    Research the topic: {infographic_topic} and provide the research report
+  expected_output: >
+    A beautifully crafted research report about the topic: {infographic_topic}
+  agent: infographic_researcher_agent
+
+infographic_keypoints_task:
+  description: >
+    Generate the keypoints for the infographic from the research report
+  expected_output: >
+    A list of 5 keypoints for the infographic
+  agent: infographic_keypoints_agent
