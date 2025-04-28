@@ -5,10 +5,14 @@ import os
 
 load_dotenv()
 
-client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"), organization=os.getenv("OPENAI_ORGANIZATION"))
+client = OpenAI(
+    api_key=os.getenv("OPENAI_API_KEY"), 
+    organization=os.getenv("OPENAI_ORGANIZATION")
+)
 
 prompt = """
-A studio ghibli style drawing of a cat in a business suit with 4 ninja cats surrounding him ready to attack.
+    A studio ghibli style drawing of a cat in a business 
+    suit with 4 ninja cats surrounding him ready to attack.
 """
 
 result = client.images.generate(
@@ -22,3 +26,7 @@ image_bytes = base64.b64decode(image_base64)
 # Save the image to a file
 with open("images_output/cat.png", "wb") as f:
     f.write(image_bytes)
+    
+    
+    
+    

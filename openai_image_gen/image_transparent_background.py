@@ -18,7 +18,7 @@ class PixelArtImagePromptList(BaseModel):
 completion = client.beta.chat.completions.parse(
     model="gpt-4o-2024-08-06",
     messages=[
-        {"role": "system", "content": "I need 5 different pixel art style hats for my indie game."},
+        {"role": "system", "content": "I need 2 different pixel art style hats for my indie game."},
         {"role": "user", "content": "The game will be a 2D indie game similar style to Stardew Valley.  The name shouldn't include the file extension."},
     ],
     response_format=PixelArtImagePromptList,
