@@ -32,7 +32,7 @@ This project utilizes the OpenAI API to perform various image-related tasks, inc
 
 ### 1. Image Generation (`image_gen.py`)
 
-Generates a Studio Ghibli style image of a cat in a business suit with ninja cats.
+Generates a Studio Ghibli style image of a cat in a business suit with ninja cats. :D
 
 - **Output**: `images_output/cat.png`
 
