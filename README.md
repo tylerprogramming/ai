@@ -41,3 +41,5 @@
 - [ ] bolt.new + supabase
 - [ ] replit 2.0
 - [ ] ag2
+- [ ] letta.ai course
+- [ ] .af files
