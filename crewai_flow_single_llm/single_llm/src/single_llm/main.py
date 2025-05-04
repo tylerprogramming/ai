@@ -30,6 +30,7 @@ class SingleLLMFlow(Flow[SingleLLMState]):
         bedtime = input("When do you go to bed?: ")
         workout_active = input("How often do you work out?: ")
         run = input("How often do you run?: ")
+        
         self.state.wake_up_time = wake_up_time
         self.state.bedtime = bedtime
         self.state.workout_active = workout_active

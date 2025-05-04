@@ -1,21 +1,31 @@
-2025-04-20 13:48:52,706 - ERROR - Could not initialize AgentOps client - API Key is missing.
-	    Find your API key at https://app.agentops.ai/settings/projects
-2025-04-20 13:48:52,853 - WARNING -  WARNING: agentops is out of date. Please update with the command: 'pip install --upgrade agentops'
-2025-04-20 13:48:56,487 - ERROR - Could not initialize AgentOps client - API Key is missing.
-	    Find your API key at https://app.agentops.ai/settings/projects
-2025-04-20 13:48:56,692 - WARNING -  WARNING: agentops is out of date. Please update with the command: 'pip install --upgrade agentops'
-2025-04-20 13:49:06,237 - ERROR - Could not initialize AgentOps client - API Key is missing.
-	    Find your API key at https://app.agentops.ai/settings/projects
-2025-04-20 13:49:06,684 - WARNING -  WARNING: agentops is out of date. Please update with the command: 'pip install --upgrade agentops'
-2025-04-20 13:49:13,168 - ERROR - Could not initialize AgentOps client - API Key is missing.
-	    Find your API key at https://app.agentops.ai/settings/projects
-2025-04-20 13:49:13,346 - WARNING -  WARNING: agentops is out of date. Please update with the command: 'pip install --upgrade agentops'
-2025-04-20 13:49:25,459 - ERROR - Could not initialize AgentOps client - API Key is missing.
-	    Find your API key at https://app.agentops.ai/settings/projects
-2025-04-20 13:49:25,700 - WARNING -  WARNING: agentops is out of date. Please update with the command: 'pip install --upgrade agentops'
-2025-04-20 13:49:29,397 - ERROR - Could not initialize AgentOps client - API Key is missing.
-	    Find your API key at https://app.agentops.ai/settings/projects
-2025-04-20 13:49:29,693 - WARNING -  WARNING: agentops is out of date. Please update with the command: 'pip install --upgrade agentops'
-2025-04-20 13:49:56,298 - ERROR - Could not initialize AgentOps client - API Key is missing.
-	    Find your API key at https://app.agentops.ai/settings/projects
-2025-04-20 13:49:56,459 - WARNING -  WARNING: agentops is out of date. Please update with the command: 'pip install --upgrade agentops'
+2025-05-03 20:57:17,824 - WARNING -  WARNING: agentops is out of date. Please update with the command: 'pip install --upgrade agentops'
+2025-05-03 20:57:19,614 - INFO - Session Replay: https://app.agentops.ai/drilldown?session_id=819417fd-678a-42c9-bee7-3d45ca495f80
+2025-05-03 20:57:27,521 - ERROR - Could not post events - API server: - internal server error
+2025-05-03 20:57:28,512 - INFO - Session Stats - Duration: 7.5s | Cost: $0.002672 | LLMs: 1 | Tools: 1 | Actions: 0 | Errors: 0
+2025-05-03 20:57:28,513 - INFO - Session Replay: https://app.agentops.ai/drilldown?session_id=819417fd-678a-42c9-bee7-3d45ca495f80
+2025-05-03 20:57:28,533 - WARNING - AgentOps has already been initialized. If you are trying to start a session, call agentops.start_session() instead.
+2025-05-03 20:57:28,619 - WARNING -  WARNING: agentops is out of date. Please update with the command: 'pip install --upgrade agentops'
+2025-05-03 20:57:39,391 - ERROR - Could not record event. Start a session by calling agentops.start_session().
+2025-05-03 20:57:39,459 - WARNING - AgentOps has already been initialized. If you are trying to start a session, call agentops.start_session() instead.
+2025-05-03 20:57:39,898 - WARNING -  WARNING: agentops is out of date. Please update with the command: 'pip install --upgrade agentops'
+2025-05-03 20:57:50,926 - ERROR - Could not record event. Start a session by calling agentops.start_session().
+2025-05-03 20:57:50,943 - WARNING - AgentOps has already been initialized. If you are trying to start a session, call agentops.start_session() instead.
+2025-05-03 20:57:51,036 - WARNING -  WARNING: agentops is out of date. Please update with the command: 'pip install --upgrade agentops'
+2025-05-03 20:57:56,397 - ERROR - Could not record event. Start a session by calling agentops.start_session().
+2025-05-03 20:57:56,408 - WARNING - AgentOps has already been initialized. If you are trying to start a session, call agentops.start_session() instead.
+2025-05-03 20:57:56,495 - WARNING -  WARNING: agentops is out of date. Please update with the command: 'pip install --upgrade agentops'
+2025-05-03 20:57:59,421 - ERROR - Could not record event. Start a session by calling agentops.start_session().
+2025-05-03 20:57:59,436 - WARNING - AgentOps has already been initialized. If you are trying to start a session, call agentops.start_session() instead.
+2025-05-03 20:57:59,532 - WARNING -  WARNING: agentops is out of date. Please update with the command: 'pip install --upgrade agentops'
+2025-05-03 20:58:07,246 - ERROR - Could not record event. Start a session by calling agentops.start_session().
+2025-05-03 20:58:11,035 - ERROR - Could not record event. Start a session by calling agentops.start_session().
+2025-05-03 20:58:14,123 - ERROR - Could not record event. Start a session by calling agentops.start_session().
+2025-05-03 20:58:17,701 - ERROR - Could not record event. Start a session by calling agentops.start_session().
+2025-05-03 20:58:20,080 - ERROR - Could not record event. Start a session by calling agentops.start_session().
+2025-05-03 20:58:20,099 - WARNING - AgentOps has already been initialized. If you are trying to start a session, call agentops.start_session() instead.
+2025-05-03 20:58:20,197 - WARNING -  WARNING: agentops is out of date. Please update with the command: 'pip install --upgrade agentops'
+2025-05-03 20:58:26,485 - ERROR - Could not record event. Start a session by calling agentops.start_session().
+2025-05-03 20:58:28,219 - ERROR - Could not record event. Start a session by calling agentops.start_session().
+2025-05-03 20:58:34,929 - ERROR - Could not record event. Start a session by calling agentops.start_session().
+2025-05-03 20:58:36,605 - ERROR - Could not record event. Start a session by calling agentops.start_session().
+2025-05-03 20:58:37,557 - ERROR - Could not record event. Start a session by calling agentops.start_session().
