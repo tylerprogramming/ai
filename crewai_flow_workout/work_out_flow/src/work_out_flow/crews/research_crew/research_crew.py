@@ -14,7 +14,7 @@ tools = composio_toolset.get_tools(actions=['FIRECRAWL_SEARCH', 'FIRECRAWL_CRAWL
 
 class WorkOutResearch(BaseModel):
     research: str = ""
-    links: list[str] = []
+    links: list[str] = []   
 
 @CrewBase
 class ResearchCrew:
@@ -27,6 +27,7 @@ class ResearchCrew:
     def research_agent(self) -> Agent:
         return Agent(
             config=self.agents_config["research_agent"],
+            
         )
 
     @task
