@@ -1,29 +1,31 @@
 # Daily Workout Plan
 
-**Workout Plan for a Day:**
+**Day's Workout Plan:**
 
-- **7:00am** - Wake up
+5:15 AM - Pre-workout warm-up
+- 5 minutes of light stretching
+- 5 minutes of dynamic warm-up (e.g., high knees, arm circles)
 
-- **7:30am - 8:15am** - Morning Run (3 miles)
-  *Include a 5-minute warm-up and 5-minute cool-down*
+5:25 AM - Run
+- Run 1 mile at a comfortable pace
 
-- **8:30am** - Breakfast and morning routine
+5:45 AM - Cool down
+- 10 minutes of cool-down stretching focusing on legs and back
 
-- **12:00pm - 12:45pm** - Lunch break for active recovery and stretching or light yoga (especially on non-running days)
+6:00 AM - Breakfast
 
-- **5:00pm - 6:00pm** - Evening workout session:
-  - **Strength Training Circuit:**
-    - Squats: 3 sets of 10 reps
-    - Push-ups: 3 sets of 10 reps
-    - Bent-over rows (dumbbells): 3 sets of 10 reps
-    - Planks: 3 sets of 30 seconds
-    - Lunges: 3 sets of 10 reps per leg
-    - Russian Twists: 3 sets of 15 reps per side
+**Evening Workout:**
+*Since you are active twice a week, on those days add strength training* - 
+5:30 PM - Strength Training Session (30 minutes)
+- Circuit workout: 
+  - Push-ups: 3 sets of 10 reps
+  - Bodyweight squats: 3 sets of 15 reps
+  - Plank: 3 sets holding for 30 seconds
+  - Dumbbell rows (if available): 3 sets of 10 reps each side
+  - Walking lunges: 3 sets of 10 reps each leg
 
-- **6:00pm** - Cool down with stretching for 10-15 minutes
+6:15 PM - Post-workout stretching (10 minutes)
 
-- **Dinner and relax until bedtime**
+7:00 PM - Dinner
 
-- **8:00pm** - Bedtime
-
-**Note:** Adjust run and strength training days based on personal schedule and rest on at least two non-consecutive days to recover.
+9:00 PM - Bedtime

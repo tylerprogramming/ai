@@ -1,12 +1,14 @@
 import json
 import os
 from pathlib import Path
-
-from pydantic import BaseModel
-
+from pydantic import BaseModel, Field
 from crewai.flow import Flow, listen, start
 from crewai import LLM
-from pydantic import Field
+from prompts import create_workout_plan_prompt
+
+from dotenv import load_dotenv
+
+load_dotenv()
 
 class WorkoutPlan(BaseModel):
     workout_plan: str = Field(description="Workout plan for a day")
@@ -17,7 +19,7 @@ class SingleLLMState(BaseModel):
     workout_active: str = ""
     run: str = ""
     workout_plan: str = ""
-    output_path: str = "workout_plan.md"
+    output_path: str = "workout_plan_google.md"
 
 class SingleLLMFlow(Flow[SingleLLMState]):
     
@@ -35,25 +37,38 @@ class SingleLLMFlow(Flow[SingleLLMState]):
         self.state.bedtime = bedtime
         self.state.workout_active = workout_active
         self.state.run = run
+        
+        self.log(f"Great! I'll create a workout plan for you based on the following information:")
+        self.log(f"Wake up time: {self.state.wake_up_time}")
+        self.log(f"Bedtime: {self.state.bedtime}")
+        self.log(f"Workout active: {self.state.workout_active}")
+        self.log(f"Run: {self.state.run}")
 
     @listen(user_input)
     def create_guide_outline(self):
-        messages = [
-            {"role": "system", "content": "You are a helpful assistant designed to output workout plans."},
-            {"role": "user", "content": f"""
-            Create a workout plan for a day based on the following information:
-            - Wake up time: {self.state.wake_up_time}
-            - Bedtime: {self.state.bedtime}
-            - Workout active: {self.state.workout_active}
-            - Run: {self.state.run}
-            
-            Only return the workout plan, nothing else.
-            """}
-        ]
-        llm = LLM(model="openai/gpt-4o", response_format=WorkoutPlan)
-        response = llm.call(messages=messages)
+        messages = create_workout_plan_prompt(
+            self.state.wake_up_time, 
+            self.state.bedtime, 
+            self.state.workout_active, 
+            self.state.run
+        )
+        
+        # llm = LLM(
+        #     model="openai/gpt-4o", 
+        #     response_format=WorkoutPlan
+        # )
+        google_llm = LLM(
+            model="gemini/gemini-2.5-flash-preview-04-17",
+            api_key=os.getenv("GEMINI_API_KEY"),
+            response_format=WorkoutPlan
+        )
+        
+        response = google_llm.call(messages=messages)
 
         self.state.workout_plan = response
+
+        self.log(f"Here is your workout plan:")
+        self.log(self.state.workout_plan)
 
     @listen(create_guide_outline)
     def save_workout_plan(self):
@@ -78,9 +93,9 @@ class SingleLLMFlow(Flow[SingleLLMState]):
                 f.write(workout_plan)
             
         except json.JSONDecodeError:
-            print("Error: Invalid JSON format")
+            self.log("Error: Invalid JSON format")
         except Exception as e:
-            print(f"Error saving workout plan: {str(e)}")
+            self.log(f"Error saving workout plan: {str(e)}")
 
 def kickoff():
     workout_flow = SingleLLMFlow()
