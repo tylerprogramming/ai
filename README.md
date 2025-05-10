@@ -24,26 +24,22 @@
 
 
 ## Upcoming Ideas/Projects for Videos
-- [x] GPT-4 Vision with AutoGen
-- [ ] AutoGen with CodeInterpreter
-- [x] AutoGen with TeachableAgent (uses Vector DB to remember conversations)
-- [x] Auto Generated Agent Chat: Hierarchy flow using select_speaker
-- [x] AutoGen Teams, actually creating separate teams that each do a specific thing and pass on what they accomplished to the next one
-- [x] Combining GPT-4 Vision with a library that can take a screenshot of a website, perhaps with stocks for example, and examine it
-- [ ] Create a Sudoku Puzzle Creator/Checker with an AI WorkForce
-- [x] Create WebScraper with Puppeteer
-- [x] Create AutoGen with Whisper
-- [x] Fitness Tracker with multiple models and LMStudio for LocalLLM
-- [x] Fitness Expert Bot with Flask Server
-- [x] YouTube Services
-- [x] Beginner Course
-- [ ] Intermediate Course
-- [ ] Advanced Course
-
-## Updates:
-- 05/03/2024 - added directory for frontend code saving and example .net code
-- 06/02/2024 - started an integrations directory, and the first one is Airtable + AutoGen
-- 10/03/2024 - updated crewai with new crew examples, changed how they are created
-- 10/04/2024 - added crewai_create_a_crew and crewai_custom_tool
-- 10/10/2024 - added crewai_series with 6 days of crewai examples, will add 2 more as I continue the series
-- 10/14/2024 - added jupyter notebooks for crewai_series, refining some of the code as well
+- [x] crewai_flow_workout
+- [ ] crewai_flow_single_llm
+- [ ] crewai_infographic_creation
+- [ ] crewai_docker_example
+- [ ] crewai_flow_recipes
+- [ ] google agent sdk
+- [ ] mem0 with crewai
+- [ ] full local agent setup (ollama, crewai, qdrant docker, crawl4ai, postgres docker)
+- [ ] don't 'vibe' code
+- [ ] Find best videos from last two weeks
+- [ ] Why AI is difficult...
+- [ ] 5 AI Agent Projects
+- [ ] agentstack
+- [ ] Lovable 2.0
+- [ ] bolt.new + supabase
+- [ ] replit 2.0
+- [ ] ag2
+- [ ] letta.ai course
+- [ ] .af files

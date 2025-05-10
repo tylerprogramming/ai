@@ -10,6 +10,7 @@ A sophisticated AI-powered workout planning system that leverages CrewAI for orc
 - Slack notifications for workout plans
 - Intelligent flow management using CrewAI
 - Research and summarization capabilities
+- It works!
 
 ## 🏗️ Architecture
 

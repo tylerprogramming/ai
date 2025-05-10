@@ -15,21 +15,26 @@ from dotenv import load_dotenv
 load_dotenv()
 
 composio_toolset = ComposioToolSet(api_key=os.getenv("COMPOSIO_API_KEY"))
-google_create_find_folder = composio_toolset.get_tools(actions=['GOOGLEDRIVE_CREATE_FOLDER', 'GOOGLEDRIVE_FIND_FOLDER', 'GOOGLEDRIVE_DELETE_FOLDER_OR_FILE'])
-google_upload_file = composio_toolset.get_tools(actions=['GOOGLEDRIVE_FIND_FOLDER', 'GOOGLEDRIVE_UPLOAD_FILE', 'GOOGLEDRIVE_CREATE_FILE_FROM_TEXT'])
-slack_toolset = composio_toolset.get_tools(actions=['SLACK_SENDS_A_MESSAGE_TO_A_SLACK_CHANNEL'])
+google_create_find_folder = composio_toolset.get_tools(
+    actions=[
+        'GOOGLEDRIVE_CREATE_FOLDER', 
+        'GOOGLEDRIVE_FIND_FOLDER', 
+        'GOOGLEDRIVE_DELETE_FOLDER_OR_FILE'
+    ])
+google_upload_file = composio_toolset.get_tools(
+    actions=[
+        'GOOGLEDRIVE_FIND_FOLDER', 
+        'GOOGLEDRIVE_UPLOAD_FILE', 
+        'GOOGLEDRIVE_CREATE_FILE_FROM_TEXT'
+    ])
+slack_toolset = composio_toolset.get_tools(
+    actions=['SLACK_SENDS_A_MESSAGE_TO_A_SLACK_CHANNEL'])
 
 openai_llm = LLM(model="gpt-4o", temperature=0)
 
 class WorkOutResearch(BaseModel):
     research: str = ""
     links: list[str] = []
-
-class DriveFolder(BaseModel):
-    id: str = ""
-    name: str = ""
-    parent_id: str = ""
-    created_at: str = ""
 
 class WorkOutState(BaseModel):
     drive_folder_id: str = ""
@@ -82,7 +87,7 @@ class WorkOutFlow(Flow[WorkOutState]):
         result = (
             SummaryCrew()
             .crew()
-            .kickoff(inputs={"workout": self.state.workout})
+            .kickoff(inputs={"research": self.state.research.model_dump_json()})
         )
 
         self.state.summary = result.raw

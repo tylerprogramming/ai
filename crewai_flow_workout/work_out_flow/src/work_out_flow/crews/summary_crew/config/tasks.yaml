@@ -1,6 +1,6 @@
 summary_task:
   description: >
-    Summarize the internet for information about workouts
+    Summarize the internet for information about workouts from the research: {research}
   expected_output: >
-    A beautifully crafted summary about workouts.
+    A beautifully crafted summary about workouts from the research: {research}
   agent: summary_agent

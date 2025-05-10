@@ -1,21 +1,32 @@
-2025-04-20 13:48:52,706 - ERROR - Could not initialize AgentOps client - API Key is missing.
-	    Find your API key at https://app.agentops.ai/settings/projects
-2025-04-20 13:48:52,853 - WARNING -  WARNING: agentops is out of date. Please update with the command: 'pip install --upgrade agentops'
-2025-04-20 13:48:56,487 - ERROR - Could not initialize AgentOps client - API Key is missing.
-	    Find your API key at https://app.agentops.ai/settings/projects
-2025-04-20 13:48:56,692 - WARNING -  WARNING: agentops is out of date. Please update with the command: 'pip install --upgrade agentops'
-2025-04-20 13:49:06,237 - ERROR - Could not initialize AgentOps client - API Key is missing.
-	    Find your API key at https://app.agentops.ai/settings/projects
-2025-04-20 13:49:06,684 - WARNING -  WARNING: agentops is out of date. Please update with the command: 'pip install --upgrade agentops'
-2025-04-20 13:49:13,168 - ERROR - Could not initialize AgentOps client - API Key is missing.
-	    Find your API key at https://app.agentops.ai/settings/projects
-2025-04-20 13:49:13,346 - WARNING -  WARNING: agentops is out of date. Please update with the command: 'pip install --upgrade agentops'
-2025-04-20 13:49:25,459 - ERROR - Could not initialize AgentOps client - API Key is missing.
-	    Find your API key at https://app.agentops.ai/settings/projects
-2025-04-20 13:49:25,700 - WARNING -  WARNING: agentops is out of date. Please update with the command: 'pip install --upgrade agentops'
-2025-04-20 13:49:29,397 - ERROR - Could not initialize AgentOps client - API Key is missing.
-	    Find your API key at https://app.agentops.ai/settings/projects
-2025-04-20 13:49:29,693 - WARNING -  WARNING: agentops is out of date. Please update with the command: 'pip install --upgrade agentops'
-2025-04-20 13:49:56,298 - ERROR - Could not initialize AgentOps client - API Key is missing.
-	    Find your API key at https://app.agentops.ai/settings/projects
-2025-04-20 13:49:56,459 - WARNING -  WARNING: agentops is out of date. Please update with the command: 'pip install --upgrade agentops'
+2025-05-06 16:22:43,650 - WARNING -  WARNING: agentops is out of date. Please update with the command: 'pip install --upgrade agentops'
+2025-05-06 16:22:45,375 - INFO - Session Replay: https://app.agentops.ai/drilldown?session_id=2edac528-b6f5-4182-9589-95dc365024ac
+2025-05-06 16:22:54,611 - ERROR - Could not post events - API server: - internal server error
+2025-05-06 16:22:56,196 - INFO - Session Stats - Duration: 9.2s | Cost: $0.00 | LLMs: 0 | Tools: 0 | Actions: 0 | Errors: 0
+2025-05-06 16:22:56,196 - INFO - Session Replay: https://app.agentops.ai/drilldown?session_id=2edac528-b6f5-4182-9589-95dc365024ac
+2025-05-06 16:22:56,213 - WARNING - AgentOps has already been initialized. If you are trying to start a session, call agentops.start_session() instead.
+2025-05-06 16:22:56,368 - WARNING -  WARNING: agentops is out of date. Please update with the command: 'pip install --upgrade agentops'
+2025-05-06 16:23:05,255 - ERROR - Could not record event. Start a session by calling agentops.start_session().
+2025-05-06 16:23:31,106 - ERROR - Could not record event. Start a session by calling agentops.start_session().
+2025-05-06 16:23:31,157 - WARNING - AgentOps has already been initialized. If you are trying to start a session, call agentops.start_session() instead.
+2025-05-06 16:23:31,292 - WARNING -  WARNING: agentops is out of date. Please update with the command: 'pip install --upgrade agentops'
+2025-05-06 16:23:46,597 - ERROR - Could not record event. Start a session by calling agentops.start_session().
+2025-05-06 16:23:46,629 - WARNING - AgentOps has already been initialized. If you are trying to start a session, call agentops.start_session() instead.
+2025-05-06 16:23:46,763 - WARNING -  WARNING: agentops is out of date. Please update with the command: 'pip install --upgrade agentops'
+2025-05-06 16:24:22,531 - ERROR - Could not record event. Start a session by calling agentops.start_session().
+2025-05-06 16:24:22,636 - WARNING - AgentOps has already been initialized. If you are trying to start a session, call agentops.start_session() instead.
+2025-05-06 16:24:22,756 - WARNING -  WARNING: agentops is out of date. Please update with the command: 'pip install --upgrade agentops'
+2025-05-06 16:24:28,734 - ERROR - Could not record event. Start a session by calling agentops.start_session().
+2025-05-06 16:24:28,746 - WARNING - AgentOps has already been initialized. If you are trying to start a session, call agentops.start_session() instead.
+2025-05-06 16:24:28,881 - WARNING -  WARNING: agentops is out of date. Please update with the command: 'pip install --upgrade agentops'
+2025-05-06 16:24:40,347 - ERROR - Could not record event. Start a session by calling agentops.start_session().
+2025-05-06 16:24:44,311 - ERROR - Could not record event. Start a session by calling agentops.start_session().
+2025-05-06 16:24:48,679 - ERROR - Could not record event. Start a session by calling agentops.start_session().
+2025-05-06 16:24:53,421 - ERROR - Could not record event. Start a session by calling agentops.start_session().
+2025-05-06 16:25:05,003 - ERROR - Could not record event. Start a session by calling agentops.start_session().
+2025-05-06 16:25:05,117 - WARNING - AgentOps has already been initialized. If you are trying to start a session, call agentops.start_session() instead.
+2025-05-06 16:25:05,273 - WARNING -  WARNING: agentops is out of date. Please update with the command: 'pip install --upgrade agentops'
+2025-05-06 16:25:23,025 - ERROR - Could not record event. Start a session by calling agentops.start_session().
+2025-05-06 16:25:25,343 - ERROR - Could not record event. Start a session by calling agentops.start_session().
+2025-05-06 16:25:43,540 - ERROR - Could not record event. Start a session by calling agentops.start_session().
+2025-05-06 16:25:45,680 - ERROR - Could not record event. Start a session by calling agentops.start_session().
+2025-05-06 16:25:48,036 - ERROR - Could not record event. Start a session by calling agentops.start_session().
