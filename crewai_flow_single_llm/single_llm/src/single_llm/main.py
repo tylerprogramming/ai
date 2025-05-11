@@ -32,7 +32,7 @@ class SingleLLMFlow(Flow[SingleLLMState]):
         bedtime = input("When do you go to bed?: ")
         workout_active = input("How often do you work out?: ")
         run = input("How often do you run?: ")
-        
+         
         self.state.wake_up_time = wake_up_time
         self.state.bedtime = bedtime
         self.state.workout_active = workout_active
@@ -53,17 +53,17 @@ class SingleLLMFlow(Flow[SingleLLMState]):
             self.state.run
         )
         
-        # llm = LLM(
-        #     model="openai/gpt-4o", 
-        #     response_format=WorkoutPlan
-        # )
-        google_llm = LLM(
-            model="gemini/gemini-2.5-flash-preview-04-17",
-            api_key=os.getenv("GEMINI_API_KEY"),
+        llm = LLM(
+            model="openai/gpt-4o", 
             response_format=WorkoutPlan
         )
+        # google_llm = LLM(
+        #     model="gemini/gemini-2.5-flash-preview-04-17",
+        #     api_key=os.getenv("GEMINI_API_KEY"),
+        #     response_format=WorkoutPlan
+        # )
         
-        response = google_llm.call(messages=messages)
+        response = llm.call(messages=messages)
 
         self.state.workout_plan = response
 
