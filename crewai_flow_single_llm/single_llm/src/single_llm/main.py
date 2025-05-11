@@ -53,17 +53,17 @@ class SingleLLMFlow(Flow[SingleLLMState]):
             self.state.run
         )
         
-        llm = LLM(
-            model="openai/gpt-4o", 
-            response_format=WorkoutPlan
-        )
-        # google_llm = LLM(
-        #     model="gemini/gemini-2.5-flash-preview-04-17",
-        #     api_key=os.getenv("GEMINI_API_KEY"),
+        # llm = LLM(
+        #     model="openai/gpt-4o", 
         #     response_format=WorkoutPlan
         # )
+        google_llm = LLM(
+            model="gemini/gemini-2.5-flash-preview-04-17",
+            api_key=os.getenv("GEMINI_API_KEY"),
+            response_format=WorkoutPlan
+        )
         
-        response = llm.call(messages=messages)
+        response = google_llm.call(messages=messages)
 
         self.state.workout_plan = response
 
