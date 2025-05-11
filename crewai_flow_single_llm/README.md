@@ -1,4 +1,4 @@
-# single_llm: Personalized Workout Plan Generator with crewAI
+# Personalized Workout Plan Generator with crewAI
 
 This project is a simple, interactive AI workflow that generates a personalized daily workout plan using a single LLM (Large Language Model) via the [crewAI](https://crewai.com) framework. The user provides their daily routine and workout habits, and the system creates a tailored workout plan, saving it as a markdown file.
 
