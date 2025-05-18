@@ -18,3 +18,5 @@ ai_agency_08_checklistai/migrations/versions/d2881ce4c4cb_.py
 
 agentops.log
 .composio.lock/
+
+venv/
