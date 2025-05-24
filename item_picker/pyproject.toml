@@ -1,0 +1,23 @@
+[project]
+name = "item_picker"
+version = "0.1.0"
+description = "item_picker using crewAI"
+authors = [{ name = "Your Name", email = "you@example.com" }]
+requires-python = ">=3.10,<3.13"
+dependencies = [
+    "crewai[tools]>=0.121.0,<1.0.0"
+]
+
+[project.scripts]
+item_picker = "item_picker.main:run"
+run_crew = "item_picker.main:run"
+train = "item_picker.main:train"
+replay = "item_picker.main:replay"
+test = "item_picker.main:test"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.crewai]
+type = "crew"
