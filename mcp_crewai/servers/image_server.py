@@ -37,5 +37,5 @@ def image_creation_openai(query: str, image_name: str) -> str:
         return {"success": False, "error": str(e)}
 
 if __name__ == "__main__":
-    mcp.run(transport="stdio")
     print("Image Creation MCP Server running stdio")
+    mcp.run(transport="stdio")

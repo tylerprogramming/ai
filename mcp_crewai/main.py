@@ -20,6 +20,16 @@ server_params=StdioServerParameters(
     ],
 )
 
+github_server_params=StdioServerParameters(
+    command="npx",
+    args=[
+        "-y",
+        "@modelcontextprotocol/server-github",
+    ],
+    env={"GITHUB_PERSONAL_ACCESS_TOKEN": os.getenv("GITHUB_PERSONAL_ACCESS_TOKEN")},
+)
+      
+
 brave_search_params=StdioServerParameters(
     command="npx",
     args=[
@@ -36,7 +46,8 @@ image_server_params=StdioServerParameters(
     ],
     env={"OPENAI_API_KEY": os.getenv("OPENAI_API_KEY"), "OPENAI_ORGANIZATION": os.getenv("OPENAI_ORGANIZATION")},
 )
-all_tools=[server_params, brave_search_params, image_server_params]
+
+all_tools=[server_params, brave_search_params, image_server_params, github_server_params]
 with MCPServerAdapter(all_tools) as tools:
     print(f"Available tools from Stdio MCP server: {[tool.name for tool in tools]}")
 
@@ -50,14 +61,14 @@ with MCPServerAdapter(all_tools) as tools:
     )
     
     task = Task(
-        description="""I need you to research Model Context Protocol, then create an image of a diagram on how basic mcp works.""",
-        expected_output="A confirmation that the image was created.",
+        description="""I need you to research Model Context Protocol and create an in-depth diagram on how it works.""",
+        expected_output="A summary of the brave search results and a successful image creation.",
         agent=agent,
     )
     
     summary_task = Task(
         description="Summarize the results of the task and create a text file in the downloads folder (check allowed folders) and save the summary to this file.",
-        expected_output="A summary of the results of the task in a text file in the downloads folder.",
+        expected_output="A summary of the brave search results in a text file in the downloads folder.",
         agent=agent,
     )
     
