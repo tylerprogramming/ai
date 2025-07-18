@@ -5,13 +5,13 @@
 
 <img src="https://microsoft.github.io/autogen/img/ag.svg" alt="AutoGen Logo" width="100">
 
-![Python Version](https://img.shields.io/badge/3.8%20%7C%203.9%20%7C%203.10%20%7C%203.11%20%7C%203.12-blue) [![PyPI version](https://img.shields.io/badge/PyPI-v0.2.34-blue.svg)](https://pypi.org/project/pyautogen/)
+![Python Version](https://img.shields.io/badge/3.8%20%7C%203.9%20%7C%203.10%20%7C%203.11%20%7C%203.12-blue) [![PyPI version](https://img.shields.io/badge/PyPI-v0.2.34-blue.svg)](https://pypi.org/project/ag2/)
 [![NuGet version](https://badge.fury.io/nu/AutoGen.Core.svg)](https://badge.fury.io/nu/AutoGen.Core)
 
-[![Downloads](https://static.pepy.tech/badge/pyautogen/week)](https://pepy.tech/project/pyautogen)
+[![Downloads](https://static.pepy.tech/badge/ag2/week)](https://pepy.tech/project/ag2)
 [![Discord](https://img.shields.io/discord/1153072414184452236?logo=discord&style=flat)](https://aka.ms/autogen-dc)
 
-[![Twitter](https://img.shields.io/twitter/url/https/twitter.com/cloudposse.svg?style=social&label=Follow%20%40pyautogen)](https://twitter.com/pyautogen)
+[![Twitter](https://img.shields.io/twitter/url/https/twitter.com/cloudposse.svg?style=social&label=Follow%20%40ag2)](https://twitter.com/ag2)
 
 </div>
 
@@ -72,7 +72,7 @@ AutoGen was created out of collaborative [research](https://microsoft.github.io/
 
 :tada: Dec 31, 2023: [AutoGen: Enabling Next-Gen LLM Applications via Multi-Agent Conversation Framework](https://arxiv.org/abs/2308.08155) is selected by [TheSequence: My Five Favorite AI Papers of 2023](https://thesequence.substack.com/p/my-five-favorite-ai-papers-of-2023).
 
-<!-- :fire: Nov 24: pyautogen [v0.2](https://github.com/microsoft/autogen/releases/tag/v0.2.0) is released with many updates and new features compared to v0.1.1. It switches to using openai-python v1. Please read the [migration guide](https://microsoft.github.io/autogen/docs/Installation#python). -->
+<!-- :fire: Nov 24: ag2 [v0.2](https://github.com/microsoft/autogen/releases/tag/v0.2.0) is released with many updates and new features compared to v0.1.1. It switches to using openai-python v1. Please read the [migration guide](https://microsoft.github.io/autogen/docs/Installation#python). -->
 
 <!-- :fire: Nov 11: OpenAI's Assistants are available in AutoGen and interoperatable with other AutoGen agents! Checkout our [blogpost](https://microsoft.github.io/autogen/blog/2023/11/13/OAI-assistants) for details and examples. -->
 
@@ -135,14 +135,14 @@ Find detailed instructions for users [here](https://microsoft.github.io/autogen/
 AutoGen requires **Python version >= 3.8, < 3.13**. It can be installed from pip:
 
 ```bash
-pip install pyautogen
+pip install ag2
 ```
 
 Minimal dependencies are installed without extra options. You can install extra options based on the feature you need.
 
 <!-- For example, use the following to install the dependencies needed by the [`blendsearch`](https://microsoft.github.io/FLAML/docs/Use-Cases/Tune-User-Defined-Function#blendsearch-economical-hyperparameter-optimization-with-blended-search-strategy) option.
 ```bash
-pip install "pyautogen[blendsearch]"
+pip install "ag2[blendsearch]"
 ``` -->
 
 Find more options in [Installation](https://microsoft.github.io/autogen/docs/Installation#option-2-install-autogen-locally-using-virtual-environment).
