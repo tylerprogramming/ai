@@ -1,0 +1,109 @@
+curate_transcript_task:
+  description: >
+    You are given a raw sales call transcript. Clean obvious transcription artifacts (stutters, duplicated words, filler),
+    keep speaker turns, and segment into logical sections (discovery, pain, solution, pricing, next steps, etc.).
+    If key details seem missing (e.g., budget, authority, timeline), note the missing items explicitly.
+
+    Transcript to process:
+    ---
+    {transcript}
+    ---
+  expected_output: >
+    JSON only, no code fences. Schema:
+    {
+      "sections": [
+        {"label": "discovery|pain|solution|pricing|timeline|next_steps|other", "summary": "...", "quotes": ["..."]}
+      ],
+      "missing": ["budget", "authority", "timeline"],
+      "highlights": ["short bullet points of notable facts"]
+    }
+  agent: transcript_curator
+
+extract_structured_data_task:
+  description: >
+    From the curated output, extract structured fields using BANT + ICP. Normalize each category to one of the allowed
+    categorical levels shown in parentheses. If unknown, choose "unknown" where allowed.
+
+    Allowed categorical values:
+      - budget: none|unknown|low|adequate|committed
+      - authority: user|influencer|committee|decision_maker
+      - need: weak|moderate|strong|urgent
+      - timing: no_timeline|>6mo|3-6mo|<3mo|immediate
+      - icp_fit: poor|fair|good|excellent
+      - engagement: low|medium|high
+      - risk: low|medium|high
+
+    Use ICP context if provided:
+    ICP: {icp_criteria}
+  expected_output: >
+    JSON only, no code fences. Schema:
+    {
+      "company": "{company}",
+      "contact_name": "{contact_name}",
+      "industry": "string|unknown",
+      "headcount": "int|unknown",
+      "use_case": ["string", "..."],
+      "pain_points": ["string", "..."],
+      "desired_outcomes": ["string", "..."],
+      "current_tools": ["string", "..."],
+      "budget": "none|unknown|low|adequate|committed",
+      "authority": "user|influencer|committee|decision_maker",
+      "need": "weak|moderate|strong|urgent",
+      "timing": "no_timeline|>6mo|3-6mo|<3mo|immediate",
+      "icp_fit": "poor|fair|good|excellent",
+      "engagement": "low|medium|high",
+      "risk": "low|medium|high",
+      "notes": "free-text supporting rationale"
+    }
+  agent: lead_extractor
+
+prioritize_insights_task:
+  description: >
+    Analyze the structured data and identify the top insights that influence probability to close and speed to value.
+    Distill crisp, actionable bullets and call out blockers/unknowns.
+  expected_output: >
+    JSON only, no code fences. Schema:
+    {
+      "top_insights": ["..."],
+      "blockers": ["..."],
+      "unknowns": ["..."],
+      "recommended_next_steps": ["..."]
+    }
+  agent: insight_prioritizer
+
+score_lead_task:
+  description: >
+    Convert the extracted fields to the required categorical inputs and CALL THE TOOL `calculate_lead_score` with:
+    {
+      "budget": <from data>,
+      "authority": <from data>,
+      "need": <from data>,
+      "timing": <from data>,
+      "icp_fit": <from data>,
+      "engagement": <from data>,
+      "risk": <from data>,
+      "weights": <optional overrides from {scoring_rubric}>
+    }
+
+    Return the tool's JSON verbatim and add a short human-readable rationale referencing the inputs.
+  expected_output: >
+    JSON only, no code fences. Schema:
+    {
+      "score_breakdown": {"subscores": {...}, "total": 0-100, "tier": "Hot|Warm|Cold"},
+      "rationale": "2-4 sentences connecting inputs to the score"
+    }
+  agent: lead_scorer
+
+report_task:
+  description: >
+    Produce a concise, decision-ready Markdown report for the AE/AM. Include:
+      - Header with company/contact, date {current_year}
+      - One-paragraph executive summary
+      - Table of BANT + ICP fields
+      - Top insights, blockers, unknowns
+      - Scoring breakdown (subscores, total, tier) in a table
+      - Recommended next steps and owner
+      - Append short quotes (if any) supporting key claims
+  expected_output: >
+    A Markdown document (no code fences) suitable for pasting into a CRM note.
+  agent: report_writer
