@@ -2,7 +2,7 @@
 I think a realistic version of an AI Engineer is to also allow it to edit already existing code.  You won't always be creating new code the way you want, and you will probably have to adhere to how existing code is written.
 
 ## Imports Needed:
-- pyautogen
+- ag2
 
 ## YouTube Link:
 - [Accelerate Software Creation with AI Agents: Quick Tutorial](https://youtu.be/tT-I0ImNcQ0)

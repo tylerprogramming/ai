@@ -46,7 +46,7 @@ elif LLM_BACKEND == "local":
     config_list = [
         {
             "model": "NULL",  # not needed
-            # NOTE: on versions of pyautogen < 0.2.0 use "api_base", and also uncomment "api_type"
+            # NOTE: on versions of ag2 < 0.2.0 use "api_base", and also uncomment "api_type"
             # "api_base": "http://localhost:1234/v1",
             # "api_type": "open_ai",
             "base_url": "http://localhost:1234/v1",
