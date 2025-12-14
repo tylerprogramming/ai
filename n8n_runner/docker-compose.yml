@@ -1,0 +1,39 @@
+services:
+  n8n:
+    image: n8nio/n8n:2.0.0
+    ports:
+      - "5678:5678"
+      - "5101:5101"
+    environment:
+      N8N_RUNNERS_ENABLED: "true"
+      N8N_RUNNERS_MODE: "external"
+      N8N_RUNNERS_DISABLED_MODES: "embedded"
+      N8N_RUNNERS_JAVASCRIPT_ENABLED: "true"
+      N8N_RUNNERS_PYTHON_ENABLED: "true"
+      N8N_RUNNERS_AUTH_TOKEN: "my-super-secret-token"
+      N8N_RUNNERS_BROKER_LISTEN_ADDRESS: "0.0.0.0"
+      N8N_RUNNERS_BROKER_PORT: "5101"
+      N8N_RESTRICT_FILE_ACCESS_TO: "/videos"
+    volumes:
+      - n8n_data:/home/node/.n8n
+      - ../videos:/videos
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+  runner:
+    image: custom-n8n-runner
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      N8N_RUNNERS_AUTH_TOKEN: "my-super-secret-token"
+      N8N_RUNNERS_TASK_BROKER_URI: "http://n8n:5101"
+      N8N_RUNNERS_LAUNCHER_LOG_LEVEL: "debug"
+    volumes:
+      - ../videos:/videos
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    restart: always
+
+volumes:
+  n8n_data:
