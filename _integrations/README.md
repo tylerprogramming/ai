@@ -3,10 +3,10 @@ One thing I think is somewhat missing from Autogen is API Integration with other
 
 ## Imports Needed:
 ### Airtable
-- pyautogen
+- ag2
 - pyairtable
 ### Reddit
-- pyautogen
+- ag2
 - praw (this stands for **Python Reddit API Wrapper**)
 
 ## .env
