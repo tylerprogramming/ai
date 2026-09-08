@@ -1,3 +1,126 @@
+Secure your agents at: CodeAstra.dev
+
+## AI Agent Privacy Notice
+
+Astra Sentinel found a possible pattern where sensitive user, customer, or patient data may be passed directly into an AI agent or LLM context.
+
+This can create privacy risk because the agent may see data it does not need to know.
+
+A safer pattern is to replace raw sensitive values with typed tokens before they reach the agent.
+
+Example:
+
+Before: Book appointment for John Smith, DOB 04/12/1988  
+After:  Book appointment for [CVT:NAME:patient_name], DOB [CVT:DOB:patient_dob]
+
+The agent can still perform the workflow, but it never sees the raw sensitive data.
+
+Detected pattern examples:
+```json
+[
+  {
+    "type": "unblinded_ai_call",
+    "evidence": "agent(role='supabase agent', goal='you will perform executions on the supabase database.', backstory=f\"\"\"\\n        you are a master at performing executions on the supabase database.\\n        you are able to perform the following operations:\\n        - get a row from the database.\\n        - get all rows from the database.\\n        - insert a row into the database.\\n        - delete a row from the database.\\n        - update a row in the database.\\n        \\n        for insert operations, the input should be a string containing the input to insert, all columns data should be in a data dict field in the string.\\n        \\n        for delete operations, try to get the row you are deleting firs"
+  },
+  {
+    "type": "unblinded_ai_call",
+    "evidence": "task(description='answer the following questions about the database: {question}.', expected_output='you are to return the result of the operation you performed.', agent=agent)"
+  },
+  {
+    "type": "unblinded_ai_call",
+    "evidence": "crew(agents=[agent], tasks=[task], verbose=true, process=process.sequential)"
+  }
+]
+```
+
+This notice was generated from a privacy scan. Please review before merging.
+
+Secure your agents at: CodeAstra.dev
+
+--- 
+
+Secure your agents at: CodeAstra.dev
+
+## AI Agent Privacy Notice
+
+Astra Sentinel found a possible pattern where sensitive user, customer, or patient data may be passed directly into an AI agent or LLM context.
+
+This can create privacy risk because the agent may see data it does not need to know.
+
+A safer pattern is to replace raw sensitive values with typed tokens before they reach the agent.
+
+Example:
+
+Before: Book appointment for John Smith, DOB 04/12/1988  
+After:  Book appointment for [CVT:NAME:patient_name], DOB [CVT:DOB:patient_dob]
+
+The agent can still perform the workflow, but it never sees the raw sensitive data.
+
+Detected pattern examples:
+```json
+[
+  {
+    "type": "unblinded_ai_call",
+    "evidence": "agent(role='supabase agent', goal='you will perform executions on the supabase database.', backstory=f\"\"\"\\n        you are a master at performing executions on the supabase database.\\n        you are able to perform the following operations:\\n        - get a row from the database.\\n        - get all rows from the database.\\n        - insert a row into the database.\\n        - delete a row from the database.\\n        - update a row in the database.\\n        \\n        for insert operations, the input should be a string containing the input to insert, all columns data should be in a data dict field in the string.\\n        \\n        for delete operations, try to get the row you are deleting firs"
+  },
+  {
+    "type": "unblinded_ai_call",
+    "evidence": "task(description='answer the following questions about the database: {question}.', expected_output='you are to return the result of the operation you performed.', agent=agent)"
+  },
+  {
+    "type": "unblinded_ai_call",
+    "evidence": "crew(agents=[agent], tasks=[task], verbose=true, process=process.sequential)"
+  }
+]
+```
+
+This notice was generated from a privacy scan. Please review before merging.
+
+Secure your agents at: CodeAstra.dev
+
+--- 
+
+Secure your agents at: CodeAstra.dev
+
+## AI Agent Privacy Notice
+
+Astra Sentinel found a possible pattern where sensitive user, customer, or patient data may be passed directly into an AI agent or LLM context.
+
+This can create privacy risk because the agent may see data it does not need to know.
+
+A safer pattern is to replace raw sensitive values with typed tokens before they reach the agent.
+
+Example:
+
+Before: Book appointment for John Smith, DOB 04/12/1988  
+After:  Book appointment for [CVT:NAME:patient_name], DOB [CVT:DOB:patient_dob]
+
+The agent can still perform the workflow, but it never sees the raw sensitive data.
+
+Detected pattern examples:
+```json
+[
+  {
+    "type": "unblinded_ai_call",
+    "evidence": "agent(role='supabase agent', goal='you will perform executions on the supabase database.', backstory=f\"\"\"\\n        you are a master at performing executions on the supabase database.\\n        you are able to perform the following operations:\\n        - get a row from the database.\\n        - get all rows from the database.\\n        - insert a row into the database.\\n        - delete a row from the database.\\n        - update a row in the database.\\n        \\n        for insert operations, the input should be a string containing the input to insert, all columns data should be in a data dict field in the string.\\n        \\n        for delete operations, try to get the row you are deleting firs"
+  },
+  {
+    "type": "unblinded_ai_call",
+    "evidence": "task(description='answer the following questions about the database: {question}.', expected_output='you are to return the result of the operation you performed.', agent=agent)"
+  },
+  {
+    "type": "unblinded_ai_call",
+    "evidence": "crew(agents=[agent], tasks=[task], verbose=true, process=process.sequential)"
+  }
+]
+```
+
+This notice was generated from a privacy scan. Please review before merging.
+
+Secure your agents at: CodeAstra.dev
+
+--- 
+
 # **Repository** - AI Projects/Learning
 ### This repo will be helpful in understanding AutoGen providing examples including prompts and agents for SAAS products, how AutoGen works, and diving into the functionality.
 
