@@ -23,6 +23,9 @@
   - WINDOWS: https://phoenixnap.com/kb/ffmpeg-windows
 
 
+## Skills / Claude Code
+- [claude_skill_social_me](claude_skill_social_me) - a Claude Code skill that researches a topic across YouTube, Instagram, TikTok and X through the Apify MCP server and writes a brief on what to make next. Includes the five-line prompt that builds it.
+
 ## Upcoming Ideas/Projects for Videos
 - [x] crewai_flow_workout
 - [ ] crewai_flow_single_llm
