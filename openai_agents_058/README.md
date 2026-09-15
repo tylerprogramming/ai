@@ -4,6 +4,20 @@ Three small scripts against the OpenAI Agents API (public beta, launched 2026-09
 
 Each script is under 80 lines and meant to be read top to bottom on screen.
 
+## What is in this folder
+
+| File | Section | What it does | Read it when |
+|---|---|---|---|
+| `common.py` | Setup | Loads `.env`, builds the `OpenAI` client, sets `MODEL`. `Printer` turns the ~30 event types into a short timestamped transcript. | You want to change the model or print more event types. |
+| `01_hosted_sandbox.py` | Demo 1 | One `sessions.create(stream=True)` call: agent + hosted sandbox + session. The agent writes and runs a Python script, reports real output. | First run. Proves the API works and shows sandbox provisioning time. |
+| `02_function_tools.py` | Demo 2 | Your own function tool with `environment: none`. Turn 1 handles `requires_action` by hand; turn 2 uses `sessions.stream` with `tool_handlers` on the same session. | You want the agent to call your code, and want to see session memory across turns. |
+| `03_subagents.py` | Demo 3 | `multi_agent.enabled` on a hosted sandbox. The harness spawns parallel subagents; you watch them in the event stream. | You want fan-out without writing an orchestrator. |
+| `pyproject.toml`, `uv.lock` | Deps | `openai>=3.14`, `python-dotenv`. Python 3.11+. | Installing. |
+| `.env.example` | Secrets | Template for `OPENAI_API_KEY`. Copy to `.env`, never commit `.env`. | Before the first run. |
+| `CLAUDE.md` | Agent notes | Conventions for Claude Code or Hermes extending this folder. | You ask an agent to add a demo. |
+
+Sections below: [Install](#install), [Run](#run), [Env vars](#env-vars), [What to expect](#what-to-expect-when-you-run-it), [On camera](#things-worth-saying-on-camera), [Docs](#docs).
+
 | Script | What it shows | Sandbox | Cost on top of tokens |
 |---|---|---|---|
 | `01_hosted_sandbox.py` | One call creates an agent, a sandbox, and a session. The agent writes a script, runs it, reports the real output. | `openai_hosted` | Container rate (1 GB sandbox is $0.03 per 20 min, 5 min minimum) |
