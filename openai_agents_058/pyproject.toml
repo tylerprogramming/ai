@@ -1,0 +1,9 @@
+[project]
+name = "openai-agents-058"
+version = "0.1.0"
+description = "Video 058: OpenAI Agents API demos (hosted sandbox, function tools, subagents)"
+requires-python = ">=3.11"
+dependencies = [
+    "openai>=3.14.0",
+    "python-dotenv>=1.0",
+]
