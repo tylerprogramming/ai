@@ -1,0 +1,14 @@
+README.md
+pyproject.toml
+src/lead_crew/__init__.py
+src/lead_crew/crew.py
+src/lead_crew/main.py
+src/lead_crew/tools/__init__.py
+src/lead_crew/tools/custom_tool.py
+src/lead_crew/tools/score_tool.py
+src/my_project.egg-info/PKG-INFO
+src/my_project.egg-info/SOURCES.txt
+src/my_project.egg-info/dependency_links.txt
+src/my_project.egg-info/entry_points.txt
+src/my_project.egg-info/requires.txt
+src/my_project.egg-info/top_level.txt

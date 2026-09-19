@@ -1,0 +1,6 @@
+research_task:
+  description: >
+    Research the internet for information about workouts.  Use the tools to research, crawl and scrape the internet for information about workouts.
+  expected_output: >
+    Full research about about the best workouts for the user and the links that were scraped.
+  agent: research_agent

@@ -1,0 +1,61 @@
+fastapi_task:
+  description: >
+    Create a professional, production-ready FastAPI application template using best practices and modern architecture. Include clear separation of concerns with layers for routing, services, database access, and data models. Specifically, structure the application as follows:
+
+        1. Routing Layer (FastAPI endpoints): Clearly organized API routes.
+        - Use APIRouter for modular route definitions.
+        - Include example CRUD endpoints (Create, Read, Update, Delete).
+
+        2. Services Layer (Business logic):
+        - Encapsulate all business logic separate from route handlers.
+        - Provide clean function interfaces for easy maintainability and testing.
+
+        3. Database Layer (Database interactions):
+        - Use SQLAlchemy ORM for database operations.
+        - Provide an example of dependency-injected database sessions with FastAPI's built-in dependency system.
+        - Include examples of models with relationships.
+
+        Include examples of models with relationships.
+
+        4. Data Models Layer (Pydantic schemas):
+        - Separate schemas clearly for request validation and response serialization.
+        - Demonstrate best-practice usage of Pydantic for data validation and type safety.
+
+        Additionally, ensure you include:
+        - Structured folder organization with meaningful naming conventions.
+        - folders for models, routes, services, database, and tests and the files within them.
+        - Environment variable management using pydantic-settings.
+        - Proper database configuration examples using PostgreSQL.
+        - An example .env file.
+        - Basic instructions on running the application locally.
+        
+        The main project folder is /projects/crewai_mcp_docker.  The code should be written under the /projects/crewai_mcp_docker folder.
+
+        use context7
+  expected_output: >
+    A fully fledged FastAPI application template using best practices and modern architecture.
+  agent: fastapi_agent
+
+code_task:
+  description: >
+    Write the code for the application based on the FastAPI Developer's instructions.  Use filesystem to write the code to the file system.  Use the tools required to create directory, write files, edit files, and read files.
+  expected_output: >
+    A fully fledged FastAPI application template using best practices and modern architecture.
+  agent: code_writer
+
+review_code_task:
+  description: >
+    Perform an in-depth review of all Python files in {file_path}. Provide:
+    - A structured report with:
+      * Summary of detected issues
+      * Suggestions for each issue
+    - After the review, rewrite the original code implementing your improvements.
+    *Output must include:*
+      1. Issues in a numbered list
+      2. Suggestions in bullet points
+      3. Improved code in Python blocks
+  expected_output: >
+    A markdown report including:
+    - Issues and recommendations
+    - Rewritten optimized code for each file
+  agent: code_reviewer

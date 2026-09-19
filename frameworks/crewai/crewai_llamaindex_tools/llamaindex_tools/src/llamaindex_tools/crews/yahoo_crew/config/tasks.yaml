@@ -1,0 +1,6 @@
+yahoo_result:
+  description: >
+    Query yahoo finance with this query: {query}
+  expected_output: >
+    A yahoo finance result with this query: {query}
+  agent: yahoo_agent

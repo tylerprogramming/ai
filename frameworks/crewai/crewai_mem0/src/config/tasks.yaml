@@ -1,0 +1,7 @@
+
+create_a_joke:
+  description: >
+    the joke should be brand new and find ways to get creative
+  expected_output: >
+    just the joke
+  agent: joke_agent

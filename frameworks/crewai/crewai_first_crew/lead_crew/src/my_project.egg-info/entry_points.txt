@@ -1,0 +1,6 @@
+[console_scripts]
+replay = research_crew.main:replay
+research_crew = research_crew.main:run
+run_crew = research_crew.main:run
+test = research_crew.main:test
+train = research_crew.main:train

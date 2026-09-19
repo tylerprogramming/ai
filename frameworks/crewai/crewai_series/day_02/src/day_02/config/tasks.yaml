@@ -1,0 +1,13 @@
+generate_joke_task:
+  description: >
+    Generate 10 Chuck Norris jokes
+  expected_output: >
+    A list with 10 Chuck Norris jokes
+  agent: chuck_norris_joke_generator
+
+pick_joke_task:
+  description: >
+    Pick the best joke from the list of jokes
+  expected_output: >
+    The best joke from the list of jokes
+  agent: chuck_norris_joke_picker

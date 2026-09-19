@@ -1,0 +1,25 @@
+[build-system]
+requires = ["setuptools", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "my_project"
+version = "0.1.0"
+description = "Lead Scoring Crew using CrewAI"
+authors = [{ name = "You" }]
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+  "crewai",
+  "python-dotenv>=1.0.1",
+]
+
+[project.scripts]
+research_crew = "research_crew.main:run"
+run_crew = "research_crew.main:run"
+train = "research_crew.main:train"
+replay = "research_crew.main:replay"
+test = "research_crew.main:test"
+
+[tool.crewai]
+type = "crew"

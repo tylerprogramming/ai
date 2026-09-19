@@ -1,0 +1,6 @@
+write_task:
+  description: >
+    Write the news to a markdown file.
+  expected_output: >
+    A markdown file with the news.  Add formatting and make it look pretty.
+  agent: writer
