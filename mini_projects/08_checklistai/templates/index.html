@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="jumbotron bg-primary text-white p-5 rounded-3 mb-4">
+    <div class="row">
+    <div class="col-md-8">
+        <h1 class="display-3">Welcome to checkit.ai</h1>
+        <p class="lead">Manage your tasks efficiently with our smart checklist system.</p>
+        <hr class="my-4 bg-white">
+        <p class="fs-5">Create, schedule, and share checklists with ease.</p>
+        <a class="btn btn-light btn-lg" href="{{ url_for('create_checklist') }}" role="button">
+            <i class="bi bi-plus-circle"></i> Create New Checklist
+        </a>
+    </div>
+
+    <div class="col-md-4">
+        <h4>Example Checklists:</h4>
+        <div class="list-group">
+            <a href="{{ url_for('create_example_checklist', example='vacation') }}" class="list-group-item list-group-item-action">Vacation Checklist</a>
+            <a href="{{ url_for('create_example_checklist', example='nightly_routine') }}" class="list-group-item list-group-item-action">Nightly Routine</a>
+            <a href="{{ url_for('create_example_checklist', example='work_from_home') }}" class="list-group-item list-group-item-action">Work from Home Setup</a>
+        </div>
+    </div>
+    </div>
+</div>
+
+<div class="mb-4">
+    <h2>Generate AI Checklist</h2>
+    <form action="{{ url_for('generate_ai_checklist') }}" method="POST" class="mb-3">
+        {{ form.hidden_tag() }}
+        <div class="input-group">
+            <input type="text" name="ai_prompt" class="form-control" placeholder="Ask AI to create a checklist...">
+            <button type="submit" class="btn btn-primary">Generate Checklist</button>
+        </div>
+    </form>
+</div>
+
+<h2 class="mb-4">Your Checklists</h2>
+<div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-3">
+    {% for checklist in checklists %}
+    <div class="col">
+        <div class="card h-100 shadow-sm">
+            <div class="card-body">
+                <form action="{{ url_for('update_title', id=checklist.id) }}" method="POST" class="mb-2">
+                    {{ form.hidden_tag() }}
+                    <div class="input-group input-group-sm">
+                        <input type="text" class="form-control form-control-sm" name="title" value="{{ checklist.title }}">
+                        <button type="submit" class="btn btn-outline-primary btn-sm">Update</button>
+                    </div>
+                </form>
+                <p class="card-text small mb-1">
+                    <i class="bi bi-clock"></i> 
+                    {% if checklist.schedule_time %}
+                        {{ checklist.schedule_time.strftime('%I:%M %p') }}
+                    {% else %}
+                        Not scheduled
+                    {% endif %}
+                </p>
+                <p class="card-text small mb-2">
+                    <i class="bi bi-list-check"></i> Items: {{ checklist.items|length }}
+                </p>
+                <div class="d-flex justify-content-between">
+                    <a href="{{ url_for('view_checklist', id=checklist.id) }}" class="btn btn-sm btn-primary">
+                        <i class="bi bi-eye"></i> View
+                    </a>
+                    <a href="{{ url_for('delete_checklist', id=checklist.id) }}" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure you want to delete this checklist?')">
+                        <i class="bi bi-trash"></i> Delete
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+{% if not checklists %}
+<div class="alert alert-info" role="alert">
+    <i class="bi bi-info-circle"></i> You don't have any checklists yet. Create your first one now!
+</div>
+{% endif %}
+
+{% endblock %}

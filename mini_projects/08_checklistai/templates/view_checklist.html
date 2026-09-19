@@ -1,0 +1,115 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="jumbotron bg-primary text-white p-5 rounded-3 mb-4">
+    <div class="row">
+        <div class="col-md-8">
+            <h1 class="display-4">
+                <form method="POST" action="{{ url_for('update_title', id=checklist.id) }}" class="d-inline">
+                    {{ form.hidden_tag() }}
+                    <input type="text" name="title" value="{{ checklist.title }}" class="form-control-plaintext text-white" onblur="this.form.submit()">
+                </form>
+            </h1>
+            <p class="lead">Manage and update your checklist items</p>
+        </div>
+        <div class="col-md-4">
+            <div class="card bg-light text-dark">
+                <div class="card-body">
+                    <h5 class="card-title">Checklist Stats</h5>
+                    <p class="card-text">
+                        <strong>Items:</strong> {{ checklist.items|length }}<br>
+                        <strong>Schedule:</strong> 
+                        {% if checklist.schedule_time %}
+                            {{ checklist.schedule_time.strftime('%I:%M %p') }}
+                        {% else %}
+                            Not scheduled
+                        {% endif %}
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <a href="{{ url_for('index') }}" class="btn btn-light mt-3">
+        <i class="bi bi-house-door"></i> Back to Home
+    </a>
+</div>
+
+<div class="container">
+    <div class="card shadow">
+        <div class="card-body">
+            <form id="checklist-form" method="POST" action="{{ url_for('view_checklist', id=checklist.id) }}">
+                {{ form.hidden_tag() }}
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <p><strong><i class="bi bi-clock"></i> Schedule:</strong>
+                            {{ form.schedule_time(class="form-control", onchange="this.form.submit()") }}
+                        </p>
+                    </div>
+                    <div class="col-md-6">
+                        <p><strong><i class="bi bi-envelope"></i> Recipients:</strong>
+                            {{ form.recipients(class="form-control", onchange="this.form.submit()") }}
+                        </p>
+                    </div>
+                </div>
+
+                <h2 class="mb-3"><i class="bi bi-list-check"></i> Checklist Items:</h2>
+                <ul class="list-group mb-4" id="checklist-items">
+                    {% for item in checklist.items %}
+                        <li class="list-group-item" data-item-id="{{ item.id }}">
+                            <div class="input-group">
+                                <input type="hidden" name="item_id" value="{{ item.id }}">
+                                <input type="text" name="item" value="{{ item.content }}" class="form-control" onchange="this.form.submit()">
+                                <button type="button" class="btn btn-outline-danger" onclick="removeItem(this, {{ item.id }})">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            </div>
+                        </li>
+                    {% endfor %}
+                </ul>
+                <div class="input-group mb-3">
+                    <input type="text" id="new-item-input" name="new_item" class="form-control" placeholder="Enter new item" onkeypress="handleKeyPress(event)">
+                    <button type="button" class="btn btn-outline-primary" onclick="addItem()">
+                        <i class="bi bi-plus-circle"></i> Add Item
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+function addItem() {
+    var form = document.getElementById('checklist-form');
+    var newItemInput = document.getElementById('new-item-input');
+    if (newItemInput.value.trim() !== '') {
+        var input = document.createElement('input');
+        input.type = 'hidden';
+        input.name = 'add_item';
+        input.value = newItemInput.value;
+        form.appendChild(input);
+        form.submit();
+    }
+}
+
+function updateItem(input, itemId) {
+    input.form.submit();
+}
+
+function removeItem(button, itemId) {
+    var form = document.getElementById('checklist-form');
+    var input = document.createElement('input');
+    input.type = 'hidden';
+    input.name = 'delete_item_id';
+    input.value = itemId;
+    form.appendChild(input);
+    form.submit();
+}
+
+function handleKeyPress(event) {
+    if (event.key === 'Enter') {
+        event.preventDefault();
+        addItem();
+    }
+}
+</script>
+{% endblock %}

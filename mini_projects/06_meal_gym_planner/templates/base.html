@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Workout Planner</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .form-container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        .progress-indicator {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+        .progress-step {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background-color: #e9ecef;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+        .progress-step.active {
+            color: white;
+        }
+        .jumbotron-screen1 { background-color: #007bff; }
+        .jumbotron-screen2 { background-color: #dc3545; }
+        .jumbotron-screen3 { background-color: #ffc107; }
+        .jumbotron-screen4 { background-color: #28a745; }
+        .jumbotron-workout_plan { background-color: #17a2b8; }
+    </style>
+</head>
+<body>
+    <div class="jumbotron jumbotron-fluid text-white py-4 mb-4 jumbotron-{{ active_screen }}">
+        <div class="container">
+            <h1 class="display-4">Workout Planner</h1>
+            <p class="lead">Create your personalized workout plan</p>
+        </div>
+    </div>
+    <div class="container">
+        <div class="form-container">
+            <div class="progress-indicator">
+                <div class="progress-step {% if active_step >= 1 %}active{% endif %}" style="background-color: {% if active_step >= 1 %}#007bff{% else %}#e9ecef{% endif %}">1</div>
+                <div class="progress-step {% if active_step >= 2 %}active{% endif %}" style="background-color: {% if active_step >= 2 %}#dc3545{% else %}#e9ecef{% endif %}">2</div>
+                <div class="progress-step {% if active_step >= 3 %}active{% endif %}" style="background-color: {% if active_step >= 3 %}#ffc107{% else %}#e9ecef{% endif %}">3</div>
+                <div class="progress-step {% if active_step >= 4 %}active{% endif %}" style="background-color: {% if active_step >= 4 %}#28a745{% else %}#e9ecef{% endif %}">4</div>
+            </div>
+            <h2 class="mb-4">{% block title %}{% endblock %}</h2>
+            {% block content %}{% endblock %}
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %}Schedule & Intensity{% endblock %}
+{% block content %}
+<form method="POST">
+    <div class="mb-3">
+        <label for="workout_days" class="form-label">Number of Workout Days</label>
+        <select class="form-select" id="workout_days" name="workout_days" required>
+            <option value="3">3 days per week</option>
+            <option value="4">4 days per week</option>
+            <option value="5">5 days per week</option>
+            <option value="6">6 days per week</option>
+        </select>
+    </div>
+    <div class="mb-3">
+        <label for="intensity" class="form-label">Intensity Level</label>
+        <select class="form-select" id="intensity" name="intensity" required>
+            <option value="Low">Low</option>
+            <option value="Medium">Medium</option>
+            <option value="High">High</option>
+        </select>
+    </div>
+    <div class="mb-3">
+        <label for="workout_time" class="form-label">Preferred Workout Time</label>
+        <select class="form-select" id="workout_time" name="workout_time" required>
+            <option value="Morning">Morning</option>
+            <option value="Afternoon">Afternoon</option>
+            <option value="Evening">Evening</option>
+        </select>
+    </div>
+    <button type="submit" class="btn btn-primary">Next</button>
+</form>
+{% endblock %}

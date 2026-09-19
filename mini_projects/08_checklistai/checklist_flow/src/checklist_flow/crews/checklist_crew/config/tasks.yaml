@@ -1,0 +1,7 @@
+write_checklist:
+  description: >
+    Write a checklist for a given task.
+    Ensure the checklist is engaging and adheres to the checklist provided {checklist}.
+  expected_output: >
+    A beautifully crafted checklist formatted for an email.  So, don't use markdown, make sure its formatted nicely like html for the email.
+  agent: checklist_writer

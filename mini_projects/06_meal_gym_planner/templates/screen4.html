@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block title %}Customization & Finalization{% endblock %}
+{% block content %}
+<form method="POST">
+    <div class="mb-3">
+        <label class="form-label">Include Warm-Up/Cool-Down?</label>
+        <div class="form-check">
+            <input class="form-check-input" type="radio" name="warmup_cooldown" id="warmup_yes" value="Yes" required>
+            <label class="form-check-label" for="warmup_yes">Yes</label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="radio" name="warmup_cooldown" id="warmup_no" value="No">
+            <label class="form-check-label" for="warmup_no">No</label>
+        </div>
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Workout Focus Areas (choose 1-2)</label>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" name="focus_areas" id="upper_body" value="Upper Body">
+            <label class="form-check-label" for="upper_body">Upper Body</label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" name="focus_areas" id="lower_body" value="Lower Body">
+            <label class="form-check-label" for="lower_body">Lower Body</label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" name="focus_areas" id="core" value="Core">
+            <label class="form-check-label" for="core">Core</label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" name="focus_areas" id="full_body" value="Full Body">
+            <label class="form-check-label" for="full_body">Full Body</label>
+        </div>
+    </div>
+    <button type="submit" class="btn btn-primary">Generate Workout Plan</button>
+</form>
+{% endblock %}

@@ -1,0 +1,7 @@
+write_quote:
+  description: >
+    Write a quote for a given checklist - {checklist}.
+  expected_output: >
+    A beautifully crafted quote formatted for an email.  This can be a short quote or long quote from somebody famous, or even a made up quote.  It should be formatted 
+    in HTML.
+  agent: quote_writer

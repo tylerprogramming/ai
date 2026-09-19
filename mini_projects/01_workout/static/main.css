@@ -1,0 +1,29 @@
+.scrollable{
+  overflow-y: auto;
+  max-height: 300px;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    background: linear-gradient(to right, #ece9e6, #ffffff);
+
+}
+.container {
+    text-align: center;
+}
+.form-group {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    margin-top: 20px;
+}
+#prompt {
+    width: 45%; /* Adjust the width as needed */
+}
+#response {
+    width: 45%; /* Adjust the width as needed */
+}
