@@ -100,9 +100,7 @@ See `frameworks/pydanticai/pydanticai_v2_features/` for examples.
 - `crawl4ai` is a web scraping TOOL, not a framework
 - AgentOps IS a framework (for agent monitoring/observability)
 
-## Upcoming Ideas/Projects for Videos
+## Related Repositories
 
-- [ ] full local agent setup (ollama, crewai, qdrant docker, crawl4ai, postgres docker)
-- [ ] agentstack
-- [ ] ag2
-- [ ] letta.ai course
+- [ai-courses](https://github.com/tylerprogramming/ai-courses) - Full structured courses (Atomic Agents, LangChain, LangGraph, etc.)
+- [master-crewai-course](https://github.com/tylerprogramming/master-crewai-course) - Comprehensive CrewAI course
