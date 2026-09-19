@@ -1,4 +1,0 @@
-pyautogen
-flask
-whisper
-moviepy
