@@ -1,0 +1,17 @@
+[
+    {
+        "model": "lmstudio",
+        "api_key": "sk-1111",
+        "base_url": "http://localhost:1234/v1"
+    },
+    {
+        "model": "phi",
+        "api_key": "sk-1111",
+        "base_url": "http://localhost:11434/v1"
+    },
+    {
+        "model": "gpt-5.4-mini",
+        "api_key": "sk-1111",
+        "tags": ["tool", "4o-tool"]
+    }
+]

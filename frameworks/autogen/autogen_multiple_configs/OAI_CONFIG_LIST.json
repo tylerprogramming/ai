@@ -1,0 +1,13 @@
+[
+    {
+        "model": "gpt-5.4-mini",
+        "api_key": "GPT-4 API KEY",
+        "api_base": "https://api.gpt4.com"
+    },
+    {
+        "model": "gpt-5.4-mini",
+        "api_key": "GPT-3.5 API KEY",
+        "api_version": "2023-03-01",
+        "api_base": "https://api.someotherapi.com"
+    }
+]
