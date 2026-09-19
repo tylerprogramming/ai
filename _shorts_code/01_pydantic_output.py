@@ -15,7 +15,7 @@ player_agent = Agent(
     backstory="""You are an expert content creator, skilled in crafting engaging and informative blog posts.""",
     verbose=False,
     allow_delegation=False,
-    llm="gpt-4o",
+    llm="gpt-5.4-mini",
 )
 
 task1 = Task(

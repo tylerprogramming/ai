@@ -1,6 +1,6 @@
 [
     {
-        "model": "gpt-4o",
+        "model": "gpt-5.4-mini",
         "api_key": "sk-proj-111-1111"
     }
 ]

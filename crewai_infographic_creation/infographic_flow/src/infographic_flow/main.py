@@ -77,7 +77,7 @@ class InfographicFlow(Flow[InfographicState]):
                 contents = file.read()
                 
             completion = client.beta.chat.completions.parse(
-                model="gpt-4o-2024-08-06",
+                model="gpt-5.4-mini",
                 messages=[
                     {"role": "system", "content": "I need all the steps simplified in under 5 words of the flow involved in the crewai flow file provided.  Only return the steps, no other text."},
                     {"role": "user", "content": contents},

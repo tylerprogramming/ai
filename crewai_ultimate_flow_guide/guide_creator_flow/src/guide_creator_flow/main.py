@@ -72,7 +72,7 @@ class GuideCreatorFlow(Flow[GuideCreatorState]):
         print("Creating guide outline...")
 
         # Initialize the LLM
-        llm = LLM(model="openai/gpt-5", response_format=GuideOutline)
+        llm = LLM(model="openai/gpt-5.4-mini", response_format=GuideOutline)
 
         # Create the messages for the outline
         messages = [

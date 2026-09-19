@@ -4,7 +4,7 @@ using AutoGen.OpenAI;
 
 
 var openAIKey = "your-api-key";
-var gpt35Config = new OpenAIConfig(openAIKey, "gpt-3.5-turbo");
+var gpt35Config = new OpenAIConfig(openAIKey, "gpt-5.4-mini");
 
 var assistantAgent = new AssistantAgent(
     name: "assistant",

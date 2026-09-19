@@ -8,7 +8,7 @@ load_dotenv()
 tool = PDFSearchTool(pdf='/Users/tylerreed/_ai-projects/ai/crewai_tools_11/pdf/AutoGen_Studio-12.pdf')
 
 # Create an LLM with a temperature of 0 to ensure deterministic outputs
-llm = LLM(model="gpt-4o", temperature=0)
+llm = LLM(model="gpt-5.4-mini", temperature=0)
 
 # Create an agent with the knowledge store
 agent = Agent(

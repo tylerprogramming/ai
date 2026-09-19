@@ -3,7 +3,7 @@ from autogen.coding import LocalCommandLineCodeExecutor
 
 config_list = [
     {
-        "model": "gpt-4",
+        "model": "gpt-5.4-mini",
         "api_key": "sk-proj-1111"
     }
 ]

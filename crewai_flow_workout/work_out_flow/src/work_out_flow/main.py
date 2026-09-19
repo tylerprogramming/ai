@@ -30,7 +30,7 @@ google_upload_file = composio_toolset.get_tools(
 slack_toolset = composio_toolset.get_tools(
     actions=['SLACK_SENDS_A_MESSAGE_TO_A_SLACK_CHANNEL'])
 
-openai_llm = LLM(model="gpt-4o", temperature=0)
+openai_llm = LLM(model="gpt-5.4-mini", temperature=0)
 
 class WorkOutResearch(BaseModel):
     research: str = ""

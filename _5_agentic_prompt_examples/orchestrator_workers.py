@@ -60,7 +60,7 @@ async def orchestrator_workflow(task : str, orchestrator_prompt : str, worker_pr
     print(f"\nANALYSIS:\n{analysis}")
     print(f"\nTASKS:\n{json.dumps(tasks, indent=2)}")
 
-    worker_model =  ["gpt-4o"]*len(tasks)
+    worker_model =  ["gpt-5.4-mini"]*len(tasks)
 
     # Gather intermediate responses from worker models
     return tasks, await asyncio.gather(*[run_llm_parallel(prompt=worker_prompt.format(original_task=task, task_type=task_info['type'], task_description=task_info['description']), model=model) for task_info, model in zip(tasks,worker_model)])
