@@ -1,18 +1,20 @@
 # AI Projects & Learning Repository
 
-A collection of AI agent projects, framework tutorials, and integrations.
+A collection of AI agent projects, framework tutorials, and integrations. This is the main hub for projects from my YouTube videos.
 
 ## Repository Structure
 
 ```
-├── frameworks/          # AI framework projects organized by framework
-│   ├── autogen/        # 21 AutoGen projects
-│   ├── crewai/         # 16 CrewAI projects  
-│   ├── openai/         # OpenAI SDK, Swarm, Agents, Image Gen
-│   ├── pydanticai/     # PydanticAI examples
-│   └── smolagents/     # Smolagents examples
+├── frameworks/           # AI framework projects
+│   ├── agentops/        # Agent monitoring/observability
+│   ├── autogen/         # 21 AutoGen projects
+│   ├── crewai/          # 16 CrewAI projects  
+│   ├── openai/          # OpenAI SDK, Swarm, Agents, Image Gen
+│   ├── pydanticai/      # PydanticAI examples
+│   └── smolagents/      # Smolagents examples
 │
-├── mini_projects/      # Standalone tutorial projects (formerly ai_agency series)
+├── mini_projects/        # Standalone tutorial projects
+│   ├── 00_getting_started
 │   ├── 01_workout
 │   ├── 02_lmstudio
 │   ├── 03_video_captions
@@ -22,23 +24,24 @@ A collection of AI agent projects, framework tutorials, and integrations.
 │   ├── 07_news_aggregator
 │   ├── 08_checklistai
 │   ├── 09_movie_recommendation
-│   └── 10_powerpoint_ai
+│   ├── 10_powerpoint_ai
+│   ├── agentic_prompts
+│   └── ai_snake_games
 │
-├── integrations/       # Third-party integrations
-│   ├── n8n_crewai
-│   ├── n8n_runner
+├── integrations/         # Third-party integrations
+│   ├── google_drive_monitor
 │   ├── mcp_crewai
 │   ├── mcp_supabase
-│   └── google_drive_monitor
+│   ├── n8n_crewai
+│   └── n8n_runner
 │
-├── tools/              # Utilities and tools (not frameworks)
-│   ├── crawl4ai/       # Web scraping tool
+├── tools/                # Utilities (not frameworks)
+│   ├── crawl4ai/        # Web scraping tool
 │   └── repo_images/
 │
-└── misc/               # Other projects and experiments
-    ├── claude_skill_social_me
-    ├── saas_products
-    └── ...
+├── youtube_shorts/       # Code for YouTube Shorts videos
+│
+└── claude_skill_social_me/  # Claude skill for social media research
 ```
 
 ## Current Library Versions
@@ -63,7 +66,7 @@ A collection of AI agent projects, framework tutorials, and integrations.
   - WINDOWS: https://phoenixnap.com/kb/ffmpeg-windows
 
 ## Skills / Claude Code
-- [claude_skill_social_me](misc/claude_skill_social_me) - a Claude Code skill that researches a topic across YouTube, Instagram, TikTok and X through the Apify MCP server and writes a brief on what to make next. Includes the five-line prompt that builds it.
+- [claude_skill_social_me](claude_skill_social_me) - a Claude Code skill that researches a topic across YouTube, Instagram, TikTok and X through the Apify MCP server and writes a brief on what to make next. Includes the five-line prompt that builds it.
 
 ## Upcoming Ideas/Projects for Videos
 - [x] crewai_flow_workout
