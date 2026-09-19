@@ -1,0 +1,3 @@
+# CrewAI v1.15+ Requirements
+crewai>=1.15.0
+crewai-tools>=0.17.0

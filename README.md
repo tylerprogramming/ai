@@ -5,28 +5,20 @@ A collection of AI agent projects, framework tutorials, and integrations. This i
 ## Repository Structure
 
 ```
-├── frameworks/           # AI framework projects
+├── frameworks/           # AI framework projects (simple examples, not full courses)
 │   ├── agentops/        # Agent monitoring/observability
-│   ├── autogen/         # 21 AutoGen projects
-│   ├── crewai/          # 16 CrewAI projects  
+│   ├── autogen/         # AutoGen projects (includes v0.7+ examples)
+│   ├── crewai/          # CrewAI projects (includes v1.15+ features)
 │   ├── openai/          # OpenAI SDK, Swarm, Agents, Image Gen
-│   ├── pydanticai/      # PydanticAI examples
-│   └── smolagents/      # Smolagents examples
+│   ├── pydanticai/      # PydanticAI examples (includes v2.x features)
+│   └── smolagents/      # Smolagents examples (includes v1.26+ features)
 │
 ├── mini_projects/        # Standalone tutorial projects
 │   ├── 00_getting_started
 │   ├── 01_workout
 │   ├── 02_lmstudio
 │   ├── 03_video_captions
-│   ├── 04_youtube_service
-│   ├── 05_pdf
-│   ├── 06_meal_gym_planner
-│   ├── 07_news_aggregator
-│   ├── 08_checklistai
-│   ├── 09_movie_recommendation
-│   ├── 10_powerpoint_ai
-│   ├── agentic_prompts
-│   └── ai_snake_games
+│   └── ...more
 │
 ├── integrations/         # Third-party integrations
 │   ├── google_drive_monitor
@@ -41,50 +33,74 @@ A collection of AI agent projects, framework tutorials, and integrations. This i
 │
 ├── youtube_shorts/       # Code for YouTube Shorts videos
 │
-└── claude_skill_social_me/  # Claude skill for social media research
+└── claude_skill_agent_builder/  # Claude skill for building AI agents
 ```
 
-## Current Library Versions
-<a href="https://github.com/microsoft/autogen/tree/main"><img src="https://img.shields.io/badge/AutoGen-0.2.36-red"/></a>
-<a href="https://github.com/crewAIInc/crewAI"><img src="https://img.shields.io/badge/CrewAI-0.70.1-blue"/></a>
-<a href="https://lmstudio.ai/"><img src="https://img.shields.io/badge/LMStudio-0.2.22-purple"/></a>
+## Current Framework Versions
+
+| Framework | Version | Notes |
+|-----------|---------|-------|
+| AutoGen | v0.7+ | **Breaking change from v0.2!** New async API |
+| CrewAI | v1.15+ | Conversational flows, LLM overlay |
+| PydanticAI | v2.40+ | TypeSafe, realtime sessions |
+| Smolagents | v1.26+ | Exa search, improved executors |
+| OpenAI Agents | v0.58+ | Hosted sandbox, streaming |
+
+## Framework Quick Reference
+
+### AutoGen v0.7+ (Breaking Changes!)
+
+The old `import autogen` API is deprecated. New pattern:
+
+```python
+from autogen_agentchat.agents import AssistantAgent
+from autogen_ext.models.openai import OpenAIChatCompletionClient
+
+model_client = OpenAIChatCompletionClient(model="gpt-5.4-mini")
+agent = AssistantAgent(name="my_agent", model_client=model_client)
+await agent.run_stream(task="...")
+```
+
+See `frameworks/autogen/autogen_v07_quickstart/` for examples.
+
+### CrewAI v1.15+
+
+```python
+from crewai import Agent, Crew, Task, LLM
+from crewai.flow import Flow, listen, start
+```
+
+See `frameworks/crewai/crewai_v115_features/` for new features.
+
+### PydanticAI v2.x
+
+```python
+from pydantic_ai import Agent
+
+agent = Agent("openai:gpt-5.4-mini", result_type=MyModel)
+result = await agent.run("...")
+```
+
+See `frameworks/pydanticai/pydanticai_v2_features/` for examples.
+
+## Skills / Claude Code
+
+- **[agent-builder](claude_skill_agent_builder)** - A Claude Code skill that scaffolds complete AI agent projects. Give it a task and framework, get a working project with proper structure, dependencies, and best practices.
 
 ## Downloads
+
 - Ollama: https://ollama.com/
 - LM Studio: https://lmstudio.ai/
 - PyCharm Download: https://www.jetbrains.com/pycharm/download
-- Anaconda Download: https://www.anaconda.com/download
 - Visual Studio Code: https://code.visualstudio.com/
-- .NET SDK: https://dotnet.microsoft.com/en-us/download
 
-## Need to KNOW
-- MemGPT has been updated recently and if we don't use `memgpt configure` to set the openai_key, then it won't work with OpenAI API. I opened issue here: [https://github.com/tylerprogramming/ai/issues/1](https://github.com/cpacker/MemGPT/issues/568)
-- Issues with function calling connected with LM Studio. GPT function calling works, but as soon as the config is swapped for localhost to LM Studio, they are ignored
-- NEED to make sure that if using LM Studio, set the UserAgent to have a default auto reply to "..." or something. LM Studio complains about this because of the interaction
-- FFMPEG: must be installed to use Whisper AI
-  - MACOS: https://superuser.com/questions/624561/install-ffmpeg-on-os-x
-  - WINDOWS: https://phoenixnap.com/kb/ffmpeg-windows
+## Notes
 
-## Skills / Claude Code
-- [claude_skill_social_me](claude_skill_social_me) - a Claude Code skill that researches a topic across YouTube, Instagram, TikTok and X through the Apify MCP server and writes a brief on what to make next. Includes the five-line prompt that builds it.
+- Full courses live in the separate `ai-courses` repository
+- `crawl4ai` is a web scraping TOOL, not a framework
+- AgentOps IS a framework (for agent monitoring/observability)
 
-## Upcoming Ideas/Projects for Videos
-- [x] crewai_flow_workout
-- [ ] crewai_flow_single_llm
-- [ ] crewai_infographic_creation
-- [ ] crewai_docker_example
-- [ ] crewai_flow_recipes
-- [ ] google agent sdk
-- [ ] mem0 with crewai
-- [ ] full local agent setup (ollama, crewai, qdrant docker, crawl4ai, postgres docker)
-- [ ] don't 'vibe' code
-- [ ] Find best videos from last two weeks
-- [ ] Why AI is difficult...
-- [ ] 5 AI Agent Projects
-- [ ] agentstack
-- [ ] Lovable 2.0
-- [ ] bolt.new + supabase
-- [ ] replit 2.0
-- [ ] ag2
-- [ ] letta.ai course
-- [ ] .af files
+## Related Repositories
+
+- [ai-courses](https://github.com/tylerprogramming/ai-courses) - Full structured courses (Atomic Agents, LangChain, LangGraph, etc.)
+- [master-crewai-course](https://github.com/tylerprogramming/master-crewai-course) - Comprehensive CrewAI course
