@@ -8,7 +8,7 @@ llm_config = {
     "temperature": 0.7
 }
 config_list = autogen.config_list_from_json(config_file_or_env, filter_dict={
-    "model": ["gpt-4"]
+    "model": ["gpt-5.4-mini"]
 })
 
 position_list = utility.position_list
@@ -57,8 +57,8 @@ json.dump(sys_msg_list, open(library_path_or_json, "w"), indent=4)
 
 new_builder = AgentBuilder(
     config_file_or_env=config_file_or_env,
-    builder_model="gpt-4",
-    agent_model="gpt-4",
+    builder_model="gpt-5.4-mini",
+    agent_model="gpt-5.4-mini",
 )
 
 agent_list, _ = new_builder.build_from_library(utility.building_task, library_path_or_json, llm_config)

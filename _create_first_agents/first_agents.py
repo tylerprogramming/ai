@@ -2,7 +2,7 @@ import autogen
 
 config_list = [
     {
-        "model": "gpt-3.5-turbo",  # or gpt-3.5-turbo
+        "model": "gpt-5.4-mini",  # or gpt-3.5-turbo
         "api_key": "sk-proj-1111"
     }
 ]

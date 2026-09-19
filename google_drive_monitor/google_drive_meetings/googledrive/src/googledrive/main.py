@@ -40,7 +40,7 @@ class GoogleDriveFlow(Flow[GoogleDriveState]):
         print("Retrieving types")
         print("File name", self.state.file_name)
         completion = client.chat.completions.create(
-            model="gpt-4o",
+            model="gpt-5.4-mini",
             messages=[
                 {"role": "system", "content": "You are a helpful assistant."},
                 {

@@ -28,7 +28,7 @@ def generate(task: str, generator_prompt: str, context: str = "") -> tuple[str, 
     """Generate and improve a solution based on feedback."""
     full_prompt = f"{generator_prompt}\n{context}\nTask: {task}" if context else f"{generator_prompt}\nTask: {task}"
 
-    response = run_llm(full_prompt, model="gpt-4o")
+    response = run_llm(full_prompt, model="gpt-5.4-mini")
     
     print("\n## Generation start")
     print(f"Output:\n{response}\n")

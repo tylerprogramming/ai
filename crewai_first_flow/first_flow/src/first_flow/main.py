@@ -56,7 +56,7 @@ class GuideCreatorFlow(Flow[GuideCreatorState]):
         print("Creating guide outline...")
 
         # Initialize the LLM
-        llm = LLM(model="openai/gpt-4o-mini", response_format=GuideOutline)
+        llm = LLM(model="openai/gpt-5.4-mini", response_format=GuideOutline)
 
         # Create the messages for the outline
         messages = [
@@ -112,7 +112,7 @@ class GuideCreatorFlow(Flow[GuideCreatorState]):
                 previous_sections_text = "No previous sections written yet."
 
             # Run the content crew for this section
-            llm = LLM(model="openai/gpt-4o", response_format=SectionContent)
+            llm = LLM(model="openai/gpt-5.4-mini", response_format=SectionContent)
             result = llm.call(messages=[
                 {"role": "system", "content": "You are a helpful assistant designed to output JSON."},
                 {"role": "user", "content": f"""

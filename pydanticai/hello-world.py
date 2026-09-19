@@ -1,7 +1,7 @@
 from pydantic_ai import Agent
 
 agent = Agent(  
-    'openai:gpt-4o',
+    'openai:gpt-5.4-mini',
     system_prompt='Be concise, reply with one sentence.',  
 )
 

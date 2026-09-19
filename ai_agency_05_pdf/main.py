@@ -59,7 +59,7 @@ if uploaded_file is not None:
             {
                 # "base_url": os.getenv("BASE_URL"),
                 "api_key": os.getenv("OPENAI_API_KEY"),
-                "model": "gpt-3.5-turbo"
+                "model": "gpt-5.4-mini"
             }
         ]
 

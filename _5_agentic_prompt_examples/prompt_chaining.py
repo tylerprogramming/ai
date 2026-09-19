@@ -9,7 +9,7 @@ def prompt_chain_workflow(input_query: str, prompt_chain : List[str]) -> List[st
     response = input_query
     for i, prompt in enumerate(prompt_chain):
         print(f"Step {i+1}")
-        response = run_llm(f"{prompt}\nInput:\n{response}", model='gpt-4o')
+        response = run_llm(f"{prompt}\nInput:\n{response}", model='gpt-5.4-mini')
         response_chain.append(response)
         print(f"{response}\n")
     return response_chain

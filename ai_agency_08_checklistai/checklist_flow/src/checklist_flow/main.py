@@ -41,7 +41,7 @@ class ChecklistFlow(Flow[ChecklistState]):
         print("Generating final email body")
         client = OpenAI()
         completion = client.chat.completions.create(
-            model="gpt-4o",
+            model="gpt-5.4-mini",
             messages=[
                 {"role": "system", "content": "You are a helpful assistant."},
                 {

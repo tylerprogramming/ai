@@ -3,7 +3,7 @@ import autogen
 config_list = autogen.config_list_from_json(
     "OAI_CONFIG_LIST",
     filter_dict={
-        "model": ["gpt-3.5-turbo"],
+        "model": ["gpt-5.4-mini"],
     },
 )
 

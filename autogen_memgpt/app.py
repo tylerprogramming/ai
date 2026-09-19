@@ -14,7 +14,7 @@ config_list = [
 
 config_list_memgpt = [
     {
-        "model": "gpt-3.5",
+        "model": "gpt-5.4-mini",
     },
 ]
 

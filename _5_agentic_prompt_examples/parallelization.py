@@ -28,14 +28,14 @@ async def parallel_workflow(prompt : str, proposer_models : List[str], aggregato
 
 
 reference_models = [
-    "o1-mini",
-    "o1-preview"
+    "gpt-5.4-mini",
+    "gpt-5.4-mini"
 ]
 
 user_prompt = """Jenna and her mother picked some apples from their apple farm. 
 Jenna picked half as many apples as her mom. If her mom got 20 apples, how many apples did they both pick?"""
 
-aggregator_model = "o1-mini"
+aggregator_model = "gpt-5.4-mini"
 
 aggregator_system_prompt = """You have been provided with a set of responses from various open-source models to the latest user query.
 Your task is to synthesize these responses into a single, high-quality response. It is crucial to critically evaluate the information
