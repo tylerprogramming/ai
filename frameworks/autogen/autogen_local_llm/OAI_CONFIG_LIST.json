@@ -1,0 +1,12 @@
+[
+    {
+        "model": "stabilityai/stable-code-3b",
+        "model_client_cls": "CustomModelClient",
+        "model-card": "stable-code-3b-Q5_K_M.gguf",
+        "device": "cpu",
+        "n": 1,
+        "params": {
+            "max_length": 1000
+        }
+    }
+]

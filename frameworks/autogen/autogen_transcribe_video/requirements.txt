@@ -1,0 +1,4 @@
+pyautogen
+openai-whisper
+openai
+moviepy
