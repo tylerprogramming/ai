@@ -1,5 +1,6 @@
 """Shared helpers for the 058 demos. Keeps each demo file short enough to read on camera."""
 
+import math
 import os
 import sys
 import time
@@ -9,12 +10,52 @@ from openai import OpenAI
 
 MODEL = "gpt-6-astra"
 
+# Standard tier, short context, USD per 1M tokens. From developers.openai.com/api/docs/pricing.
+PRICE = {"input": 10.00, "cached_input": 1.00, "output": 50.00}
+CONTAINER_PER_20_MIN = 0.03  # 1 GB hosted sandbox, billed per 20-minute session
+
 
 def make_client() -> OpenAI:
     load_dotenv()
     if not os.environ.get("OPENAI_API_KEY"):
         sys.exit("OPENAI_API_KEY is not set. Copy .env.example to .env and add your key.")
     return OpenAI()
+
+
+def print_cost(client: OpenAI, session_id: str | None, t0: float) -> None:
+    """Print a token and container cost estimate for a session.
+
+    Tokens come from the session's recorded usage (best effort, may be None right
+    after a turn). Container time is estimated from elapsed wall clock since t0 and
+    rounded up to 20-minute blocks. The real bill is on the Usage page.
+    """
+    if not session_id:
+        return
+    session = client.beta.agents.sessions.retrieve(session_id)
+    u = session.usage
+    print("\n--- cost estimate ---")
+    if u is None:
+        print("tokens: usage not reported yet (retrieve the session again in a minute)")
+        tokens_usd = 0.0
+    else:
+        cached = u.input_tokens_details.cached_tokens
+        fresh = u.input_tokens - cached
+        tokens_usd = (
+            fresh * PRICE["input"] + cached * PRICE["cached_input"] + u.output_tokens * PRICE["output"]
+        ) / 1_000_000
+        print(
+            f"tokens: in={u.input_tokens} (cached {cached}) out={u.output_tokens} "
+            f"(reasoning {u.output_tokens_details.reasoning_tokens})  ${tokens_usd:.4f}"
+        )
+    if session.environment.type == "openai_hosted":
+        minutes = (time.time() - t0) / 60
+        blocks = max(1, math.ceil(minutes / 20))
+        container_usd = blocks * CONTAINER_PER_20_MIN
+        print(f"container: {minutes:.1f} min so far, {blocks} x 20-min block  ${container_usd:.2f}")
+    else:
+        container_usd = 0.0
+        print(f"container: none ({session.environment.type})")
+    print(f"total: ${tokens_usd + container_usd:.4f}")
 
 
 class Printer:

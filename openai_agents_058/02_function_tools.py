@@ -10,7 +10,7 @@ the harness: tokens only, no container.
 
 import json
 
-from common import MODEL, Printer, make_client
+from common import MODEL, Printer, make_client, print_cost
 
 client = make_client()
 
@@ -69,6 +69,7 @@ with client.beta.agents.sessions.create(
             break
 
 session_id = printer.session_id
+t0 = printer.t0
 
 # Turn 2: same session, so the agent remembers Sam. The stream helper runs the
 # tool handler for us this time.
@@ -83,3 +84,4 @@ with client.beta.agents.sessions.stream(
         printer.handle(event)
 
 print("\nsession id:", session_id)
+print_cost(client, session_id, t0)

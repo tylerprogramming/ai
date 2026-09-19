@@ -5,7 +5,7 @@ in parallel inside the same sandbox. You watch them get created and closed in
 the event stream. No orchestration code on your side.
 """
 
-from common import MODEL, Printer, make_client
+from common import MODEL, Printer, make_client, print_cost
 
 client = make_client()
 printer = Printer()
@@ -34,3 +34,4 @@ with client.beta.agents.sessions.create(
             break
 
 print("\nsession id:", printer.session_id)
+print_cost(client, printer.session_id, printer.t0)

@@ -5,7 +5,7 @@ writing a script, running it, and reporting the real output. OpenAI runs the
 loop. You never see a tool-call round trip.
 """
 
-from common import MODEL, Printer, make_client
+from common import MODEL, Printer, make_client, print_cost
 
 client = make_client()
 printer = Printer()
@@ -27,3 +27,4 @@ with client.beta.agents.sessions.create(
             break
 
 print("\nsession id:", printer.session_id)
+print_cost(client, printer.session_id, printer.t0)
