@@ -26,12 +26,43 @@ This is an AI projects repository containing:
 2. **AgentOps IS a framework** - It's for agent monitoring/observability
 3. **This repo is for examples, not courses** - Full courses live in `ai-courses` repo
 
+## Current Framework Versions (September 2026)
+
+**CRITICAL:** AutoGen has completely changed its API in v0.7+!
+
+| Framework | Package | Current Pattern |
+|-----------|---------|-----------------|
+| AutoGen v0.7+ | `autogen-agentchat`, `autogen-ext` | Async, event-driven |
+| CrewAI v1.15+ | `crewai>=1.15.0` | Decorators, YAML config, Flows |
+| PydanticAI v2.x | `pydantic-ai>=2.40.0` | Type-safe, structured outputs |
+| Smolagents v1.26+ | `smolagents>=1.26.0` | Code agents, LiteLLM |
+| OpenAI Agents | `openai>=1.50.0` | Chat completions, tools |
+
+### AutoGen v0.7+ Migration
+
+**Old (v0.2 - DEPRECATED):**
+```python
+import autogen
+agent = autogen.AssistantAgent(name="...", llm_config={...})
+```
+
+**New (v0.7+):**
+```python
+from autogen_agentchat.agents import AssistantAgent
+from autogen_ext.models.openai import OpenAIChatCompletionClient
+
+model_client = OpenAIChatCompletionClient(model="gpt-5.4-mini")
+agent = AssistantAgent(name="...", model_client=model_client)
+await agent.run_stream(task="...")
+```
+
 ## Code Style
 
 - Python projects typically use virtual environments
 - Configuration files often named `OAI_CONFIG_LIST.json` for OpenAI config
 - Environment variables in `.env` files (see `.env.example`)
 - Most projects are standalone and self-contained
+- Default model: `gpt-5.4-mini`
 
 ## When Adding New Content
 
@@ -50,7 +81,7 @@ python main.py
 
 ## Common Dependencies
 
-- `autogen` / `pyautogen` - Microsoft AutoGen framework
+- `autogen-agentchat` / `autogen-ext` - Microsoft AutoGen v0.7+ framework
 - `crewai` - CrewAI multi-agent framework
 - `openai` - OpenAI Python SDK
 - `pydantic-ai` - PydanticAI framework
