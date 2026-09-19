@@ -16,7 +16,7 @@ class PixelArtImagePromptList(BaseModel):
     image_prompts: list[PixelArtImagePrompt]
 
 completion = client.beta.chat.completions.parse(
-    model="gpt-4o-2024-08-06",
+    model="gpt-5.4-mini",
     messages=[
         {"role": "system", "content": "I need 3 different prompts for images of the code presented.  I need the first image prompt to be an overview of the code.  The second image prompt should be for creating an image of the workflow.  The third image prompt should be a detailed description of the code."},
         {"role": "user", "content": """ import os
@@ -39,7 +39,7 @@ google_create_find_folder = composio_toolset.get_tools(actions=['GOOGLEDRIVE_CRE
 google_upload_file = composio_toolset.get_tools(actions=['GOOGLEDRIVE_FIND_FOLDER', 'GOOGLEDRIVE_UPLOAD_FILE', 'GOOGLEDRIVE_CREATE_FILE_FROM_TEXT'])
 slack_toolset = composio_toolset.get_tools(actions=['SLACK_SENDS_A_MESSAGE_TO_A_SLACK_CHANNEL'])
 
-openai_llm = LLM(model="gpt-4o", temperature=0)
+openai_llm = LLM(model="gpt-5.4-mini", temperature=0)
 
 class WorkOutResearch(BaseModel):
     research: str = ""

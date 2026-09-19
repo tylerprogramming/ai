@@ -10,7 +10,7 @@
         "base_url": "http://localhost:11434/v1"
     },
     {
-        "model": "gpt-4o",
+        "model": "gpt-5.4-mini",
         "api_key": "sk-proj-1111"
     }
 ]

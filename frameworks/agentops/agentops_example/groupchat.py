@@ -11,7 +11,7 @@ agentops.init("agentops-api-key-here")
 
 config_list = [
     {
-        "model": "gpt-3.5-turbo",
+        "model": "gpt-5.4-mini",
         "api_key": os.getenv("OPENAI_API_KEY")
     }
 ]

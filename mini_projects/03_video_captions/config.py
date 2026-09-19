@@ -3,7 +3,7 @@ import autogen
 config_list = autogen.config_list_from_dotenv(
     dotenv_file_path=".",
     filter_dict={
-        "model": ["gpt-4"],
+        "model": ["gpt-5.4-mini"],
     }
 )
 

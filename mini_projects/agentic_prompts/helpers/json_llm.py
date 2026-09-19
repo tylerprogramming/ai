@@ -20,7 +20,7 @@ def JSON_llm(user_prompt: str, schema: BaseModel, system_prompt: str = None):
 
         extract = client.chat.completions.create(
             messages=messages,
-            model="gpt-4o",
+            model="gpt-5.4-mini",
             response_format={
                 "type": "json_schema",
                 "json_schema": {

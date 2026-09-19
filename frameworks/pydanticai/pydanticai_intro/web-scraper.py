@@ -28,7 +28,7 @@ class Deps:
 
 
 web_scraper_agent = Agent(
-    'openai:gpt-4o',
+    'openai:gpt-5.4-mini',
     system_prompt='Scrape the website and return the most relevant information.',
     deps_type=Deps,
     retries=2,

@@ -12,8 +12,8 @@ class News(BaseModel):
     news: str = ""
 
 class NewsFlow(Flow[News]):
-    model = "gpt-4o-mini"
-    model_4o = "gpt-4o"
+    model = "gpt-5.4-mini"
+    model_4o = "gpt-5.4-mini"
 
     @start()
     def generate_news_topic(self):

@@ -4,7 +4,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 messages = []
-model = LiteLLMModel("openai/gpt-4o", temperature=0.2)
+model = LiteLLMModel("openai/gpt-5.4-mini", temperature=0.2)
 
 while True:
     user_input = input("Enter a message: ")

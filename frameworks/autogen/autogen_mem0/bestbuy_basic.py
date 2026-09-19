@@ -12,7 +12,7 @@ USER_ID = "best_buy_service_bot"
 agent = ConversableAgent(
     "chatbot",
     system_message="You are a helpful AI Assistant.",
-    llm_config={"config_list": [{"model": "gpt-4o", "api_key": os.environ.get("OPENAI_API_KEY")}]},
+    llm_config={"config_list": [{"model": "gpt-5.4-mini", "api_key": os.environ.get("OPENAI_API_KEY")}]},
     code_execution_config=False,
     function_map=None,
     human_input_mode="NEVER",

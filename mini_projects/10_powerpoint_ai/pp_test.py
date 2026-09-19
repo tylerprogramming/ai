@@ -19,7 +19,7 @@ def get_section_content():
     client = OpenAI()
     
     completion = client.beta.chat.completions.parse(
-        model="gpt-4o",
+        model="gpt-5.4-mini",
         messages=[
             {
                 "role": "system", 

@@ -11,7 +11,7 @@ image_waldo = "https://i.stack.imgur.com/reNlF.jpg"
 config_list_4v = autogen.config_list_from_json(
     "OAI_CONFIG_LIST.json",
     filter_dict={
-        "model": ["gpt-4-vision-preview"],
+        "model": ["gpt-5.4-mini"],
     },
 )
 

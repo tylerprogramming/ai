@@ -13,7 +13,7 @@ base_id = os.getenv("BASE_ID")
 
 config_list = autogen.config_list_from_dotenv(
     dotenv_file_path=".env",
-    model_api_key_map={"gpt-4": os.getenv("OPENAI_API_KEY")}
+    model_api_key_map={"gpt-5.4-mini": os.getenv("OPENAI_API_KEY")}
 )
 
 llm_config = {

@@ -4,7 +4,7 @@ from typing import Annotated
 config_list = autogen.config_list_from_json(
     env_or_file="config/OAI_CONFIG_LIST.json",
     filter_dict={
-        "model": ["gpt-3.5-turbo"]
+        "model": ["gpt-5.4-mini"]
     },
 )
 

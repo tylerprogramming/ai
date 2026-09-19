@@ -42,9 +42,7 @@ prompt_list = [
 ]
 
 model_routes = {
-    "o1-mini": "Best model choice for code generation tasks.",
-    "gpt-4o": "Best model choice for story-telling, role-playing and fantasy tasks.",
-    "gpt-4o-mini": "Best model for reasoning, planning and multi-step tasks",
+    "gpt-5.4-mini": "Best model choice for code generation, story-telling, role-playing, fantasy tasks, reasoning, planning and multi-step tasks.",
 }
 
 for i, prompt in enumerate(prompt_list):
