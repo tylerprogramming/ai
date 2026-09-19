@@ -1,10 +1,10 @@
 # AI Projects & Learning Repository
 
-[![YouTube](https://img.shields.io/badge/YouTube-tylerprogramming-red?style=flat&logo=youtube)](https://youtube.com/@tylerprogramming)
+[![YouTube](https://img.shields.io/badge/YouTube-TylerReedAI-red?style=flat&logo=youtube)](https://youtube.com/@TylerReedAI)
 [![GitHub stars](https://img.shields.io/github/stars/tylerprogramming/ai?style=flat&logo=github)](https://github.com/tylerprogramming/ai)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
-A collection of AI agent projects, framework tutorials, and integrations. This is the main hub for code from my [YouTube channel](https://youtube.com/@tylerprogramming).
+A collection of AI agent projects, framework tutorials, and integrations. This is the main hub for code from my [YouTube channel](https://youtube.com/@TylerReedAI).
 
 > **Looking for full courses?** Check out [ai-courses](https://github.com/tylerprogramming/ai-courses) for structured learning paths (LangChain, LangGraph, Atomic Agents, etc.)
 
@@ -128,6 +128,6 @@ python main.py
 ---
 
 <p align="center">
-  <a href="https://youtube.com/@tylerprogramming">YouTube</a> •
+  <a href="https://youtube.com/@TylerReedAI">YouTube</a> •
   <a href="https://github.com/tylerprogramming">GitHub</a>
 </p>
