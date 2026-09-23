@@ -1,0 +1,1 @@
+Review the most recent commit on <owner>/<repo> using the code-review skill. Fetch it with gh. File and line for every finding, quote the code. Lead with the one finding that matters. Do not post anything to GitHub.

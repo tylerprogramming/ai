@@ -1,0 +1,1 @@
+Run the content-brief skill using ONLY the files in this folder (status.md, analytics-50-videos.json, video-ideas.md). Produce the morning brief in the exact output shape from the skill, under 900 characters, 3 openings, ending with "Reply with a number." Numbers only from the files.

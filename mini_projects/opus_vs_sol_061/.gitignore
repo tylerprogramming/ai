@@ -1,0 +1,14 @@
+# your data, never committed
+inputs/*
+!inputs/README.md
+runs/*
+!runs/.gitkeep
+*.mp4
+*.wav
+*.m4a
+*.jpg
+*.png
+*.srt
+*.json
+out.txt
+time.txt
