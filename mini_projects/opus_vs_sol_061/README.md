@@ -44,18 +44,27 @@ this repo is the harness, not the results.
 
 ## Results
 
-Filled in after the run. Model ids as reported by each agent.
+Run 2026-09-23, same prompt file to each profile. Model ids as reported by the agents. Every artifact is in `runs/<profile>/<case>/`.
 
 | # | Case | Opus 5.5 | GPT-6 Sol | Call |
 |---|---|---|---|---|
-| 5 | Analytics | Found "10 to 20 min holds, courses die, viewers stop at the same point regardless of length"; 72 of 81 subs from that band; 0 em dashes | Recommended under 5 minutes (highest %, but those videos earned 0 subs); 4 em dashes after being told none | Opus |
-| 7 | Brief | Newest idea, flagged stale data, 6 notes on what it could not verify | Oldest idea in the file (a dead lane), dated the brief to the stale data | Opus |
-| 1 | Website | | | |
-| 2 | Review | | | |
-| 3 | Ad | | | |
-| 4 | Game | | | |
-| 6 | Reel | | | |
-| 8 | Bill | | | |
+| 1 | Website | 12.6 KB, 6 blocks, 2 CTAs (asked for one). Least-sure line: "Your first brief arrives the next morning," with the reason (no public Skool API) and a safer rewrite. | 8.2 KB, 5 blocks, 1 CTA as asked. Opened Chrome at phone width to check the layout. | judge by eye |
+| 2 | Code review | Led with a logic bug: a deleting run logged as idle because the result dict lacks a `wrote` key. Fix given. Read the diff only. | Led with a UX limit (`.limit(20)`), then found a read-then-delete race that removes a row the owner just ticked. **Ran the test suite** and reported the gap. | Sol |
+| 3 | Ad | Hook: "Your most active member hasn't posted in two weeks. Did you notice?" 87 words by `wc`, 0 em dashes. Flagged that the 14% proof number comes from a mockup screen. | Hook: "Your member count won't tell you who stopped showing up." Proof line is a feature list. 1 em dash after being told none. | Opus |
+| 4 | Game | 14.4 KB. Browser tool timed out twice, so it wrote a Node script to drive headless Chrome with real keypresses. Played to level 8, 3,200 pts, then found the speed cap (emails can't arrive faster than 0.9s) and asked whether that's intended. | 21.1 KB. Played one round in headless Chrome, 1,000 pts, deliberately mislabelled 3 to verify game over. Fixed long subjects overflowing cards. | judge by playing |
+| 5 | Analytics | "10 to 20 min holds, over 20 dies, viewers stop at the same point regardless of length." 72 of 81 subs from that band. Named "Full Course" as the losing pattern with 5 examples. 0 em dashes. | "Under 5 minutes holds best" (highest %, but those videos earned 0 subs). Recommended a CS-basics video for a Claude Code channel. 4 em dashes. | Opus |
+| 6 | Reel | 1080x1920, 45.0s, 13.6 MB, `check --strict` pass. Caught the broken SRT (one line repeated), re-transcribed 3 cuts. Pulled 5 reference frames and a face crop before designing. "Give the caption sync one pass." | 1080x1920, 45.0s, 5.5 MB, `check --strict` zero findings, 31.6s render. Caught the broken SRT, repaired captions from audio. Stayed on 0.8.17 when the upgrade failed verification. | tie (both fixed an input bug I didn't know was there) |
+| 7 | Brief | Picked the newest idea, flagged the analytics as stale, 6 notes on what it could not verify and why it didn't run yt-search. | Picked the oldest idea in the file (a dead lane this week), dated the brief to the stale data. | Opus |
+| 8 | Bill | pending: both profiles fire the 8am repo check from 2026-09-24; invoices compared after 3 days | | |
+
+Tally on the judged rows: Opus 3, Sol 1, tie 1. Website and game are for the viewer.
+
+What held across all 7: Opus questions its own output and the inputs more; Sol follows the literal instruction more closely and verifies by running things. Sol used em dashes in 3 of 7 outputs after being told not to; Opus in 0.
+
+## Two bugs in the harness, fixed
+
+- `hermes chat` writes relative to the profile workdir, not the shell's cwd. Both models wrote `~/landing.html` and `~/game.html`, and the second overwrote the first. `run-all.sh` now puts the absolute case folder in the prompt. Sol's game was re-run after the fix.
+- The reel prompt pointed both models at a stretch of transcript that was corrupted (a whisper repeat loop from an earlier run). Neither model was told. Both found it. Left in on purpose; it is the best beat.
 
 ## Notes that cost me time
 
