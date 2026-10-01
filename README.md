@@ -124,6 +124,7 @@ python main.py
 |------------|-------------|
 | [ai-courses](https://github.com/tylerprogramming/ai-courses) | Full structured courses (LangChain, LangGraph, Atomic Agents) |
 | [master-crewai-course](https://github.com/tylerprogramming/master-crewai-course) | Comprehensive CrewAI course |
+| [MySpec](https://myspec.dev?utm_source=github&utm_medium=referral&utm_campaign=tylerprogramming-ai) | Spec-first architecture and PRD authoring for multi-agent workflows |
 
 ---
 
