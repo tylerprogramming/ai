@@ -20,3 +20,5 @@ agentops.log
 .composio.lock/
 
 venv/
+# git worktrees live here; each is its own checkout
+.worktrees/
