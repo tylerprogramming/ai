@@ -1,10 +1,14 @@
 import os
+from dotenv import load_dotenv
+
+load_dotenv()  # loads MEM0_API_KEY from .env
+
 from crewai import Crew, Process, Agent, Task   
 from mem0 import MemoryClient
 from search_mem0_tool import SearchMem0Tool
 
 # Step 1: Record preferences based on past conversation or user input
-client = MemoryClient(api_key="m0-sblhjtHFcj96vR7GAvPwQ5sVgY5J5pifrYrybXLA")
+client = MemoryClient(api_key=os.environ["MEM0_API_KEY"])
 
 # Create an agent with the knowledge store
 agent = Agent(

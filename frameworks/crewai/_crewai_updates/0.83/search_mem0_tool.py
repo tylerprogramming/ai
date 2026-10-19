@@ -2,8 +2,12 @@ from crewai.tools import BaseTool
 from typing import Type
 from pydantic import BaseModel, Field
 from mem0 import MemoryClient
+import os
+from dotenv import load_dotenv
 
-client = MemoryClient(api_key="m0-sblhjtHFcj96vR7GAvPwQ5sVgY5J5pifrYrybXLA")
+load_dotenv()  # loads MEM0_API_KEY from .env
+
+client = MemoryClient(api_key=os.environ["MEM0_API_KEY"])
 
 class SearchMem0ToolInput(BaseModel):
     """Input schema for AirtableTool."""
