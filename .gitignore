@@ -1,5 +1,8 @@
 .venv/
 .env
+# AutoGen config files hold API keys; commit OAI_CONFIG_LIST.example instead
+OAI_CONFIG_LIST
+OAI_CONFIG_LIST.json
 .pyautogen/
 autogen_rag_chroma/docs/ag_studio.pdf
 __pycache__
