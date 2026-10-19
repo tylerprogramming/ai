@@ -34,7 +34,8 @@ async def main():
     )
 
     await Console(
-        team.run_stream(task="Tell me a joke about programming and then TERMINATE.")
+        # Don't put the termination word in the task itself, or the run ends immediately.
+        team.run_stream(task="Tell me a joke about programming.")
     )
     await model_client.close()
 

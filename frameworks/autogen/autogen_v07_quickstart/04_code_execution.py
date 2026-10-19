@@ -5,7 +5,7 @@ An agent that can write and execute Python code using a Docker sandbox.
 """
 
 import asyncio
-from autogen_agentchat.agents import AssistantAgent
+from autogen_agentchat.agents import AssistantAgent, CodeExecutorAgent
 from autogen_agentchat.conditions import TextMentionTermination
 from autogen_agentchat.teams import RoundRobinGroupChat
 from autogen_agentchat.ui import Console
@@ -31,11 +31,10 @@ async def main():
         After your code is executed and verified, say TERMINATE.""",
     )
 
-    executor = AssistantAgent(
+    # CodeExecutorAgent runs the code blocks the coder writes, inside the Docker sandbox.
+    executor = CodeExecutorAgent(
         name="executor",
-        model_client=model_client,
         code_executor=code_executor,
-        system_message="Execute the code and report results.",
     )
 
     termination = TextMentionTermination("TERMINATE")

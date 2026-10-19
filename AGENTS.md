@@ -56,7 +56,7 @@ agent = AssistantAgent(name="...", model_client=model_client)
 await agent.run_stream(task="...")
 ```
 
-Older examples that still use the 0.2 API are marked with a "Legacy example" notice in their README and pin `pyautogen==0.2.35` (Python 3.10–3.12 only). Keep them in place — YouTube descriptions link to these paths — and write new AutoGen examples against v0.7+.
+All AutoGen examples use the v0.7 API, including older ones first recorded on 0.2 (migrated in place — YouTube descriptions link to these paths, so don't move or rename project folders). The only exception is `integrations/_legacy_integrations/`, which still pins `pyautogen==0.2.35` (Python 3.10–3.12) and carries a legacy notice.
 
 ## Code Style
 
