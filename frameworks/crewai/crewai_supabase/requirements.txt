@@ -1,0 +1,6 @@
+# Install with: pip install -r requirements.txt
+crewai
+crewai-tools
+pydantic
+python-dotenv
+supabase

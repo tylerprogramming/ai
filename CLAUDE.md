@@ -35,6 +35,8 @@ claude_skill_agent_builder/  # Claude skill for building AI agents
 
 **IMPORTANT:** AutoGen v0.7+ is a breaking change from v0.2. The old `import autogen` pattern is deprecated. See `frameworks/autogen/autogen_v07_quickstart/` for current patterns.
 
+Older examples that still use the 0.2 API are marked with a "Legacy example" notice in their README and pin `pyautogen==0.2.35` (Python 3.10–3.12 only). Keep them in place — YouTube descriptions link to these paths — and write new AutoGen examples against v0.7+.
+
 ## Key Conventions
 
 - **Frameworks vs Courses**: This repo contains simple examples and tutorials for each framework. Full structured courses live in the separate `ai-courses` repository.
@@ -46,7 +48,7 @@ claude_skill_agent_builder/  # Claude skill for building AI agents
 ## Common Tasks
 
 ### Adding a new framework example
-Place it under `frameworks/<framework_name>/` with a descriptive folder name.
+Place it under `frameworks/<framework_name>/` with a descriptive folder name, and include a `requirements.txt` listing its dependencies.
 
 ### Adding a new integration
 Place it under `integrations/` (e.g., `integrations/mcp_<service>/`).

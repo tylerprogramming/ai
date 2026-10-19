@@ -1,0 +1,7 @@
+# Install with: pip install -r requirements.txt
+APScheduler
+crewai
+crewai-tools
+mcp
+python-dotenv
+requests

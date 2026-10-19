@@ -56,6 +56,8 @@ agent = AssistantAgent(name="...", model_client=model_client)
 await agent.run_stream(task="...")
 ```
 
+Older examples that still use the 0.2 API are marked with a "Legacy example" notice in their README and pin `pyautogen==0.2.35` (Python 3.10–3.12 only). Keep them in place — YouTube descriptions link to these paths — and write new AutoGen examples against v0.7+.
+
 ## Code Style
 
 - Python projects typically use virtual environments
@@ -70,6 +72,8 @@ await agent.run_stream(task="...")
 2. **New mini project**: `mini_projects/<number>_<name>/`
 3. **New integration**: `integrations/<integration_name>/`
 4. **New tool**: `tools/<tool_name>/`
+
+Every new project should include a `requirements.txt` (or `pyproject.toml`) listing its dependencies.
 
 ## Testing
 

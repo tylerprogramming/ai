@@ -1,0 +1,4 @@
+# Install with: pip install -r requirements.txt
+crewai
+crewai-tools
+python-dotenv

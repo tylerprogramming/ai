@@ -1,4 +1,5 @@
-pyautogen
+pyautogen==0.2.35
 flask
-whisper
-moviepy
+openai-whisper
+moviepy<2  # code uses moviepy.editor, removed in 2.0
+python-dotenv

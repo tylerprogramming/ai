@@ -1,0 +1,6 @@
+# Install with: pip install -r requirements.txt
+firecrawl-py
+httpx
+logfire
+pydantic
+pydantic-ai

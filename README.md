@@ -70,6 +70,54 @@ await agent.run_stream(task="...")
 
 See `frameworks/autogen/autogen_v07_quickstart/` for examples.
 
+#### Legacy AutoGen 0.2 examples
+
+Many older examples in this repo (from earlier videos) still use the AutoGen 0.2 `import autogen` API. Each one is marked with a legacy notice and pins `pyautogen==0.2.35` in its `requirements.txt`, so it still runs — but **only on Python 3.10–3.12**. Use a separate virtual environment for them:
+
+```bash
+cd frameworks/autogen/autogen_graphs
+python3.12 -m venv .venv && source .venv/bin/activate
+pip install -r requirements.txt
+```
+
+<details>
+<summary>All 32 legacy AutoGen 0.2 projects</summary>
+
+- [`frameworks/agentops/agentops_example`](frameworks/agentops/agentops_example)
+- [`frameworks/autogen/autogen_agentbuilder`](frameworks/autogen/autogen_agentbuilder)
+- [`frameworks/autogen/autogen_create_edit_software`](frameworks/autogen/autogen_create_edit_software)
+- [`frameworks/autogen/autogen_functions`](frameworks/autogen/autogen_functions)
+- [`frameworks/autogen/autogen_gpt_vision`](frameworks/autogen/autogen_gpt_vision)
+- [`frameworks/autogen/autogen_graphs`](frameworks/autogen/autogen_graphs)
+- [`frameworks/autogen/autogen_human_interaction`](frameworks/autogen/autogen_human_interaction)
+- [`frameworks/autogen/autogen_lmstudio_connection`](frameworks/autogen/autogen_lmstudio_connection)
+- [`frameworks/autogen/autogen_local_llm`](frameworks/autogen/autogen_local_llm)
+- [`frameworks/autogen/autogen_logging`](frameworks/autogen/autogen_logging)
+- [`frameworks/autogen/autogen_math_solving`](frameworks/autogen/autogen_math_solving)
+- [`frameworks/autogen/autogen_mem0`](frameworks/autogen/autogen_mem0)
+- [`frameworks/autogen/autogen_memgpt`](frameworks/autogen/autogen_memgpt)
+- [`frameworks/autogen/autogen_memgpt_lmstudio`](frameworks/autogen/autogen_memgpt_lmstudio)
+- [`frameworks/autogen/autogen_multiple_configs`](frameworks/autogen/autogen_multiple_configs)
+- [`frameworks/autogen/autogen_rag_chroma`](frameworks/autogen/autogen_rag_chroma)
+- [`frameworks/autogen/autogen_teaching`](frameworks/autogen/autogen_teaching)
+- [`frameworks/autogen/autogen_transcribe_video`](frameworks/autogen/autogen_transcribe_video)
+- [`frameworks/autogen/autogen_updates_0_2_27`](frameworks/autogen/autogen_updates_0_2_27)
+- [`frameworks/autogen/autogen_webscraping`](frameworks/autogen/autogen_webscraping)
+- [`frameworks/autogen/autogentest`](frameworks/autogen/autogentest)
+- [`integrations/_legacy_integrations/airtable`](integrations/_legacy_integrations/airtable)
+- [`integrations/_legacy_integrations/reddit`](integrations/_legacy_integrations/reddit)
+- [`integrations/_legacy_integrations/youtube-summarizer`](integrations/_legacy_integrations/youtube-summarizer)
+- [`mini_projects/00_getting_started`](mini_projects/00_getting_started)
+- [`mini_projects/01_workout`](mini_projects/01_workout)
+- [`mini_projects/03_video_captions`](mini_projects/03_video_captions)
+- [`mini_projects/04_youtube_service`](mini_projects/04_youtube_service)
+- [`mini_projects/05_pdf`](mini_projects/05_pdf)
+- [`mini_projects/06_meal_gym_planner`](mini_projects/06_meal_gym_planner)
+- [`mini_projects/07_news_aggregator`](mini_projects/07_news_aggregator)
+- [`mini_projects/ai_snake_games`](mini_projects/ai_snake_games)
+
+</details>
+
 ### CrewAI v1.15+
 
 ```python
@@ -114,7 +162,7 @@ Most examples are standalone. Navigate to a project folder and run:
 
 ```bash
 cd frameworks/crewai/crewai_first_crew
-pip install -r requirements.txt  # if exists
+pip install -r requirements.txt
 python main.py
 ```
 

@@ -1,1 +1,1 @@
-pyautogen
+pyautogen[lmm]==0.2.35

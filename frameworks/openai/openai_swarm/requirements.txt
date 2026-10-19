@@ -1,0 +1,2 @@
+# Install with: pip install -r requirements.txt
+git+https://github.com/openai/swarm.git

@@ -1,0 +1,5 @@
+# Install with: pip install -r requirements.txt
+# Legacy AutoGen 0.2 example: requires Python 3.10-3.12
+pyautogen==0.2.35
+agentops
+python-dotenv

@@ -1,0 +1,5 @@
+# Install with: pip install -r requirements.txt
+crewai
+mem0ai
+pydantic
+python-dotenv

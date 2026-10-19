@@ -1,0 +1,9 @@
+# Install with: pip install -r requirements.txt
+# Legacy AutoGen 0.2 example: requires Python 3.10-3.12
+pyautogen==0.2.35
+langchain<1  # code uses langchain.chains / langchain.memory, removed in 1.0
+langchain-community
+langchain-openai
+python-dotenv
+streamlit
+typing-extensions
