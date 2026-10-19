@@ -1,17 +1,40 @@
-from autogen import AssistantAgent, UserProxyAgent, config_list_from_json
+import asyncio
 
-config_list = config_list_from_json(env_or_file="OAI_CONFIG_LIST")
+from dotenv import load_dotenv
+from autogen_agentchat.agents import AssistantAgent, CodeExecutorAgent, UserProxyAgent
+from autogen_agentchat.conditions import TextMentionTermination
+from autogen_agentchat.teams import RoundRobinGroupChat
+from autogen_agentchat.ui import Console
+from autogen_ext.code_executors.local import LocalCommandLineCodeExecutor
+from autogen_ext.models.openai import OpenAIChatCompletionClient
 
-assistant = AssistantAgent(
-    name="assistant",
-    llm_config={"config_list": config_list}
-)
+load_dotenv()  # OPENAI_API_KEY from .env
 
-user_proxy = UserProxyAgent(
-    name="user_proxy",
-    code_execution_config={
-        "work_dir": "code"
-    }
-)
 
-user_proxy.initiate_chat(assistant, message="Write to a python file the code to plot a chart of the top 10 countries by land mass.")
+async def main():
+    model_client = OpenAIChatCompletionClient(model="gpt-5.4-mini")
+
+    assistant = AssistantAgent(
+        name="assistant",
+        model_client=model_client,
+    )
+
+    # Runs the code blocks the assistant writes, saving files into the "code" folder
+    executor = CodeExecutorAgent(
+        "executor",
+        code_executor=LocalCommandLineCodeExecutor(work_dir="code"),
+    )
+
+    # You (the human) get a turn after each execution. Type "exit" to stop.
+    user_proxy = UserProxyAgent("user_proxy")
+
+    termination = TextMentionTermination("TERMINATE") | TextMentionTermination("exit", sources=["user_proxy"])
+
+    team = RoundRobinGroupChat([assistant, executor, user_proxy], termination_condition=termination)
+
+    await Console(team.run_stream(task="Write to a python file the code to plot a chart of the top 10 countries by land mass."))
+    await model_client.close()
+
+
+if __name__ == "__main__":
+    asyncio.run(main())

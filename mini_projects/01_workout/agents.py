@@ -1,20 +1,25 @@
-import autogen
+from autogen_agentchat.agents import AssistantAgent
+
 import config
 import system_messages
 
-user_proxy = autogen.UserProxyAgent(
-    name="User_proxy",
-    system_message=system_messages.user_proxy_message,
-    human_input_mode="NEVER",
-    max_consecutive_auto_reply=0,
-    code_execution_config= {
-        "work_dir": "code",
-        "use_docker": False
-    }
-)
 
-fitness_expert = autogen.AssistantAgent(
-    name=system_messages.fitness_expert_name,
-    system_message=system_messages.fitness_expert_message,
-    llm_config=config.llm_config,
-)
+async def create_workout_plan(days_option, selected_options, level_option):
+    """Ask the fitness expert for a workout plan and return its reply."""
+    model_client = config.create_model_client()
+
+    # A new agent per request, so each workout plan starts with a fresh conversation
+    fitness_expert = AssistantAgent(
+        name=system_messages.fitness_expert_name,
+        system_message=system_messages.fitness_expert_message,
+        model_client=model_client,
+    )
+
+    try:
+        result = await fitness_expert.run(
+            task=system_messages.get_initiate_message(days_option, selected_options, level_option)
+        )
+    finally:
+        await model_client.close()
+
+    return result.messages[-1].content

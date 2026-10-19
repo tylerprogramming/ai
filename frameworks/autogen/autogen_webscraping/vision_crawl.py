@@ -1,39 +1,20 @@
-import autogen
-from autogen.agentchat.contrib.multimodal_conversable_agent import MultimodalConversableAgent
+import asyncio
 import subprocess
-import base64
 import os
+from pathlib import Path
 
-config_list_4v = autogen.config_list_from_json(
-    "OAI_CONFIG_LIST.json",
-    filter_dict={
-        "model": ["gpt-5.4-mini"],
-    },
-)
+from dotenv import load_dotenv
+from autogen_agentchat.agents import AssistantAgent
+from autogen_agentchat.messages import MultiModalMessage
+from autogen_agentchat.ui import Console
+from autogen_core import Image
+from autogen_ext.models.openai import OpenAIChatCompletionClient
 
-image_agent = MultimodalConversableAgent(
-    name="image-explainer",
-    llm_config={"config_list": config_list_4v, "temperature": 0.75, "max_tokens": 500}
-)
-
-user_proxy = autogen.UserProxyAgent(
-    name="User_proxy",
-    system_message="A human admin.",
-    human_input_mode="NEVER",
-    max_consecutive_auto_reply=0,
-    code_execution_config={
-        "work_dir": "code",
-        "use_docker": False
-    }
-)
-
-
-def image_b64(image):
-    with open(image, "rb") as f:
-        return base64.b64encode(f.read()).decode()
+load_dotenv()  # OPENAI_API_KEY from .env
 
 
 def create_screenshot(url, user_response_ss_name):
+    """Use puppeteer (screenshot.js) to take a full-page screenshot of the url."""
     print(f"Crawling {url}")
 
     if os.path.exists(user_response_ss_name):
@@ -51,42 +32,56 @@ def create_screenshot(url, user_response_ss_name):
         print(f"Error with exitcode {exitcode} : {result.stderr}")
         return "ERROR"
 
-    b64_image = image_b64(user_response_ss_name)
-    return b64_image
+    return user_response_ss_name
 
 
-def initiate_chat():
+async def initiate_chat():
     user_response_url = input("What is the url you want to check?:")
     user_response_message = input("What do you want from this url?:")
     user_response_ss_name = input("What name do you want to give the screenshot?:")
 
-    b64_image = create_screenshot(user_response_url, user_response_ss_name)
+    screenshot = create_screenshot(user_response_url, user_response_ss_name)
 
-    if b64_image == "ERROR":
+    if screenshot == "ERROR":
         return "I was unable to crawl that site, check error and try again."
 
     print("Image captured")
 
-    # Example 1 - publix
-    user_proxy.initiate_chat(
-        image_agent,
-        message=f"""
-            What is this a picture of: <img {user_response_ss_name}>
+    # gpt-5.4-mini supports vision, so a normal AssistantAgent can look at images
+    # (this replaces the old MultimodalConversableAgent)
+    model_client = OpenAIChatCompletionClient(model="gpt-5.4-mini", temperature=0.75, max_tokens=500)
 
-            {user_response_message}
-        """
+    image_agent = AssistantAgent(
+        name="image_explainer",
+        model_client=model_client,
     )
 
+    # Example 1 - publix
+    # The image is sent as part of a MultiModalMessage (instead of an <img ...> tag)
+    message = MultiModalMessage(
+        content=[
+            f"What is this a picture of?\n\n{user_response_message}",
+            Image.from_file(Path(screenshot)),
+        ],
+        source="user",
+    )
+    await Console(image_agent.run_stream(task=message))
+
     # Example 2
-    # user_proxy.initiate_chat(
-    #     image_agent,
-    #     message=f"""
-    #             What is this a picture of: <img screenshot.jpg>
-    #
-    #             Can you give me a list of all the items and their prices from this image from amazon?.
-    #         """
+    # message = MultiModalMessage(
+    #     content=[
+    #         "What is this a picture of?\n\n"
+    #         "Can you give me a list of all the items and their prices from this image from amazon?.",
+    #         Image.from_file(Path("screenshot.jpg")),
+    #     ],
+    #     source="user",
     # )
+    # await Console(image_agent.run_stream(task=message))
+
+    await model_client.close()
 
 
-response = initiate_chat()
-
+if __name__ == "__main__":
+    response = asyncio.run(initiate_chat())
+    if response:
+        print(response)
