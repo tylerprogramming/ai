@@ -54,6 +54,7 @@ async def main():
         model_client=model_client,
         tools=[create_record, get_record_structure, get_all_records],
         reflect_on_tool_use=True,
+        max_tool_iterations=3,  # e.g. read the table structure, then create the record, in one turn
         system_message="""
         I'm Engineer. I'm expert in python programming. I'm executing code tasks required by Admin.
         """,

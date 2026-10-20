@@ -3,6 +3,7 @@ from google.oauth2.credentials import Credentials
 from googleapiclient.discovery import build
 from google_auth_oauthlib.flow import InstalledAppFlow
 from google.auth.transport.requests import Request
+from google.auth.exceptions import RefreshError
 
 SCOPES = ['https://www.googleapis.com/auth/drive.readonly']
 
@@ -19,12 +20,17 @@ def authenticate_drive():
     
     if not creds or not creds.valid:
         if creds and creds.expired and creds.refresh_token:
-            creds.refresh(Request())
-        else:
+            try:
+                creds.refresh(Request())
+            except RefreshError:
+                creds = None  # refresh token revoked or expired: log in again below
+        if not creds or not creds.valid:
             flow = InstalledAppFlow.from_client_secrets_file(CREDENTIALS_FILE, SCOPES)
             creds = flow.run_local_server(port=0)
-        
-        with open(TOKEN_FILE, 'w') as token:
+
+        # token.json holds your refresh token, so make it readable by you only (0600)
+        fd = os.open(TOKEN_FILE, os.O_WRONLY | os.O_CREAT | os.O_TRUNC, 0o600)
+        with os.fdopen(fd, 'w') as token:
             token.write(creds.to_json())
     
     return build('drive', 'v3', credentials=creds)

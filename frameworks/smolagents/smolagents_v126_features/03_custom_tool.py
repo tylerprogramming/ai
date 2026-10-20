@@ -27,6 +27,8 @@ def safe_eval(expression: str):
             return node.value
         if isinstance(node, ast.BinOp) and type(node.op) in _OPERATORS:
             left, right = _eval(node.left), _eval(node.right)
+            if isinstance(left, list) or isinstance(right, list):
+                raise ValueError("lists are only allowed as function arguments, e.g. sum([1, 2])")
             if isinstance(node.op, ast.Pow) and abs(right) > 100:
                 raise ValueError("exponent too large")
             return _OPERATORS[type(node.op)](left, right)

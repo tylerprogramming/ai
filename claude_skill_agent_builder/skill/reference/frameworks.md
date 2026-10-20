@@ -12,7 +12,7 @@ Last updated: October 2026
 ### Installation
 
 ```bash
-pip install -U "autogen-agentchat>=0.7.0" "autogen-ext[openai]>=0.7.0"
+pip install -U "autogen-agentchat~=0.7.5" "autogen-ext[openai]~=0.7.5"
 ```
 
 ### Key Changes from v0.2
@@ -62,7 +62,7 @@ team = RoundRobinGroupChat(
     participants=[agent1, agent2],
     termination_condition=TextMentionTermination("TERMINATE"),
 )
-await team.run_stream(task="...")
+await Console(team.run_stream(task="..."))  # from autogen_agentchat.ui import Console
 ```
 
 ---

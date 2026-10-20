@@ -26,7 +26,7 @@ This is an AI projects repository containing:
 2. **AgentOps IS a framework** - It's for agent monitoring/observability
 3. **This repo is for examples, not courses** - Full courses live in `ai-courses` repo
 
-## Current Framework Versions (September 2026)
+## Current Framework Versions (October 2026)
 
 **CRITICAL:** AutoGen has completely changed its API in v0.7+!
 
@@ -58,7 +58,7 @@ model_client = OpenAIChatCompletionClient(
     model_info={"vision": True, "function_calling": True, "json_output": True, "family": "gpt-5", "structured_output": True},
 )
 agent = AssistantAgent(name="...", model_client=model_client)
-await agent.run_stream(task="...")
+await Console(agent.run_stream(task="..."))  # from autogen_agentchat.ui import Console; or: result = await agent.run(task="...")
 ```
 
 All AutoGen examples use the v0.7 API, including older ones first recorded on 0.2 (migrated in place — YouTube descriptions link to these paths, so don't move or rename project folders).
@@ -66,7 +66,7 @@ All AutoGen examples use the v0.7 API, including older ones first recorded on 0.
 ## Code Style
 
 - Python projects typically use virtual environments
-- Configuration files often named `OAI_CONFIG_LIST.json` for OpenAI config
+- API keys come from environment variables / `.env` (no `OAI_CONFIG_LIST` files)
 - Environment variables in `.env` files (see `.env.example`)
 - Most projects are standalone and self-contained
 - Default model: `gpt-5.4-mini`

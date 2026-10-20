@@ -1,3 +1,4 @@
+import re
 from openai import OpenAI
 import base64
 from dotenv import load_dotenv
@@ -218,7 +219,9 @@ for image_prompt in image_prompts:
         image_bytes = base64.b64decode(image_base64)
 
         # Save the image to a file
-        with open(f"images_pixel_art_output/{image_prompt.image_name}.png", "wb") as f:
+        # image_name comes from the model, so keep only a safe file name (no "../" or paths)
+        safe_name = re.sub(r"[^A-Za-z0-9_-]", "_", os.path.basename(image_prompt.image_name)) or "image"
+        with open(f"images_pixel_art_output/{safe_name}.png", "wb") as f:
             f.write(image_bytes)
     except Exception as e:
         print(f"Error generating image: {e}")

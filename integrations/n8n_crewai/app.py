@@ -49,9 +49,14 @@ def process_request():
 if __name__ == '__main__':
     if not N8N_SHARED_SECRET:
         raise SystemExit("Set N8N_SHARED_SECRET in .env (n8n sends it in the X-API-Key header).")
+    host = os.getenv("HOST", "127.0.0.1")
+    debug = os.getenv("FLASK_DEBUG") == "1"  # debug is opt-in: FLASK_DEBUG=1
+    if debug and host not in ("127.0.0.1", "localhost"):
+        # The Werkzeug debugger runs before the API-key check, so never expose it beyond this machine
+        raise SystemExit("FLASK_DEBUG=1 is only allowed with HOST=127.0.0.1")
     app.run(
-        debug=os.getenv("FLASK_DEBUG") == "1",  # debug is opt-in: FLASK_DEBUG=1
+        debug=debug,
         port=int(os.getenv("PORT", "5003")),
         # Local only by default. If n8n runs in Docker, set HOST=0.0.0.0 so the container can reach it.
-        host=os.getenv("HOST", "127.0.0.1"),
+        host=host,
     )

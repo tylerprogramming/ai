@@ -26,7 +26,7 @@ claude_skill_agent_builder/  # Claude skill for building AI agents
 
 ## Current Framework Versions (October 2026)
 
-All projects were updated and tested against these versions (offline, with faked LLM calls):
+All projects were updated for these versions and smoke-tested offline (faked LLM calls, external services stubbed). Upstream caps: CrewAI 1.15 requires `openai<3` and `mcp~=1.28`; litellm requires `openai<3`; Swarm needs `openai` 3.3.
 
 | Framework | Version | Key Changes |
 |-----------|---------|-------------|

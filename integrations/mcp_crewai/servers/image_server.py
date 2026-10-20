@@ -3,6 +3,7 @@ from openai import OpenAI
 import os
 import sys
 import base64
+import re
 
 # Initialize FastMCP server
 mcp = FastMCP("image_server")
@@ -29,7 +30,9 @@ def image_creation_openai(query: str, image_name: str) -> dict:
         os.makedirs(output_dir, exist_ok=True)
 
         # Save the image to a file
-        image_path = os.path.join(output_dir, f"{image_name}.png")
+        # image_name comes from the model, so keep only a safe file name (no "../" or paths)
+        safe_name = re.sub(r"[^A-Za-z0-9_-]", "_", os.path.basename(image_name)) or "image"
+        image_path = os.path.join(output_dir, f"{safe_name}.png")
         with open(image_path, "wb") as f:
             f.write(image_bytes)
 

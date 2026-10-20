@@ -44,7 +44,7 @@ A collection of AI agent projects, framework tutorials, and integrations. This i
 
 ## Framework Versions (October 2026)
 
-Every project in the repo was updated and tested against these versions:
+Every project in the repo was updated for these versions and smoke-tested offline (LLM calls faked; external services stubbed). A few projects run on older pins because of upstream caps: CrewAI 1.15 requires `openai<3` and `mcp~=1.28`, litellm requires `openai<3`, and the archived Swarm needs `openai` 3.3.
 
 | Framework | Package / version | Highlights |
 |-----------|-------------------|------------|
@@ -66,6 +66,7 @@ The old `import autogen` API is deprecated. New pattern:
 
 ```python
 from autogen_agentchat.agents import AssistantAgent
+from autogen_agentchat.ui import Console
 from autogen_ext.models.openai import OpenAIChatCompletionClient
 
 model_client = OpenAIChatCompletionClient(
@@ -74,7 +75,7 @@ model_client = OpenAIChatCompletionClient(
     model_info={"vision": True, "function_calling": True, "json_output": True, "family": "gpt-5", "structured_output": True},
 )
 agent = AssistantAgent(name="my_agent", model_client=model_client)
-await agent.run_stream(task="...")
+await Console(agent.run_stream(task="..."))  # or: result = await agent.run(task="...")
 ```
 
 See `frameworks/autogen/autogen_v07_quickstart/` for examples.

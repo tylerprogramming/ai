@@ -17,6 +17,7 @@ Every morning a CrewAI agent connects to Supabase through the Supabase MCP serve
 
    Create a `.env` file in the project root with the following variables:
    ```
+   OPENAI_API_KEY=your_openai_api_key
    SUPABASE_ACCESS_TOKEN=your_supabase_access_token
    TELEGRAM_BOT_TOKEN=your_telegram_bot_token
    TELEGRAM_CHAT_ID=your_telegram_chat_id

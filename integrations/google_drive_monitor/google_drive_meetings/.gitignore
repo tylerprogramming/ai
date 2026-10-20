@@ -8,3 +8,8 @@ token.pickle
 __pycache__/
 chunk_*.wav
 meeting_minutes/
+
+# Files the monitor downloads from Drive (private); keep only the two committed samples
+downloads/*
+!downloads/EarningsCall.wav
+!downloads/example_construction_contract.pdf

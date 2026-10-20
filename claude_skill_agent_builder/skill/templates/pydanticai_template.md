@@ -127,6 +127,9 @@ async def main_streaming():
 
 
 # Plain-text agent (no output_type): stream only the new text each time.
+text_agent = Agent("openai:gpt-5.4-mini", system_prompt="{system_prompt}")
+
+
 async def main_streaming_text():
     async with text_agent.run_stream("{prompt}") as response:
         async for chunk in response.stream_text(delta=True):

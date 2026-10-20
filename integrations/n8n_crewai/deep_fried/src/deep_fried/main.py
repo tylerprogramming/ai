@@ -44,7 +44,8 @@ SAMPLE_DATA = {
 
 
 def kickoff(data=None):
-    data = data or SAMPLE_DATA
+    if data is None:  # only the CLI uses the sample; an empty request stays empty
+        data = SAMPLE_DATA
     deep_fried_flow = DeepFriedFlow()
     result = deep_fried_flow.kickoff(inputs={
         "arrival_rating": data.get("arrival_rating"), 

@@ -11,7 +11,7 @@ __pycache__/
 .env
 .env.*
 !.env.example
-# AutoGen config files hold API keys; commit OAI_CONFIG_LIST.example instead
+# AutoGen 0.2 config files held API keys; keys now come from .env
 OAI_CONFIG_LIST
 OAI_CONFIG_LIST.json
 token.json
@@ -31,6 +31,9 @@ agentops.log
 *.code-workspace
 
 # Project-specific generated files
+# n8n_crewai appends incoming customer feedback here on every request
+integrations/n8n_crewai/**/log.txt
+integrations/n8n_crewai/log.txt
 frameworks/autogen/autogen_rag_chroma/docs/ag_studio.pdf
 mini_projects/08_checklistai/instance/
 mini_projects/08_checklistai/migrations/alembic.ini
