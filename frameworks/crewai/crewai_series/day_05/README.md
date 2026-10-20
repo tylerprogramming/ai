@@ -15,7 +15,7 @@ Ensure you have Python >=3.10 <3.14 installed on your system. This project uses 
 First, if you haven't already, install Poetry:
 
 ```bash
-pip install poetry
+pip install -U "poetry>=2.0"   # Poetry 2.0+ reads the PEP 621 [project] table in pyproject.toml
 ```
 
 Next, navigate to your project directory and install the dependencies:
@@ -46,7 +46,7 @@ To start the content marketing strategy development process, run this command fr
 poetry run python src/day_05/main.py
 ```
 
-To run the Flow version (picks a trending AI topic, runs the crew, saves `news/news.md` and writes `my_flow_plot.html`):
+To run the Flow version (picks a trending AI topic, runs the crew, saves `news/news.md`, and renders the flow diagram `my_flow_plot.html`; CrewAI 1.15 writes it to a temporary folder, opens it in your browser and prints its path):
 
 ```bash
 poetry run python src/day_05/MyFlow.py

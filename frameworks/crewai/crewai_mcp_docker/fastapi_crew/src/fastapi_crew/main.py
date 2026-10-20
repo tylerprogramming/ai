@@ -18,8 +18,9 @@ def run():
     Run the crew.
     """
     inputs = {
-        # Folder (inside the filesystem MCP container) the code reviewer reviews
-        'file_path': '/projects/crewai_mcp_docker'
+        # Folder (inside the filesystem MCP container) the code reviewer reviews;
+        # it is crewai_mcp_docker/app on your machine
+        'file_path': '/projects/app'
     }
     
     try:

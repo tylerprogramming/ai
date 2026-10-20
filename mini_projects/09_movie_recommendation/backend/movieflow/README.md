@@ -30,15 +30,14 @@ crewai install
 
 ## Running the Project
 
-To kickstart your crew of AI agents and begin task execution, run this from the root folder of your project:
+This flow is not run on its own with `crewai run`: the Flask API in `backend/` imports
+`kickoff()` and passes it the uploaded image or text query. From the `backend` folder run:
 
 ```bash
-crewai run
+python app.py
 ```
 
-This command initializes the movieflow Crew, assembling the agents and assigning them tasks as defined in your configuration.
-
-This example, unmodified, will run the create a `report.md` file with the output of a research on LLMs in the root folder.
+See `../README.md` for the full setup (Weaviate, dataset, frontend).
 
 ## Understanding Your Crew
 

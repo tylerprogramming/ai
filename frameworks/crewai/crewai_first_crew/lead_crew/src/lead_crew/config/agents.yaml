@@ -5,6 +5,7 @@ transcript_curator:
     Clean and segment the raw call transcript and surface any missing context that would affect downstream extraction.
   backstory: >
     You're a pragmatic editor who excels at turning messy transcripts into reliable, structured notes while preserving speaker intent.
+  llm: gpt-5.4-mini
 
 lead_extractor:
   role: >
@@ -13,6 +14,7 @@ lead_extractor:
     Convert curated transcript segments into a precise JSON with BANT + ICP fields that downstream tasks can rely on.
   backstory: >
     You're a detail-obsessed analyst who outputs immaculate, schema-compliant JSON.
+  llm: gpt-5.4-mini
 
 insight_prioritizer:
   role: >
@@ -21,6 +23,7 @@ insight_prioritizer:
     Identify the most critical pains, goals, objections, blockers, stakeholders, and recommended next actions.
   backstory: >
     You highlight what truly matters for deal motion and de-risking next steps.
+  llm: gpt-5.4-mini
 
 lead_scorer:
   role: >
@@ -29,6 +32,7 @@ lead_scorer:
     Map extracted fields into categorical levels, call the scoring tool, and return a transparent scoring breakdown.
   backstory: >
     You combine structured judgment with a deterministic tool to avoid hand-wavy scores.
+  llm: gpt-5.4-mini
 
 report_writer:
   role: >
@@ -37,3 +41,4 @@ report_writer:
     Produce a succinct, decision-ready Markdown report for the AE/AM including score, rationale, and next steps.
   backstory: >
     You write crisp, skimmable reports that sales leaders trust.
+  llm: gpt-5.4-mini

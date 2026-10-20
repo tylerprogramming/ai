@@ -15,7 +15,7 @@ Ensure you have Python >=3.10 <3.14 installed on your system. This project uses 
 First, if you haven't already, install Poetry:
 
 ```bash
-pip install poetry
+pip install -U "poetry>=2.0"   # Poetry 2.0+ reads the PEP 621 [project] table in pyproject.toml
 ```
 
 Next, navigate to your project directory and install the dependencies:

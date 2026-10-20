@@ -11,7 +11,6 @@ dependencies = [
 
 [project.scripts]
 kickoff = "movieflow.main:kickoff"
-plot = "movieflow.main:plot"
 
 [build-system]
 requires = ["hatchling"]

@@ -27,7 +27,7 @@ The project uses a flow-based architecture powered by CrewAI, with multiple spec
 ## 🔧 Technical Stack
 
 - **Core Framework**: CrewAI
-- **AI Model**: `gpt-5.4-mini` (flow agents); the research/summary crews use `MODEL` from `.env` or CrewAI's default
+- **AI Model**: `gpt-5.4-mini` (flow agents in `main.py`, and `llm:` in the research/summary crews' `agents.yaml`)
 - **Integrations**:
   - Google Drive API
   - Slack API
@@ -50,7 +50,6 @@ Create a `.env` file with the following:
 COMPOSIO_API_KEY=your_composio_api_key
 COMPOSIO_USER_ID=default        # the Composio user whose Google Drive and Slack accounts are connected
 OPENAI_API_KEY=sk-...
-MODEL=gpt-5.4-mini              # optional: model for the research/summary crews
 ```
 
 ## 📦 Dependencies
@@ -96,7 +95,7 @@ The system uses Pydantic models for state management:
 From the `work_out_flow` folder:
 
 ```bash
-python src/work_out_flow/main.py
+crewai run                       # or, after `pip install -e .`: python src/work_out_flow/main.py
 ```
 
 Each run also renders the flow diagram (`plot`) to an HTML file and prints its path.

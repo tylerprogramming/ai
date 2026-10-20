@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+import os
 import sys
 import warnings
 
@@ -15,8 +16,10 @@ def run():
     """
     Run the crew.
     """
+    # Who gets the confirmation email: set RECIPIENT_EMAIL in .env
+    recipient = os.getenv("RECIPIENT_EMAIL", "you@example.com")
     inputs = {
-        'query': 'I want to create a daily standup meeting in the calendar for these days: monday through thursday from 2pm - 2:15 pm titled Catchup - Standup.  Just make sure these slots are available, and if they are, then creat them.  Then send an email to tylerreed8893@gmail.com.',
+        'query': f'I want to create a daily standup meeting in the calendar for these days: monday through thursday from 2pm - 2:15 pm titled Catchup - Standup.  Just make sure these slots are available, and if they are, then creat them.  Then send an email to {recipient}.',
         'current_date': str(datetime.now().date())
     }
     

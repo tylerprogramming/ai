@@ -25,8 +25,10 @@ def require_api_key():
 
 @app.route('/process', methods=['POST'])
 def process_request():
-    # Get the JSON data from the request
-    data = request.get_json()
+    # Get the JSON data from the request (None if the body is missing or not valid JSON)
+    data = request.get_json(silent=True)
+    if not data or not isinstance(data, dict):
+        return jsonify({"status": "error", "message": "Request body must be a non-empty JSON object"}), 400
     print(data)
     
     result = kickoff(data)

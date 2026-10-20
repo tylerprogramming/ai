@@ -44,7 +44,9 @@ $ crewai run
 
 This command initializes the crawl_crew Crew, assembling the agents and assigning them tasks as defined in your configuration.
 
-The crew's `Crawl Sitemap` tool fetches the sitemap passed in `src/crawl_crew/main.py` (`https://docs.crewai.com/sitemap.xml` by default), crawls every page with Crawl4AI, and the agent prints a summary of what it found.
+The crew's `Crawl Sitemap` tool fetches the sitemap passed in `src/crawl_crew/main.py` (`https://docs.crewai.com/sitemap.xml` by default), crawls the first 20 pages with Crawl4AI (`max_urls` on `MyCustomTool` in `src/crawl_crew/tools/custom_tool.py`; each page adds up to 1000 characters to the agent's context), and the agent prints a summary of what it found.
+
+`crewai run` installs the project into its own environment first. To run `main.py` directly instead, install the package once (`pip install -e .`) and then use `python src/crawl_crew/main.py`: without installing, the `crawl_crew` package imports fail.
 
 ## Understanding Your Crew
 

@@ -6,6 +6,7 @@ infographic_researcher_agent:
   backstory: >
     You're a creative infographic researcher with a talent for capturing the essence of any topic
     in a beautiful and engaging way.
+  llm: gpt-5.4-mini
 
 infographic_keypoints_agent:
   role: >
@@ -15,3 +16,4 @@ infographic_keypoints_agent:
   backstory: >
     You're a creative infographic keypoints generator with a talent for capturing the essence of any topic
     in a beautiful and engaging way.
+  llm: gpt-5.4-mini

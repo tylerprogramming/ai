@@ -72,6 +72,7 @@ with MCPServerAdapter(all_tools) as tools:
         goal="You are an amazing AI Creator who uses MCP Tools.",
         backstory="An AI that can create images via an MCP tool.",
         tools=tools,
+        llm="gpt-5.4-mini",
         verbose=True,
     )
     

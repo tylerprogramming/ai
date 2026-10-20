@@ -29,7 +29,7 @@ fastapi_task:
         - An example .env file.
         - Basic instructions on running the application locally.
         
-        The main project folder is /projects/crewai_mcp_docker.  The code should be written under the /projects/crewai_mcp_docker folder.
+        The main project folder is /projects/app.  The code should be written under the /projects/app folder (put requirements.txt, .env.example and the README with run instructions at the root of /projects/app, and write run commands relative to that folder).
 
         use context7
   expected_output: >

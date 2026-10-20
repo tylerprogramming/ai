@@ -20,13 +20,17 @@ class MyCustomTool(BaseTool):
         "This tool is useful for crawling a sitemap and returning a list of URLs."
     )
     args_schema: Type[BaseModel] = MyCustomToolInput
+    # Only the first `max_urls` sitemap URLs are crawled (each adds up to 1000 characters
+    # to the agent's context, i.e. tokens you pay for). Raise it with MyCustomTool(max_urls=50).
+    max_urls: int = 20
     
     def _run(self, sitemap_url: str) -> str:
         # Implementation goes here
         urls = get_crewai_docs_urls(sitemap_url)
         result = []
         if urls:
-            print(f"Found {len(urls)} URLs to crawl")
+            print(f"Found {len(urls)} URLs, crawling the first {min(len(urls), self.max_urls)}")
+            urls = urls[: self.max_urls]
             result = asyncio.run(crawl_parallel(urls, max_concurrent=10))
             print(result)
         else:

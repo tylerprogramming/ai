@@ -41,11 +41,12 @@ To run the project, execute the `main.py` script. It will:
    OPENAI_API_KEY=sk-...
    COMPOSIO_API_KEY=...
    COMPOSIO_USER_ID=default   # the Composio user whose Google Calendar and Gmail are connected
-   MODEL=gpt-5.4-mini         # optional; otherwise CrewAI's default model is used
+   RECIPIENT_EMAIL=you@example.com   # who gets the confirmation email
    ```
+   The agents use `gpt-5.4-mini`, set with `llm:` in `config/agents.yaml`.
 2. **Install** (Python 3.11–3.13): `cd google_crew && pip install -e .` (or `crewai install`)
 3. **Execution**: from `google_crew`, run `crewai run` or `python src/google_crew/main.py`.
-   Edit the `query` (including the email recipient) in `src/google_crew/main.py` first.
+   Edit the `query` in `src/google_crew/main.py` first; the email recipient comes from `RECIPIENT_EMAIL`.
 
 > **Note:** Updated for CrewAI 1.15 and the Composio v1 SDK (`Composio` + `CrewAIProvider`); the code may differ slightly from the video.
 

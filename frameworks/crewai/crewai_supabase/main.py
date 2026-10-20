@@ -64,7 +64,9 @@ agent = Agent(
         that is not just retrieving data, then make sure you have the correct format for the tables with columns.  If
         the data coming in doesn't have all the necessary information but is also not needed, then fill in defaults.
         
-        If you need to update the table info, then use the file writer tool to update the file.
+        If you need to update the table info, then use the file writer tool to update the file:
+        write the full updated table info to filename "table_info.txt" with overwrite set to true
+        (the file already exists, and the tool refuses to replace it otherwise).
         
         Here is the table info:
         A list of tables and their columns: {text_knowledge}

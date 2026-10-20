@@ -11,8 +11,10 @@ from pyairtable import Api
 from llama_cloud import LlamaCloud
 import os
 
-from googledrive.src.googledrive.crews.meeting_minutes_crew.meeting_minutes_crew import MeetingMinutesCrew
-from googledrive.src.googledrive.crews.contractmanagement.contractmanagement import Contractmanagement
+# Relative imports work both for `crewai run` (package `googledrive`) and for
+# ../../../drive_monitor.py (which imports this file as `googledrive.src.googledrive.main`)
+from .crews.meeting_minutes_crew.meeting_minutes_crew import MeetingMinutesCrew
+from .crews.contractmanagement.contractmanagement import Contractmanagement
 
 load_dotenv()
 

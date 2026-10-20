@@ -3,7 +3,8 @@ from crewai.project import CrewBase, agent, crew, task
 from crewai_tools import FileWriterTool
 
 # FileWriterTool no longer takes a fixed file name: the agent passes filename + directory
-# (summary.txt / action_items.txt / sentiment.txt in meeting_minutes/) as the task describes.
+# (summary.txt / action_items.txt / sentiment.txt in meeting_minutes/) and overwrite=true
+# (the tool refuses to replace an existing file otherwise) as the task describes.
 file_writer_tool = FileWriterTool()
 
 @CrewBase

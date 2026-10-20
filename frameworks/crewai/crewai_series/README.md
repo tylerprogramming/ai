@@ -53,14 +53,14 @@ Each day's project is contained in its own directory (e.g., `day_01`, `day_02`, 
 ## Prerequisites
 
 - Python >=3.10 <3.14
-- Poetry (for dependency management)
+- Poetry 2.0 or newer (for dependency management): each day's `pyproject.toml` uses the PEP 621 `[project]` table with `package-mode = false`, which older Poetry versions can't read
 
 ## General Setup
 
 1. Clone this repository
-2. Install Poetry if you haven't already:
+2. Install Poetry (2.0+) if you haven't already, or upgrade an older one:
    ```
-   pip install poetry
+   pip install -U "poetry>=2.0"
    ```
 3. Navigate to the specific day's directory
 4. Install dependencies:

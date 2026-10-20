@@ -5,10 +5,13 @@ from mcp import StdioServerParameters
 from pathlib import Path
 from typing import List
 
-# The crewai_mcp_docker folder on your machine is mounted into the filesystem MCP
-# container as /projects/crewai_mcp_docker (the path the agents are told to write to).
-PROJECT_DIR = Path(__file__).resolve().parents[3]
-CONTAINER_DIR = "/projects/crewai_mcp_docker"
+# Only the crewai_mcp_docker/app output folder is mounted into the filesystem MCP
+# container (as /projects/app, the path the agents are told to write to). Never mount
+# the whole project: fastapi_crew/.env (your API key) and the crew source would be
+# readable and writable by the MCP server.
+OUTPUT_DIR = Path(__file__).resolve().parents[3] / "app"
+OUTPUT_DIR.mkdir(exist_ok=True)
+CONTAINER_DIR = "/projects/app"
 
 @CrewBase
 class FastapiCrew():
@@ -32,7 +35,7 @@ class FastapiCrew():
                 "run",
                 "-i",
                 "--rm",
-                "--mount", f"type=bind,src={PROJECT_DIR},dst={CONTAINER_DIR}",
+                "--mount", f"type=bind,src={OUTPUT_DIR},dst={CONTAINER_DIR}",
                 "mcp/filesystem",
                 CONTAINER_DIR
             ]

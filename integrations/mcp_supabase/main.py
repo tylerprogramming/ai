@@ -34,6 +34,7 @@ def background_supabase_task():
             goal="Get the latest records from the database.",
             backstory="You are an agent for supabase for getting the latest records from the database.",
             tools=tools,
+            llm="gpt-5.4-mini",
             # Plan before acting, but cap refinement so it can't loop if the model never says READY
             planning_config=PlanningConfig(max_attempts=3),
             verbose=True,

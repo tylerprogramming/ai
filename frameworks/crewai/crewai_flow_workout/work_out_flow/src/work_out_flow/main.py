@@ -8,8 +8,16 @@ from crewai import Agent, Task, Crew, LLM
 from composio import Composio
 from composio_crewai import CrewAIProvider
 
-from crews.research_crew.research_crew import ResearchCrew
-from crews.summary_crew.summary_crew import SummaryCrew
+try:
+    # `crewai run` (installed package)
+    from work_out_flow.crews.research_crew.research_crew import ResearchCrew
+    from work_out_flow.crews.summary_crew.summary_crew import SummaryCrew
+except ModuleNotFoundError as e:
+    if e.name != "work_out_flow":
+        raise
+    # `python src/work_out_flow/main.py`
+    from crews.research_crew.research_crew import ResearchCrew
+    from crews.summary_crew.summary_crew import SummaryCrew
 
 from dotenv import load_dotenv
 

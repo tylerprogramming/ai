@@ -7,8 +7,10 @@ three MCP servers running in Docker:
 
 - **Context7** (`context7-mcp`, built from the `Dockerfile` here) for up-to-date library docs
 - **SQLite** (`mcp/sqlite`)
-- **Filesystem** (`mcp/filesystem`), which mounts this `crewai_mcp_docker` folder into the
-  container as `/projects/crewai_mcp_docker`, so the generated code lands in this folder
+- **Filesystem** (`mcp/filesystem`), which mounts only the `app/` subfolder of this project
+  into the container as `/projects/app`, so the generated code lands in `crewai_mcp_docker/app/`
+  (created on first run). The rest of the project, including `fastapi_crew/.env` with your
+  API key, is not visible to the MCP server.
 
 The crew connects to the servers through `mcp_server_params` / `self.get_mcp_tools()` in
 `fastapi_crew/src/fastapi_crew/crew.py`.
@@ -29,5 +31,7 @@ The crew connects to the servers through `mcp_server_params` / `self.get_mcp_too
    crewai run
    ```
 
-`requirements.txt` in this folder lists the dependencies for the generated FastAPI app,
-not for the crew.
+The code reviewer reviews the generated files in `/projects/app` (the `file_path` input in
+`main.py`). To run the generated app, `cd app` and follow the README the crew writes there.
+`requirements.txt` in this folder lists baseline dependencies for the generated FastAPI app
+(the crew usually writes its own `app/requirements.txt` too), not for the crew.

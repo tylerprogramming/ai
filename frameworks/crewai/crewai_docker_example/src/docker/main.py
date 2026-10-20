@@ -2,7 +2,11 @@
 import sys
 try:
     from docker.crew import DockerCrew  # `crewai run` (installed package)
-except ImportError:
+except ModuleNotFoundError as e:
+    # Fall back only when this package itself isn't importable ("docker.crew" when the
+    # Docker SDK owns the `docker` name); errors raised inside crew.py still surface.
+    if e.name not in ("docker", "docker.crew"):
+        raise
     from crew import DockerCrew  # `python src/docker/main.py` (used by the Dockerfile)
 
 # This main file is intended to be a way for you to run your

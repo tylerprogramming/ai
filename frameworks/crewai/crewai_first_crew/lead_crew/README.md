@@ -3,7 +3,7 @@
 Pipeline: Transcript ➜ Extraction ➜ Insights ➜ Deterministic Score ➜ Report
 
 ## Quickstart
-1. Create a `.env` file with `OPENAI_API_KEY=...` (optionally `MODEL=gpt-5.4-mini` and `SCORING_WEIGHTS` as JSON, e.g. `{"need": 0.3}`).
+1. Create a `.env` file with `OPENAI_API_KEY=...` (optionally `SCORING_WEIGHTS` as JSON, e.g. `{"need": 0.3}`). The agents use `gpt-5.4-mini`, set with `llm:` in `config/agents.yaml`..
 2. Install deps: `crewai install` (or `pip install -e .`)
 3. The sample call transcript lives in `SAMPLE_TRANSCRIPT` in `src/lead_crew/main.py` — replace it with your own.
 4. Run: `crewai run` (or `lead_crew` after `pip install -e .`)

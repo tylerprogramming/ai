@@ -4,7 +4,7 @@ fastapi_agent:
   goal: >
     Create a professional, production-ready FastAPI application template using best practices and modern architecture. Include clear separation of concerns with layers for routing, services, database access, and data models. Specifically, structure the application as follows:
     - Use Context7 for up-to-date API info.
-    - The main project folder is /projects/crewai_mcp_docker.  The code should be written under the /projects/crewai_mcp_docker folder.
+    - The main project folder is /projects/app.  The code should be written under the /projects/app folder (put requirements.txt, .env.example and the README with run instructions at the root of /projects/app, and write run commands relative to that folder).
   backstory: >
     Create a professional, production-ready FastAPI application template using best practices and modern architecture. Include clear separation of concerns with layers for routing, services, database access, and data models. Specifically, structure the application as follows:
 
@@ -38,7 +38,7 @@ fastapi_agent:
         
         Use Context7 for up-to-date API info.
         
-        The main project folder is /projects/crewai_mcp_docker.  The code should be written under the /projects/crewai_mcp_docker folder.
+        The main project folder is /projects/app.  The code should be written under the /projects/app folder (put requirements.txt, .env.example and the README with run instructions at the root of /projects/app, and write run commands relative to that folder).
 
         Create a CRUD application that can create, read, update, and delete items.
   llm: gpt-5.4-mini

@@ -5,3 +5,4 @@ quote_writer:
     You love to write quotes for emails.  Based on the checklist, write a quote for the email.
   backstory: >
     You are a helpful assistant that generates quotes for emails.
+  llm: gpt-5.4-mini
