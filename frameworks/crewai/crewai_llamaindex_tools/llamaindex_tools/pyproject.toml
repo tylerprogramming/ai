@@ -3,15 +3,21 @@ name = "llamaindex_tools"
 version = "0.1.0"
 description = "llamaindex_tools using crewAI"
 authors = [{ name = "Your Name", email = "you@example.com" }]
-requires-python = ">=3.10,<=3.13"
+requires-python = ">=3.10,<3.14"
 dependencies = [
-    "crewai[tools]>=0.76.9,<1.0.0",
+    "crewai[tools]>=1.15.28,<2",
+    "llama-index-core>=0.14.25,<0.15",
+    "llama-index-tools-yahoo-finance>=0.6.0,<0.7",
 ]
 
 [project.scripts]
 kickoff = "llamaindex_tools.main:kickoff"
+run_crew = "llamaindex_tools.main:kickoff"
 plot = "llamaindex_tools.main:plot"
 
 [build-system]
 requires = ["hatchling"]
 build-backend = "hatchling.build"
+
+[tool.crewai]
+type = "flow"

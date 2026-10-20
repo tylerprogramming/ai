@@ -3,8 +3,8 @@ from pydantic import BaseModel, ConfigDict
 
 from crewai.flow.flow import Flow, listen, start
 # from crews.wikipedia_crew.wikipedia_crew import WikipediaCrew
-from crews.yahoo_crew.yahoo_crew import YahooCrew
-from crews.math_crew.crew import MathCrew
+from llamaindex_tools.crews.yahoo_crew.yahoo_crew import YahooCrew
+from llamaindex_tools.crews.math_crew.crew import MathCrew
 
 class CustomState(BaseModel):
     model_config = ConfigDict(arbitrary_types_allowed=True)

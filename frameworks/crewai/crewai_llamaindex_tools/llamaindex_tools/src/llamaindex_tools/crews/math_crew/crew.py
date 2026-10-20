@@ -1,6 +1,6 @@
 from crewai import Agent, Crew, Process, Task
 from crewai.project import CrewBase, agent, crew, task
-from crewai_llamaindex_tools.llamaindex_tools.src.llamaindex_tools.tools.math_function_tool import my_tools
+from llamaindex_tools.tools.math_function_tool import my_tools
 
 @CrewBase
 class MathCrew():
@@ -32,4 +32,4 @@ class MathCrew():
 	
 if __name__ == "__main__":
 	math_crew = MathCrew()
-	math_crew.crew.kickoff()
+	math_crew.crew().kickoff(inputs={"a": 5, "b": 2})

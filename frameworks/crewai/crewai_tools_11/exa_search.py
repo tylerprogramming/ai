@@ -1,9 +1,11 @@
-from crewai_tools import EXASearchTool
+from crewai_tools import ExaSearchTool
 from crewai import Agent, Task, Crew, Process, LLM
 from dotenv import load_dotenv
 load_dotenv()
 
-tool = EXASearchTool()
+tool = ExaSearchTool()
+
+llm = LLM(model="gpt-5.4-mini")
 
 agent = Agent(
     role="EXA Search Agent",
@@ -11,7 +13,8 @@ agent = Agent(
     backstory="""You are a master at searching EXA files.""",
     tools=[tool],
     verbose=True,
-    allow_delegation=False
+    allow_delegation=False,
+    llm=llm,
 )
 task = Task(
     description="Answer the following questions about the EXA file: {question}",
@@ -29,5 +32,7 @@ crew = Crew(
 
 while True:
     question = input("Enter a question about for EXA: ")
+    if question == "exit":
+        break
     result = crew.kickoff(inputs={"question": question})
     print(result)

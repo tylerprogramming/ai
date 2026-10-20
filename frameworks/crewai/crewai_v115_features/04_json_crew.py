@@ -1,86 +1,70 @@
 """
 CrewAI v1.15+ JSON Crew Definition Example
 
-Define crews using JSON/YAML configuration for easy deployment.
+Define crews using JSON configuration for easy deployment.
+
+CrewAI builds the Agents, Tasks and Crew from the definition for you:
+- load_crew_from_definition(dict)  -> an in-memory definition (this example)
+- load_crew("crew.json")           -> a crew.json / crew.jsonc file, with one
+                                       agents/<name>.json file per agent
+Both return (crew, default_inputs).
 """
 
 import json
-from crewai import Crew
+
+from crewai.project.crew_loader import load_crew_from_definition
 
 
 crew_config = {
-    "agents": [
-        {
+    # Agents are keyed by name; tasks reference them by that name
+    "agents": {
+        "researcher": {
             "role": "Senior Researcher",
             "goal": "Research and synthesize information on given topics",
             "backstory": "Expert researcher with PhD in Information Science",
+            "llm": "gpt-5.4-mini",
             "verbose": True,
             "allow_delegation": False,
         },
-        {
+        "writer": {
             "role": "Technical Writer",
             "goal": "Transform research into clear, engaging content",
             "backstory": "Award-winning technical writer with 15 years experience",
+            "llm": "gpt-5.4-mini",
             "verbose": True,
             "allow_delegation": False,
         },
-    ],
+    },
     "tasks": [
         {
+            "name": "research_task",
             "description": "Research the topic: {topic}. Find key facts, trends, and insights.",
             "expected_output": "Comprehensive research notes with citations",
-            "agent": "Senior Researcher",
+            "agent": "researcher",
         },
         {
+            "name": "writing_task",
             "description": "Write an article based on the research",
             "expected_output": "Well-structured article ready for publication",
-            "agent": "Technical Writer",
+            "agent": "writer",
+            "context": ["research_task"],
         },
     ],
     "process": "sequential",
     "verbose": True,
+    # Default inputs; kickoff(inputs=...) values override them
+    "inputs": {"topic": "AI Agent Frameworks in 2026"},
 }
 
 
 def main():
     print("Crew Configuration:")
     print(json.dumps(crew_config, indent=2))
-    print("\nNote: In production, use crewai.Crew.from_yaml() or from_json()")
-    print("This example shows the configuration structure.\n")
 
-    from crewai import Agent, Task, Crew, Process, LLM
+    crew, default_inputs = load_crew_from_definition(crew_config)
+    print(f"\nLoaded crew with agents: {[agent.role for agent in crew.agents]}\n")
 
-    llm = LLM(model="gpt-5.4-mini")
-
-    agents = {}
-    for agent_config in crew_config["agents"]:
-        agents[agent_config["role"]] = Agent(
-            role=agent_config["role"],
-            goal=agent_config["goal"],
-            backstory=agent_config["backstory"],
-            verbose=agent_config.get("verbose", True),
-            allow_delegation=agent_config.get("allow_delegation", True),
-            llm=llm,
-        )
-
-    tasks = []
-    for task_config in crew_config["tasks"]:
-        tasks.append(
-            Task(
-                description=task_config["description"],
-                expected_output=task_config["expected_output"],
-                agent=agents[task_config["agent"]],
-            )
-        )
-
-    crew = Crew(
-        agents=list(agents.values()),
-        tasks=tasks,
-        process=Process.sequential,
-        verbose=True,
-    )
-
-    result = crew.kickoff(inputs={"topic": "AI Agent Frameworks in 2026"})
+    result = crew.kickoff(inputs=default_inputs)
     print(f"\nResult: {result}")
 
 

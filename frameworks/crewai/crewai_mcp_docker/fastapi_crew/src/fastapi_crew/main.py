@@ -17,12 +17,13 @@ def run():
     """
     Run the crew.
     """
-    # inputs = {
-    #     'topic': 'AI LLMs'
-    # }
+    inputs = {
+        # Folder (inside the filesystem MCP container) the code reviewer reviews
+        'file_path': '/projects/crewai_mcp_docker'
+    }
     
     try:
-        FastapiCrew().crew().kickoff()
+        FastapiCrew().crew().kickoff(inputs=inputs)
     except Exception as e:
         raise Exception(f"An error occurred while running the crew: {e}")
 

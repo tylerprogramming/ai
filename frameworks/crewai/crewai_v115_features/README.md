@@ -2,26 +2,27 @@
 
 Examples showcasing the latest CrewAI features as of v1.15+.
 
+> **Note:** Updated for CrewAI 1.15.28; the code may differ slightly from the video.
+
 ## Installation
 
 ```bash
-pip install -U crewai crewai-tools
+pip install -r requirements.txt
 ```
 
 ## New Features Covered
 
-1. **Conversational Flows** - Interactive chat-style agent workflows
-2. **LLM Overlay** - Route different agent roles to different models
-3. **Human Feedback** - Pause execution for human input
-4. **Platform Tools** - Use CrewAI platform integrations
-5. **Checkpoints** - Save and resume crew execution state
+1. **Conversational Flows** - Interactive chat-style agent workflows (`@ConversationConfig`, `flow.chat()`, `flow.handle_turn()`)
+2. **LLM Overlay** - Route different agent roles to different models at run time (`crewai.llm_overlay.llm_overlay`)
+3. **Streaming Output** - Real-time streamed chunks from a crew (`Crew(stream=True)`)
+4. **JSON Crews** - Build a crew from a JSON definition (`load_crew_from_definition`, `crewai.project.load_crew`)
 
 ## Examples
 
-- `01_conversational_flow.py` - Interactive conversational agent flow
+- `01_conversational_flow.py` - Interactive conversational agent flow (type `exit` to quit)
 - `02_llm_overlay.py` - Route agents to different models
-- `03_human_feedback.py` - Pause for human approval
-- `04_streaming_output.py` - Real-time streaming responses
+- `03_streaming_output.py` - Real-time streaming responses
+- `04_json_crew.py` - Define a crew in JSON and load it
 
 ## Running
 

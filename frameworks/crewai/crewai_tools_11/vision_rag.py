@@ -6,13 +6,16 @@ load_dotenv()
 
 tool = VisionTool()
 
+llm = LLM(model="gpt-5.4-mini")
+
 agent = Agent(
     role="Vision Agent",
     goal="You will read the image for the answer to the question.  Use the tools to read the image.",
     backstory="""You are a master at reading images.""",
     tools=[tool],
     verbose=True,
-    allow_delegation=False
+    allow_delegation=False,
+    llm=llm,
 )
 
 task = Task(

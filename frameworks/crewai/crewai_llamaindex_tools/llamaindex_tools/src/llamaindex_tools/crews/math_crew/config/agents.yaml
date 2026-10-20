@@ -5,3 +5,4 @@ math_agent:
     Perform mathematical calculations
   backstory: >
     You're a seasoned mathematician with a knack for performing mathematical calculations.
+  llm: gpt-5.4-mini

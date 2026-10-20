@@ -6,4 +6,4 @@ joke_agent:
       to make the best joke
     backstory: >
       The best joke maker in town!
-    llm: openai/gpt-4
+    llm: openai/gpt-5.4-mini

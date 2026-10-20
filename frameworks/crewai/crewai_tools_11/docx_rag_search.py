@@ -7,6 +7,8 @@ load_dotenv()
 # For fixed directory searches
 tool = DOCXSearchTool(docx='./rag_dir/user.docx')
 
+llm = LLM(model="gpt-5.4-mini")
+
 # Create an agent with the knowledge store
 agent = Agent(
     role="DOCX Search Agent",
@@ -14,7 +16,8 @@ agent = Agent(
     backstory="""You are a master at searching DOCX files.""",
     tools=[tool],
     verbose=True,
-    allow_delegation=False
+    allow_delegation=False,
+    llm=llm,
 )
 task = Task(
     description="Answer the following questions about the DOCX file: {question}",
@@ -32,5 +35,7 @@ crew = Crew(
 
 while True:
     question = input("Enter a question about the DOCX file: ")
+    if question == "exit":
+        break
     result = crew.kickoff(inputs={"question": question})
     print(result)

@@ -43,7 +43,7 @@ code_task:
     A fully fledged FastAPI application template using best practices and modern architecture.
   agent: code_writer
 
-review_code_task:
+code_review_task:
   description: >
     Perform an in-depth review of all Python files in {file_path}. Provide:
     - A structured report with:

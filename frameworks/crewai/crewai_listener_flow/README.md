@@ -1,10 +1,14 @@
-# {{crew_name}} Crew
+# CrewAI Listener Flow
 
-Welcome to the {{crew_name}} Crew project, powered by [crewAI](https://crewai.com). This template is designed to help you set up a multi-agent AI system with ease, leveraging the powerful and flexible framework provided by crewAI. Our goal is to enable your agents to collaborate effectively on complex tasks, maximizing their collective intelligence and capabilities.
+> **Note:** Updated for CrewAI 1.15; the code may differ slightly from the video.
+
+A poem-writing Flow with a custom event listener (`src/crewai_listener_flow/listeners/my_custom_listener.py`) that prints crew, agent, task and flow events as they happen.
+
+Welcome to the CrewAI Listener Flow project, powered by [crewAI](https://crewai.com). This template is designed to help you set up a multi-agent AI system with ease, leveraging the powerful and flexible framework provided by crewAI. Our goal is to enable your agents to collaborate effectively on complex tasks, maximizing their collective intelligence and capabilities.
 
 ## Installation
 
-Ensure you have Python >=3.10 <3.13 installed on your system. This project uses [UV](https://docs.astral.sh/uv/) for dependency management and package handling, offering a seamless setup and execution experience.
+Ensure you have Python >=3.10 <3.14 installed on your system. This project uses [UV](https://docs.astral.sh/uv/) for dependency management and package handling, offering a seamless setup and execution experience.
 
 First, if you haven't already, install uv:
 
@@ -23,10 +27,11 @@ crewai install
 
 **Add your `OPENAI_API_KEY` into the `.env` file**
 
-- Modify `src/crewai_listener_flow/config/agents.yaml` to define your agents
-- Modify `src/crewai_listener_flow/config/tasks.yaml` to define your tasks
-- Modify `src/crewai_listener_flow/crew.py` to add your own logic, tools and specific args
-- Modify `src/crewai_listener_flow/main.py` to add custom inputs for your agents and tasks
+- Modify `src/crewai_listener_flow/crews/poem_crew/config/agents.yaml` to define your agents (model: `gpt-5.4-mini`)
+- Modify `src/crewai_listener_flow/crews/poem_crew/config/tasks.yaml` to define your tasks
+- Modify `src/crewai_listener_flow/crews/poem_crew/poem_crew.py` to add your own logic, tools and specific args
+- Modify `src/crewai_listener_flow/listeners/my_custom_listener.py` to change which events are printed
+- Modify `src/crewai_listener_flow/main.py` to change the flow
 
 ## Running the Project
 
@@ -38,7 +43,7 @@ crewai run
 
 This command initializes the crewai_listener_flow Flow as defined in your configuration.
 
-This example, unmodified, will run the create a `report.md` file with the output of a research on LLMs in the root folder.
+This example, unmodified, writes a short poem about CrewAI to `poem.txt` in the root folder.
 
 ## Understanding Your Crew
 
@@ -46,7 +51,7 @@ The crewai_listener_flow Crew is composed of multiple AI agents, each with uniqu
 
 ## Support
 
-For support, questions, or feedback regarding the {{crew_name}} Crew or crewAI.
+For support, questions, or feedback regarding crewAI:
 
 - Visit our [documentation](https://docs.crewai.com)
 - Reach out to us through our [GitHub repository](https://github.com/joaomdmoura/crewai)

@@ -41,6 +41,7 @@ fastapi_agent:
         The main project folder is /projects/crewai_mcp_docker.  The code should be written under the /projects/crewai_mcp_docker folder.
 
         Create a CRUD application that can create, read, update, and delete items.
+  llm: gpt-5.4-mini
 
 code_writer:
   role: >
@@ -50,6 +51,7 @@ code_writer:
     This should be a CRUD application that can create, read, update, and delete items.  create every folder and file that the previous task and agent planned out.
   backstory: >
     Write the code for the application based on the FastAPI Developer's instructions.  Use filesystem to write the code to the file system.  Use the tools required to create directory, write files, edit files, and read files.
+  llm: gpt-5.4-mini
 
 code_reviewer:
   role: >
@@ -69,3 +71,4 @@ code_reviewer:
     in scalable software design, performance tuning, and secure coding practices.
     You have extensive experience with enterprise-grade systems and are known
     for making clear, actionable recommendations and writing clean, optimized code.
+  llm: gpt-5.4-mini

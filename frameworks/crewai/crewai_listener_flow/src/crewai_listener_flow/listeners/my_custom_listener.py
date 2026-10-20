@@ -1,4 +1,4 @@
-from crewai.utilities.events import (
+from crewai.events import (
     CrewKickoffStartedEvent,
     CrewKickoffCompletedEvent,
     AgentExecutionCompletedEvent,
@@ -8,7 +8,7 @@ from crewai.utilities.events import (
     MethodExecutionStartedEvent,
     MethodExecutionFinishedEvent
 )
-from crewai.utilities.events.base_event_listener import BaseEventListener
+from crewai.events import BaseEventListener
 
 class MyCustomListener(BaseEventListener):
     def __init__(self):

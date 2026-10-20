@@ -2,7 +2,13 @@ from crewai import Agent, Crew, Process, Task
 from crewai.project import CrewBase, agent, crew, task
 from crewai.agents.agent_builder.base_agent import BaseAgent
 from mcp import StdioServerParameters
+from pathlib import Path
 from typing import List
+
+# The crewai_mcp_docker folder on your machine is mounted into the filesystem MCP
+# container as /projects/crewai_mcp_docker (the path the agents are told to write to).
+PROJECT_DIR = Path(__file__).resolve().parents[3]
+CONTAINER_DIR = "/projects/crewai_mcp_docker"
 
 @CrewBase
 class FastapiCrew():
@@ -26,9 +32,9 @@ class FastapiCrew():
                 "run",
                 "-i",
                 "--rm",
-                "--mount", "type=bind,src=/path/to/crewai_mcp_docker,dst=/path/to/crewai_mcp_docker",
+                "--mount", f"type=bind,src={PROJECT_DIR},dst={CONTAINER_DIR}",
                 "mcp/filesystem",
-                "/path/to/crewai_mcp_docker"
+                CONTAINER_DIR
             ]
         ),
     ]
