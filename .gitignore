@@ -36,6 +36,7 @@ integrations/n8n_crewai/**/log.txt
 integrations/n8n_crewai/log.txt
 frameworks/autogen/autogen_rag_chroma/docs/ag_studio.pdf
 mini_projects/08_checklistai/instance/
+mini_projects/05_pdf/faiss_index_react/
 mini_projects/08_checklistai/migrations/alembic.ini
 mini_projects/08_checklistai/migrations/script.py.mako
 mini_projects/08_checklistai/migrations/versions/
