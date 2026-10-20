@@ -1,27 +1,27 @@
-import autogen
+from autogen_agentchat.agents import AssistantAgent
+
 import functions
 import config
 
-chatbot = autogen.AssistantAgent(
-    name="chatbot",
-    system_message=f"You are in charge of taking a video file and then caption it after"
-                   f"transcribing it.",
-    llm_config=config.llm_config,
-)
 
-user_proxy = autogen.UserProxyAgent(
-    name="user_proxy",
-    is_termination_msg=lambda x: x.get("content", "") and x.get("content", "").rstrip().endswith("TERMINATE"),
-    human_input_mode="NEVER",
-    max_consecutive_auto_reply=2,
-    code_execution_config= {
-        "work_dir": "code",
-        "use_docker": False
-    }
-)
+def create_chatbot(model_client):
+    # The chatbot calls the transcribe/caption function itself (it's registered as a tool),
+    # so there's no separate user_proxy to execute functions anymore.
+    return AssistantAgent(
+        name="chatbot",
+        system_message=f"You are in charge of taking a video file and then caption it after"
+                       f"transcribing it.",
+        model_client=model_client,
+        tools=[functions.recognize_transcript_from_video],
+        reflect_on_tool_use=True,  # explain the tool result instead of returning raw output
+    )
 
-user_proxy.register_function(
-    function_map={
-        "recognize_transcript_from_video": functions.recognize_transcript_from_video,
-    }
-)
+
+async def caption_video(task):
+    """Run the chatbot on a task like 'Caption the video uploads/my.mp4 and name it my_captioned'."""
+    model_client = config.create_model_client()
+    try:
+        result = await create_chatbot(model_client).run(task=task)
+    finally:
+        await model_client.close()
+    return result.messages[-1].to_text()

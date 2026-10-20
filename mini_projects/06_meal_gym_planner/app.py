@@ -1,6 +1,8 @@
 from flask import Flask, render_template, request, redirect, url_for, session
 from workout_agents import WorkoutPlannerSystem  # Import the class
+import asyncio
 import json
+import os
 import ast
 import pdfkit
 from flask import send_file
@@ -63,7 +65,8 @@ def workout_plan():
         'focus_areas': session['focus_areas']
     }
 
-    plan = WorkoutPlannerSystem().generate_plan(user_data)
+    # AutoGen v0.7 is async, so run the agents with asyncio.run inside the route
+    plan = asyncio.run(WorkoutPlannerSystem().generate_plan(user_data))
 
     cleaned_plan = plan
     if "```json" in cleaned_plan:
@@ -93,4 +96,5 @@ def export_pdf():
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    # Debug mode is off by default; set FLASK_DEBUG=1 to turn it on while developing
+    app.run(debug=os.getenv("FLASK_DEBUG", "0").lower() in ("1", "true"))

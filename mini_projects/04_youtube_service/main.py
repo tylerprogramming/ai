@@ -1,27 +1,31 @@
 import agents
+import config
 import gradio as gr
 
 title = "YouTube Services"
 
 
-def create_youtube_info(type, topic, tone, length, camera):
+# Gradio can call async functions directly, so the AutoGen v0.7 team runs with await here
+async def create_youtube_info(type, topic, tone, length, camera):
     description = ""
     script_maker = ""
 
-    agents.user_proxy.initiate_chat(
-        agents.manager,
-        message=f"The type of YouTube Script I want to create is {type} and the topic is about {topic}.  The tone I "
+    model_client = config.create_model_client()
+    team = agents.create_team(model_client)
+    result = await team.run(
+        task=f"The type of YouTube Script I want to create is {type} and the topic is about {topic}.  The tone I "
                 f"want is {tone} and be a total of {length} minutes.  The camera style will be {camera}."
                 f"The script_maker will create a script and the "
                 f"description_maker will create a separate description for the script.  Make it fun and"
                 f"engaging and formatted nicely.  Make sure the script and description are separated."
     )
+    await model_client.close()
 
-    for content in agents.group_chat.messages:
-        if content["name"] == 'script_maker':
-            script_maker = content["content"]
-        if content["name"] == 'description_maker':
-            description = content["content"]
+    for message in result.messages:
+        if message.source == 'script_maker':
+            script_maker = message.to_text()
+        if message.source == 'description_maker':
+            description = message.to_text()
 
     return script_maker, description
 

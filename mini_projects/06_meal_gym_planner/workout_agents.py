@@ -1,20 +1,18 @@
-import autogen
-from autogen import config_list_from_json
+import asyncio
+
+from autogen_agentchat.agents import AssistantAgent
+from autogen_ext.models.openai import OpenAIChatCompletionClient
+from dotenv import load_dotenv
 from typing_extensions import Annotated
+
+load_dotenv()  # OPENAI_API_KEY from .env
 
 
 class WorkoutPlannerSystem:
     def __init__(self):
-        self.config_list = config_list_from_json(env_or_file="OAI_CONFIG_LIST.json")
-        self.llm_config = {"config_list": self.config_list}
-        self.llm_config_writer = {
-            "config_list": self.config_list,
-            "response_format": {
-                "type": "json_object",
-            }
-        }
+        self.model_client = OpenAIChatCompletionClient(model="gpt-5.4-mini")
 
-        self.workout_planning_agent = autogen.AssistantAgent(
+        self.workout_planning_agent = AssistantAgent(
             name="workout_planning_agent",
             system_message="""
                 You are a fitness expert, known for creating personalized workout plans.
@@ -151,9 +149,9 @@ class WorkoutPlannerSystem:
                 
                 This is an example of what you should fill in and return.  Don't add any other properties, only these. It can be in markdown format.
             """,
-            llm_config=self.llm_config,
+            model_client=self.model_client,
         )
-        self.meal_planning_agent = autogen.AssistantAgent(
+        self.meal_planning_agent = AssistantAgent(
             name="meal_planning_agent",
             system_message="""
                 You are a fitness expert, known for creating personalized meal plans.
@@ -220,11 +218,11 @@ class WorkoutPlannerSystem:
                 For the nutritional_goals property, you can include other things, and this can differ from person to person.  Take into account 
                 their age, gender, and fitness level. 
             """,
-            llm_config=self.llm_config,
+            model_client=self.model_client,
         )
-        self.writer = autogen.AssistantAgent(
+        self.writer = AssistantAgent(
             name="writer",
-            llm_config=self.llm_config,
+            model_client=self.model_client,
             system_message="""
                 You are a professional writer, known for
                 your insightful and engaging articles.
@@ -414,14 +412,14 @@ class WorkoutPlannerSystem:
                 Reply "TERMINATE" in the end when everything is done.
                 """,
         )
-        self.user_proxy_auto = autogen.UserProxyAgent(
-            name="User_Proxy_Auto",
-            human_input_mode="NEVER",
-            is_termination_msg=lambda x: x.get("content", "") and x.get("content", "").rstrip().endswith("TERMINATE"),
-            code_execution_config=False
-        )
+        # The tool is a plain function with type hints; the file_saver_agent calls it itself
+        def file_saver(text: Annotated[str, "The converted markdown to be saved"]) -> str:
+            """File Saver"""
+            with open("workout_plan.md", 'w') as text_file:
+                text_file.write(text)
+            return text
 
-        self.file_saver_agent = autogen.AssistantAgent(
+        self.file_saver_agent = AssistantAgent(
             name="file_saver_agent",
             system_message="""
                 You are a file saver, known for saving files to a specified directory.
@@ -429,20 +427,12 @@ class WorkoutPlannerSystem:
                 Convert the text which may look like a dict or json, and format it nicely into markdown.
                 When you are done, you should return TERMINATE.
             """,
-            llm_config=self.llm_config,
-            is_termination_msg=lambda x: x.get("content", "") and x.get("content", "").rstrip().endswith("TERMINATE"),
+            model_client=self.model_client,
+            tools=[file_saver],
+            reflect_on_tool_use=True,
         )
 
-        @self.user_proxy_auto.register_for_execution()
-        @self.file_saver_agent.register_for_llm(description="File Saver")
-        def file_saver(text: Annotated[str, "The converted markdown to be saved"]) -> str:
-            with open("workout_plan.md", 'w') as text_file:
-                text_file.write(text)
-            return text
-
-
-
-    def generate_plan(self, user_info):
+    async def generate_plan(self, user_info):
         workout_task = f"""Create a workout plan for me as I am a beginner. Here is information about me:
         {user_info}"""
         
@@ -450,42 +440,28 @@ class WorkoutPlannerSystem:
         
         writing_task = """Take the workout plan and the meal plan and write them neatly for the user. Make the output in json format."""
 
-        chat_results = autogen.initiate_chats(
-            [
-                {
-                    "sender": self.user_proxy_auto,
-                    "recipient": self.workout_planning_agent,
-                    "message": workout_task,
-                    "clear_history": True,
-                    "silent": False,
-                    "max_turns": 1,
-                    "summary_method": "last_msg",
-                },
-                {
-                    "sender": self.user_proxy_auto,
-                    "recipient": self.meal_planning_agent,
-                    "message": meal_plan_task,
-                    "silent": False,
-                    "max_turns": 1,
-                    "summary_method": "last_msg",
-                },
-                {
-                    "sender": self.user_proxy_auto,
-                    "recipient": self.writer,
-                    "max_turns": 1,
-                    "message": writing_task,
-                },
-                {
-                    "sender": self.user_proxy_auto,
-                    "recipient": self.file_saver_agent,
-                    "message": "Save the file.",
-                    "silent": False,
-                    "max_turns": 4,
-                },
-            ]
-        )
+        # The old initiate_chats ran these chats one after another, and each chat got the
+        # last message of the earlier chats as carryover. Each agent here gets its task plus that.
+        chats = [
+            (self.workout_planning_agent, workout_task),
+            (self.meal_planning_agent, meal_plan_task),
+            (self.writer, writing_task),
+            (self.file_saver_agent, "Save the file."),
+        ]
 
-        return chat_results[-2].chat_history[-1]['content']
+        carryover = []
+        try:
+            for agent, message in chats:
+                task = message
+                if carryover:
+                    task += "\nContext: \n" + "\n".join(carryover)
+                result = await agent.run(task=task)
+                carryover.append(result.messages[-1].to_text())  # like summary_method="last_msg"
+        finally:
+            await self.model_client.close()
+
+        # The writer's json reply (the file saver's markdown goes to workout_plan.md)
+        return carryover[-2]
 
 # Usage example:
 if __name__ == "__main__":
@@ -504,5 +480,5 @@ if __name__ == "__main__":
     Warm-up/Cool-down: Yes,
     Focus Areas: Upper Body
     """
-    result = planner.generate_plan(user_info)
+    result = asyncio.run(planner.generate_plan(user_info))
     print(result)

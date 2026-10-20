@@ -1,30 +1,27 @@
-import autogen
-import config
+from autogen_agentchat.agents import AssistantAgent
+from autogen_agentchat.conditions import MaxMessageTermination
+from autogen_agentchat.teams import SelectorGroupChat
 
-script_maker = autogen.AssistantAgent(
-    name="script_maker",
-    system_message="You are to create a youtube script organized with a title given a topic and only write the "
-                   "script, do not write the description.",
-    llm_config=config.llm_config,
-)
 
-description_maker = autogen.AssistantAgent(
-    name="description_maker",
-    system_message="You are to create the description for the youtube script organized and use emojis.  Only write "
-                   "the description, not the script.",
-    llm_config=config.llm_config
-)
+def create_team(model_client):
+    script_maker = AssistantAgent(
+        name="script_maker",
+        system_message="You are to create a youtube script organized with a title given a topic and only write the "
+                       "script, do not write the description.",
+        model_client=model_client,
+    )
 
-user_proxy = autogen.UserProxyAgent(
-    name="user_proxy",
-    is_termination_msg=lambda x: x.get("content", "") and x.get("content", "").rstrip().endswith("TERMINATE"),
-    human_input_mode="NEVER",
-    max_consecutive_auto_reply=0,
-    code_execution_config={
-        "work_dir": "code",
-        "use_docker": False
-    }
-)
+    description_maker = AssistantAgent(
+        name="description_maker",
+        system_message="You are to create the description for the youtube script organized and use emojis.  Only write "
+                       "the description, not the script.",
+        model_client=model_client,
+    )
 
-group_chat = autogen.GroupChat(agents=[user_proxy, script_maker, description_maker], messages=[], max_round=5)
-manager = autogen.GroupChatManager(groupchat=group_chat, llm_config=config.llm_config)
+    # The model picks who speaks next (like the old GroupChatManager); max_round=5 -> 5 messages.
+    # The old user_proxy only started the chat, so the request is now passed as the team's task.
+    return SelectorGroupChat(
+        [script_maker, description_maker],
+        model_client=model_client,
+        termination_condition=MaxMessageTermination(5),
+    )

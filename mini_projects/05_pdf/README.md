@@ -1,4 +1,17 @@
 # 05 Pdf
 
-> [!WARNING]
-> **Legacy example — AutoGen 0.2 API.** This project uses the old `import autogen` API, which AutoGen v0.7+ replaced with a new async API. It still runs with the pinned version: `pip install -r requirements.txt` on **Python 3.10–3.12** (AutoGen 0.2.35 doesn't support 3.13). For new projects, start from [`autogen_v07_quickstart`](../../frameworks/autogen/autogen_v07_quickstart).
+A Streamlit app that turns a PDF into a quiz question: upload a PDF, LangChain indexes it in a Chroma vectorstore, and AutoGen agents query it (via an `ask_question` tool) to write a multiple-choice question with the answer and reason, convert it to JSON and save it to disk for the page to display. `pdfsummary.py` is a separate LangChain-only script that summarizes a PDF with a local LLM.
+
+Updated to AutoGen v0.7 (the new `autogen_agentchat` API).
+
+## Run it
+
+```bash
+pip install -r requirements.txt
+```
+
+Put your `OPENAI_API_KEY` in a `.env` file, then:
+
+```bash
+streamlit run main.py
+```
