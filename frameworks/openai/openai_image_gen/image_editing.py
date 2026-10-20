@@ -14,7 +14,8 @@ containing all the items in the reference pictures.
 """
 
 result = client.images.edit(
-    model="gpt-image-1",
+    # gpt-image-1 shuts down 2026-10-23; OpenAI recommends the gpt-image-2.5 models (sunburst: more precise edits)
+    model="gpt-image-2.5-sunburst",
     image=[
         open("images_edit/body-lotion.png", "rb"),
         open("images_edit/bath-bomb.png", "rb"),

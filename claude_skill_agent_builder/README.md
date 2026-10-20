@@ -13,9 +13,9 @@ project with the right structure, dependencies, and best practices for your chos
 |-----------|---------|----------|
 | AutoGen | v0.7+ | Multi-agent collaboration, code execution |
 | CrewAI | v1.15+ | Role-based crews, sequential workflows |
-| PydanticAI | v2.x | Type-safe agents, structured outputs |
+| PydanticAI | v2.58+ | Type-safe agents, structured outputs |
 | Smolagents | v1.26+ | Lightweight code agents, HuggingFace |
-| OpenAI Agents | v0.58+ | Simple agents with OpenAI models |
+| OpenAI Agents | openai-agents 0.24+ (Agents SDK), openai 3.35+ (hosted Agents API) | Simple agents with OpenAI models |
 
 ## Quick start
 
@@ -82,9 +82,9 @@ skill/
   templates/
     autogen_template.md         AutoGen v0.7+ project template
     crewai_template.md          CrewAI v1.15+ project template
-    pydanticai_template.md      PydanticAI v2.x project template
+    pydanticai_template.md      PydanticAI v2.58+ project template
     smolagents_template.md      Smolagents v1.26+ project template
-    openai_template.md          OpenAI Agents project template
+    openai_template.md          OpenAI Agents SDK / Agents API project template
   reference/
     frameworks.md               Framework comparison and best practices
 ```

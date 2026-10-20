@@ -1,10 +1,15 @@
 from crewai_tools import CSVSearchTool
 from crewai import Agent, Task, Crew, Process, LLM
 from dotenv import load_dotenv
+from pathlib import Path
 
 load_dotenv()
 
-tool = CSVSearchTool(csv='/Users/tylerreed/_ai-projects/ai/crewai_tools_11/Financial Sample Data.csv')
+BASE_DIR = Path(__file__).parent
+
+tool = CSVSearchTool(csv=str(BASE_DIR / "Financial Sample Data.csv"))
+
+llm = LLM(model="gpt-5.4-mini")
 
 agent = Agent(
     role="CSV Search Agent",
@@ -13,6 +18,7 @@ agent = Agent(
     tools=[tool],
     verbose=True,
     allow_delegation=False,
+    llm=llm,
 )
 
 task = Task(
@@ -31,6 +37,8 @@ crew = Crew(
 
 while True:
     question = input("Enter a question about the CSV file: ")
+    if question == "exit":
+        break
     result = crew.kickoff(inputs={"question": question})
     print(result)
 

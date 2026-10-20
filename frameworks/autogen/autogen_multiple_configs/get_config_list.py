@@ -1,15 +1,32 @@
-import autogen
+import asyncio
 
+from autogen_ext.models.openai import OpenAIChatCompletionClient
+
+# Same idea as the old 0.2 "get config list" helper: pair up API keys and base URLs.
+# AutoGen v0.7 has no config lists, so we build one model client per (key, base URL) pair.
 api_keys = ["SAMPLE_API_KEY"]
 base_urls = ["http://localhost:8001"]
-api_type = "openai"
-api_version = "api-preview-01"
 
-config_list = autogen.get_config_list(
-    api_keys,
-    base_urls,
-    api_type,
-    api_version
-)
 
-print(config_list)
+async def main():
+    model_clients = [
+        OpenAIChatCompletionClient(
+            model="gpt-5.4-mini",
+            # AutoGen 0.7.5 predates gpt-5.4-mini, so its capabilities must be given explicitly
+            model_info={"vision": True, "function_calling": True, "json_output": True, "family": "gpt-5", "structured_output": True},
+            api_key=api_key,
+            base_url=base_url,
+        )
+        for api_key, base_url in zip(api_keys, base_urls)
+    ]
+
+    # Print each client's config (API keys are masked)
+    for client in model_clients:
+        print(client.dump_component().model_dump_json(indent=2))
+
+    for client in model_clients:
+        await client.close()
+
+
+if __name__ == "__main__":
+    asyncio.run(main())

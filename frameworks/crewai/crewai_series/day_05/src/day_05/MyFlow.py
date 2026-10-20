@@ -94,8 +94,10 @@ class NewsFlow(Flow[News]):
 
 async def main():
     flow = NewsFlow()
-    flow.plot("my_flow_plot")
+    # CrewAI 1.15 writes the plot to a temp folder and returns its path (and opens it in the browser)
+    plot_path = flow.plot("my_flow_plot.html")
+    print(f"Flow diagram saved to {plot_path}")
 
-    await flow.kickoff()
+    await flow.kickoff_async()
 
 asyncio.run(main())

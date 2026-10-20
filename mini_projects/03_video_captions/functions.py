@@ -1,3 +1,5 @@
+from typing import Annotated
+
 import dotenv
 import whisper
 from moviepy.editor import *
@@ -5,7 +7,12 @@ from moviepy.editor import *
 dotenv.load_dotenv()
 
 
-def recognize_transcript_from_video(audio_filepath, new_file_name):
+# AutoGen v0.7 builds the tool schema from these type hints and the docstring
+def recognize_transcript_from_video(
+    audio_filepath: Annotated[str, "path of the video file"],
+    new_file_name: Annotated[str, "new file name that will be captioned"],
+):
+    """recognize the speech from video and transfer into a txt file"""
     try:
         model = whisper.load_model("medium")
 
@@ -71,10 +78,12 @@ def recognize_transcript_from_video(audio_filepath, new_file_name):
         final_clip = concatenate_videoclips(clips)
         clip = final_clip.set_fps(24)
 
-        base_dir = os.getenv("base_dir")
+        # Save next to this project, in its captioned/ folder
+        out_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "captioned")
+        os.makedirs(out_dir, exist_ok=True)
 
         clip.write_videofile(
-            f"{base_dir}/ai/ai_agency_03_video_captions/captioned/{new_file_name}.mp4",
+            os.path.join(out_dir, f"{new_file_name}.mp4"),
             codec='libx264',
             audio_codec='aac',
             temp_audiofile='temp-audio.m4a',

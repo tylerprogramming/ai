@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 import asyncio
-from random import randint
 
 from pydantic import BaseModel
 from crewai.flow.flow import Flow, listen, start
@@ -89,19 +88,23 @@ async def run_flow(checklist):
     """
     checklist_flow = ChecklistFlow()
 
-    # add to state to store for later use in flow
-    checklist_flow.state.checklist = checklist
-
-    await checklist_flow.kickoff()
+    # pass the checklist in as state to use later in the flow (kickoff_async inside async code)
+    await checklist_flow.kickoff_async(inputs={"checklist": checklist})
     
-    checklist_flow.plot("email body flow")
+    # write the flow diagram without opening a browser
+    checklist_flow.plot("email body flow.html", show=False)
 
     print(checklist_flow.state.final_email_body)
 
     return checklist_flow.state.final_email_body
 
-def main(checklist):
+def main(checklist="- Pack clothes\n- Check passport\n- Book accommodations"):
     return asyncio.run(run_flow(checklist))
+
+
+def plot():
+    ChecklistFlow().plot()
+
 
 if __name__ == "__main__":
     main()

@@ -1,11 +1,13 @@
-from crewai_tools import EXASearchTool, ScrapeWebsiteTool
+from crewai_tools import ExaSearchTool, ScrapeWebsiteTool
 from crewai import Agent, Task, Crew, Process, LLM
 from dotenv import load_dotenv
 
 load_dotenv()
 
-tool = EXASearchTool()
+tool = ExaSearchTool()
 scrape_tool = ScrapeWebsiteTool()
+
+llm = LLM(model="gpt-5.4-mini")
 
 agent = Agent(
     role="EXA Search Agent",
@@ -13,7 +15,8 @@ agent = Agent(
     backstory="""You are a master at searching websites.""",
     tools=[tool, scrape_tool],
     verbose=True,
-    allow_delegation=False
+    allow_delegation=False,
+    llm=llm,
 )
 task = Task(
     description="Answer the following questions about the website: {question}",
@@ -30,5 +33,7 @@ crew = Crew(
 
 while True:
     question = input("Input: ")
+    if question == "exit":
+        break
     result = crew.kickoff(inputs={"question": question})
     print(result)

@@ -1,41 +1,14 @@
-import autogen
-import dotenv
+import asyncio
 import os
 
+import dotenv
 from typing import Literal
 from typing_extensions import Annotated
+from autogen_agentchat.agents import AssistantAgent
+from autogen_agentchat.ui import Console
+from autogen_ext.models.openai import OpenAIChatCompletionClient
 
-dotenv.load_dotenv()
-
-config_list = [
-    {
-        "model": os.getenv("model"),
-        "api_key": os.getenv("OPENAI_API_KEY"),
-    }
-]
-
-llm_config = {
-    "config_list": config_list,
-    "timeout": 120,
-}
-
-currency_bot = autogen.AssistantAgent(
-    name="currency_bot",
-    system_message="For currency exchange tasks, only use the functions you have been provided with. Reply TERMINATE "
-                   "when the task is done.",
-    llm_config=llm_config,
-)
-
-user_proxy = autogen.UserProxyAgent(
-    name="user_proxy",
-    is_termination_msg=lambda x: x.get("content", "") and x.get("content", "").rstrip().endswith("TERMINATE"),
-    human_input_mode="NEVER",
-    max_consecutive_auto_reply=10,
-    code_execution_config= {
-        "work_dir": "code",
-        "use_docker": False
-    }
-)
+dotenv.load_dotenv()  # OPENAI_API_KEY (and optionally "model") from .env
 
 CurrencySymbol = Literal["USD", "EUR"]
 
@@ -51,19 +24,39 @@ def exchange_rate(base_currency: CurrencySymbol, quote_currency: CurrencySymbol)
         raise ValueError(f"Unknown currencies {base_currency}, {quote_currency}")
 
 
-@user_proxy.register_for_execution()
-@currency_bot.register_for_llm(description="Currency exchange calculator.")
+# In v0.7 there are no decorators: the type hints, Annotated descriptions and docstring
+# of a plain function are enough. Just pass it to the agent with tools=[...].
 def currency_calculator(
         base_amount: Annotated[float, "Amount of currency in base_currency"],
         base_currency: Annotated[CurrencySymbol, "Base currency"] = "USD",
         quote_currency: Annotated[CurrencySymbol, "Quote currency"] = "EUR",
 ) -> str:
+    """Currency exchange calculator."""
     quote_amount = exchange_rate(base_currency, quote_currency) * base_amount
     return f"{quote_amount} {quote_currency}"
 
 
-# start the conversation
-user_proxy.initiate_chat(
-    currency_bot,
-    message="How much is 123.45 USD in EUR?",
-)
+async def main():
+    model_client = OpenAIChatCompletionClient(
+        model=os.getenv("model", "gpt-5.4-mini"),
+        # AutoGen 0.7.5 predates gpt-5.4-mini, so its capabilities must be given explicitly
+        model_info={"vision": True, "function_calling": True, "json_output": True, "family": "gpt-5", "structured_output": True},
+        timeout=120,
+    )
+
+    currency_bot = AssistantAgent(
+        name="currency_bot",
+        model_client=model_client,
+        tools=[currency_calculator],
+        reflect_on_tool_use=True,  # after calling the tool, the bot answers with the result
+        system_message="For currency exchange tasks, only use the functions you have been provided with. Reply TERMINATE "
+                       "when the task is done.",
+    )
+
+    # start the conversation
+    await Console(currency_bot.run_stream(task="How much is 123.45 USD in EUR?"))
+    await model_client.close()
+
+
+if __name__ == "__main__":
+    asyncio.run(main())

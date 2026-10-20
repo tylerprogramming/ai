@@ -3,16 +3,16 @@ meeting_minutes_summary_task:
     Summarize the meeting transcript into a summary with the following transcript:
     {transcript}
 
-    Write the summary to a file called "summary.txt" in the "meeting_minutes" directory.  This is provided by the tool.
+    Write the summary to a file called "summary.txt" in the "meeting_minutes" directory.  This is provided by the tool.  Pass overwrite as true so earlier runs' files are replaced.
 
-    Write the action items to a file called "action_items.txt" in the "meeting_minutes" directory.  This is provided by the tool.
+    Write the action items to a file called "action_items.txt" in the "meeting_minutes" directory.  This is provided by the tool.  Pass overwrite as true so earlier runs' files are replaced.
 
     I would like you to return the action items from the meeting transcript in the following format:
     - Action item 1
     - Action item 2
     - ...
 
-    I would also like you to analyze the sentiment of the meeting transcript and write it to a file called "sentiment.txt" in the "meeting_minutes" directory.  This is provided by the tool.
+    I would also like you to analyze the sentiment of the meeting transcript and write it to a file called "sentiment.txt" in the "meeting_minutes" directory.  This is provided by the tool.  Pass overwrite as true so earlier runs' files are replaced.
 
   expected_output: >
     A summary of the meeting transcript and a list of action items.

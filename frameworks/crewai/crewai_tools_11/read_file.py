@@ -7,6 +7,8 @@ load_dotenv()
 # For fixed directory searches
 tool = FileReadTool()
 
+llm = LLM(model="gpt-5.4-mini")
+
 # Create an agent with the knowledge store
 agent = Agent(
     role="File Read Agent",
@@ -14,7 +16,8 @@ agent = Agent(
     backstory="""You are a master at reading files.""",
     tools=[tool],
     verbose=True,
-    allow_delegation=False
+    allow_delegation=False,
+    llm=llm,
 )
 task = Task(
     description="What's in this file: {question}",

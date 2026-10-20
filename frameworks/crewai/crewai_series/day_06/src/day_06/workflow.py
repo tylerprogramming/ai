@@ -95,7 +95,7 @@ class NewsFlow(Flow[News]):
 
 async def run_flow():
     flow = NewsFlow()
-    await flow.kickoff()
+    await flow.kickoff_async()
     # flow.plot("automated_news_flow")
 
 async def main():

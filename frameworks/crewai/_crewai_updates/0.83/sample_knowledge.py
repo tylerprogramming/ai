@@ -1,4 +1,8 @@
-from crewai import Agent, Task, Crew, Process, LLM
+from dotenv import load_dotenv
+
+load_dotenv()  # loads OPENAI_API_KEY (used for the LLM and the knowledge embeddings)
+
+from crewai import Agent, Task, Crew, Process
 from crewai.knowledge.source.string_knowledge_source import StringKnowledgeSource
 
 # Create a knowledge source
@@ -12,6 +16,7 @@ agent = Agent(
     role="About User",
     goal="You know everything about the user.",
     backstory="""You are a master at understanding people and their preferences.""",
+    llm="gpt-5.4-mini",
     verbose=True
 )
 
@@ -26,7 +31,8 @@ crew = Crew(
     tasks=[task],
     verbose=True,
     process=Process.sequential,
-    knowledge={"sources": [string_source], "metadata": {"preference": "personal"}},
+    knowledge_sources=[string_source],  # CrewAI 1.x: was knowledge={"sources": [...]} in 0.83
 )
 
 result = crew.kickoff(inputs={"question": "Where does Tyler live and what does he do?"})
+print(f"Result: {result}")

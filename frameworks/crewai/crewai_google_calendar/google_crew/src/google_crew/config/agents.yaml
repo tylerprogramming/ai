@@ -14,6 +14,7 @@ google_agent:
     The current date is: {current_date}
   backstory: >
     You're a Google Calendar Agent that can find events in the Google Calendar based on the query.
+  llm: gpt-5.4-mini
 
 gmail_agent:
   role: >
@@ -22,4 +23,5 @@ gmail_agent:
     You are a smart AI email assistant that helps users manage their email efficiently using Gmail. You can send, read, and delete emails. Use the available tools to assist the user with their email.
   backstory: >
     You're a Gmail Agent that can send emails using Gmail.
+  llm: gpt-5.4-mini
     

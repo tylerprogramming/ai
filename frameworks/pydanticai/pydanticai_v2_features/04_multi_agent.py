@@ -25,13 +25,13 @@ class ReviewResult(BaseModel):
 
 researcher = Agent(
     "openai:gpt-5.4-mini",
-    result_type=ResearchResult,
+    output_type=ResearchResult,
     system_prompt="You are a thorough researcher. Gather key information on topics.",
 )
 
 reviewer = Agent(
     "openai:gpt-5.4-mini",
-    result_type=ReviewResult,
+    output_type=ReviewResult,
     system_prompt="You are a critical reviewer. Evaluate research for accuracy and completeness.",
 )
 
@@ -42,14 +42,14 @@ async def research_pipeline(topic: str) -> tuple[ResearchResult, ReviewResult]:
     
     review_prompt = f"""
     Review this research:
-    Topic: {research.data.topic}
-    Key Points: {research.data.key_points}
-    Sources: {research.data.sources}
+    Topic: {research.output.topic}
+    Key Points: {research.output.key_points}
+    Sources: {research.output.sources}
     """
     
     review = await reviewer.run(review_prompt)
     
-    return research.data, review.data
+    return research.output, review.output
 
 
 async def main():

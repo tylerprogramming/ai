@@ -1,22 +1,40 @@
-import autogen
-import CustomModelClient as cmc
-from autogen import AssistantAgent, UserProxyAgent
+import asyncio
 
-config_list_custom = autogen.config_list_from_json(
-    "OAI_CONFIG_LIST.json",
-    filter_dict={"model_client_cls": ["CustomModelClient"]},
-)
+from autogen_agentchat.agents import AssistantAgent, CodeExecutorAgent
+from autogen_agentchat.conditions import MaxMessageTermination, TextMentionTermination
+from autogen_agentchat.teams import RoundRobinGroupChat
+from autogen_agentchat.ui import Console
+from autogen_ext.code_executors.local import LocalCommandLineCodeExecutor
 
-assistant = AssistantAgent("assistant", llm_config={"config_list": config_list_custom})
-user_proxy = UserProxyAgent(
-    "user_proxy",
-    code_execution_config={
-        "work_dir": "coding",
-        "use_docker": False
-    }
-)
+from CustomModelClient import CustomModelClient
 
-assistant.register_model_client(model_client_cls=cmc.CustomModelClient)
 
-user_proxy.initiate_chat(assistant, message="Write python code to print Hello World!")
+async def main():
+    # Our own model client that runs a HuggingFace model locally (see CustomModelClient.py).
+    model_client = CustomModelClient(model="stabilityai/stable-code-3b", device="cpu", max_length=1000)
 
+    assistant = AssistantAgent(
+        "assistant",
+        model_client=model_client,
+        system_message="You are a helpful AI assistant. Solve tasks by writing Python code in markdown "
+                       "code blocks. When the task is done, reply with TERMINATE.",
+    )
+
+    # Runs the code the assistant writes, in the "coding" folder.
+    # cleanup_temp_files=False keeps the files the agents write (v0.7 deletes them by default)
+    code_executor = LocalCommandLineCodeExecutor(work_dir="coding", cleanup_temp_files=False)
+    executor = CodeExecutorAgent("executor", code_executor=code_executor)
+
+    # Small local models don't always say TERMINATE, so also cap the number of messages.
+    termination = TextMentionTermination("TERMINATE") | MaxMessageTermination(10)
+    team = RoundRobinGroupChat([assistant, executor], termination_condition=termination)
+
+    try:
+        await Console(team.run_stream(task="Write python code to print Hello World!"))
+    finally:
+        await code_executor.stop()
+        await model_client.close()
+
+
+if __name__ == "__main__":
+    asyncio.run(main())

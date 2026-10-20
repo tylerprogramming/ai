@@ -1,56 +1,30 @@
-# {{crew_name}} Crew
+# First Flow – Guide Creator
 
-Welcome to the {{crew_name}} Crew project, powered by [crewAI](https://crewai.com). This template is designed to help you set up a multi-agent AI system with ease, leveraging the powerful and flexible framework provided by crewAI. Our goal is to enable your agents to collaborate effectively on complex tasks, maximizing their collective intelligence and capabilities.
+A CrewAI Flow that asks for a topic and an audience level, has the LLM produce a structured outline
+(`GuideOutline`), writes each section in order (feeding previous sections back as context), and
+compiles everything into a Markdown guide.
 
-## Installation
+> **Note:** Updated for CrewAI 1.15; the code may differ slightly from the video. With
+> `response_format=<PydanticModel>`, `LLM.call()` now returns the model instance instead of a JSON string.
 
-Ensure you have Python >=3.10 <3.13 installed on your system. This project uses [UV](https://docs.astral.sh/uv/) for dependency management and package handling, offering a seamless setup and execution experience.
+## Setup
 
-First, if you haven't already, install uv:
+Requires Python >=3.10 <3.14 and [uv](https://docs.astral.sh/uv/).
 
 ```bash
 pip install uv
-```
-
-Next, navigate to your project directory and install the dependencies:
-
-(Optional) Lock the dependencies and install them by using the CLI command:
-```bash
 crewai install
 ```
 
-### Customizing
+Add your `OPENAI_API_KEY` to a `.env` file in this folder. The flow uses `openai/gpt-5.4-mini`.
 
-**Add your `OPENAI_API_KEY` into the `.env` file**
-
-- Modify `src/first_flow/config/agents.yaml` to define your agents
-- Modify `src/first_flow/config/tasks.yaml` to define your tasks
-- Modify `src/first_flow/crew.py` to add your own logic, tools and specific args
-- Modify `src/first_flow/main.py` to add custom inputs for your agents and tasks
-
-## Running the Project
-
-To kickstart your flow and begin execution, run this from the root folder of your project:
+## Run
 
 ```bash
-crewai run
+crewai run        # or: crewai flow kickoff
 ```
 
-This command initializes the first_flow Flow as defined in your configuration.
+Answer the two prompts (topic and `beginner`/`intermediate`/`advanced`). Output is written to
+`output/guide_outline.json` and `output/complete_guide.md` (relative to where you run it).
 
-This example, unmodified, will run the create a `report.md` file with the output of a research on LLMs in the root folder.
-
-## Understanding Your Crew
-
-The first_flow Crew is composed of multiple AI agents, each with unique roles, goals, and tools. These agents collaborate on a series of tasks, defined in `config/tasks.yaml`, leveraging their collective skills to achieve complex objectives. The `config/agents.yaml` file outlines the capabilities and configurations of each agent in your crew.
-
-## Support
-
-For support, questions, or feedback regarding the {{crew_name}} Crew or crewAI.
-
-- Visit our [documentation](https://docs.crewai.com)
-- Reach out to us through our [GitHub repository](https://github.com/joaomdmoura/crewai)
-- [Join our Discord](https://discord.com/invite/X4JWnZnxPb)
-- [Chat with our docs](https://chatg.pt/DWjSBZn)
-
-Let's create wonders together with the power and simplicity of crewAI.
+`plot` (`uv run plot`) saves a visualization of the flow.

@@ -4,7 +4,7 @@ import warnings
 
 from datetime import datetime
 
-from crew import CrawlCrew
+from crawl_crew.crew import CrawlCrew
 
 warnings.filterwarnings("ignore", category=SyntaxWarning, module="pysbd")
 
@@ -21,4 +21,5 @@ def run():
     except Exception as e:
         raise Exception(f"An error occurred while running the crew: {e}")
 
-run()
+if __name__ == "__main__":
+    run()

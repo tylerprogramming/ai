@@ -1,5 +1,16 @@
-import autogen
-from autogen.agentchat.contrib.multimodal_conversable_agent import MultimodalConversableAgent
+import asyncio
+from io import BytesIO
+
+import requests
+from dotenv import load_dotenv
+from PIL import Image as PILImage
+from autogen_agentchat.agents import AssistantAgent
+from autogen_agentchat.messages import MultiModalMessage
+from autogen_agentchat.ui import Console
+from autogen_core import Image
+from autogen_ext.models.openai import OpenAIChatCompletionClient
+
+load_dotenv()  # OPENAI_API_KEY from .env
 
 image_goldendoodle = "https://th.bing.com/th/id/R.422068ce8af4e15b0634fe2540adea7a?rik=y4OcXBE%2fqutDOw&pid=ImgRaw&r=0"
 image_corgi = "https://cdn.pixabay.com/photo/2019/08/19/07/45/corgi-4415649_1280.jpg"
@@ -8,63 +19,70 @@ image_super_nintendo = "https://cdn.pixabay.com/photo/2018/04/26/06/59/technolog
 image_mitochondria = "https://cdn.pixabay.com/photo/2021/07/18/05/36/cell-6474673_1280.jpg"
 image_waldo = "https://i.stack.imgur.com/reNlF.jpg"
 
-config_list_4v = autogen.config_list_from_json(
-    "OAI_CONFIG_LIST.json",
-    filter_dict={
-        "model": ["gpt-5.4-mini"],
-    },
-)
 
-image_agent = MultimodalConversableAgent(
-    name="image-explainer",
-    llm_config={"config_list": config_list_4v, "temperature": 0.5, "max_tokens": 500}
-)
+def image_from_url(url: str) -> Image:
+    """Download an image so it can be sent to the agent (replaces the old <img url> tags)."""
+    # Some image hosts reject the default python-requests user agent, so look like a browser
+    response = requests.get(url, timeout=30, headers={"User-Agent": "Mozilla/5.0"})
+    response.raise_for_status()
+    return Image.from_pil(PILImage.open(BytesIO(response.content)))
 
-user_proxy = autogen.UserProxyAgent(
-    name="User_proxy",
-    system_message="A human admin.",
-    human_input_mode="NEVER",
-    max_consecutive_auto_reply=0,
-    code_execution_config={
-        "work_dir": "code",
-        "use_docker": False
-    }
-)
 
-# Example 1
-user_proxy.initiate_chat(
-    image_agent,
-    message=f"""
-        Can you please find waldo in this image? <img {image_waldo}>
-    """
-)
+async def main():
+    # gpt-5.4-mini supports vision, so a normal AssistantAgent can look at images
+    # (this replaces the old MultimodalConversableAgent)
+    model_client = OpenAIChatCompletionClient(
+        model="gpt-5.4-mini",
+        # AutoGen 0.7.5 predates gpt-5.4-mini, so its capabilities must be given explicitly
+        model_info={"vision": True, "function_calling": True, "json_output": True, "family": "gpt-5", "structured_output": True},
+        # GPT-5 models only accept the default temperature (and max_completion_tokens, not max_tokens), so the old GPT-4 sampling settings were dropped
+    )
 
-# Example 2
-# user_proxy.initiate_chat(image_agent,
-#                          message="""What is this picture of and describe everything in it?
-# <img {image_goldendoodle}>""")
-#
-# user_proxy.send(
-#     message=f"""
-#         What dog is this a picture of? <img {image_corgi}>
-#
-#         Which of these dogs tends to bark more, this one or the previous dog image?
-#     """,
-#     recipient=image_agent
-# )
+    image_agent = AssistantAgent(
+        name="image_explainer",
+        model_client=model_client,
+    )
 
-# Example 3
-# user_proxy.initiate_chat(image_agent,
-#     message=f"""
-#         What is this picture of and describe everything in it? <img {image_luigi_yoshi_mario}>
-#     """)
-#
-# user_proxy.send(
-#     message=f"""
-#         What game is displayed here? <img {image_super_nintendo}>
-#
-#         Among all of these characters, which one has sold the most amount of games?  Can you also give some figures for all
-#         characters shown?
-#     """,
-#     recipient=image_agent
-# )
+    # Example 1
+    await Console(image_agent.run_stream(task=MultiModalMessage(
+        content=["Can you please find waldo in this image?", image_from_url(image_waldo)],
+        source="user",
+    )))
+
+    # Example 2
+    # (calling run_stream again on the same agent continues the conversation, like the old user_proxy.send)
+    # await Console(image_agent.run_stream(task=MultiModalMessage(
+    #     content=["What is this picture of and describe everything in it?", image_from_url(image_goldendoodle)],
+    #     source="user",
+    # )))
+    #
+    # await Console(image_agent.run_stream(task=MultiModalMessage(
+    #     content=[
+    #         "What dog is this a picture of?",
+    #         image_from_url(image_corgi),
+    #         "Which of these dogs tends to bark more, this one or the previous dog image?",
+    #     ],
+    #     source="user",
+    # )))
+
+    # Example 3
+    # await Console(image_agent.run_stream(task=MultiModalMessage(
+    #     content=["What is this picture of and describe everything in it?", image_from_url(image_luigi_yoshi_mario)],
+    #     source="user",
+    # )))
+    #
+    # await Console(image_agent.run_stream(task=MultiModalMessage(
+    #     content=[
+    #         "What game is displayed here?",
+    #         image_from_url(image_super_nintendo),
+    #         "Among all of these characters, which one has sold the most amount of games?  Can you also give some "
+    #         "figures for all characters shown?",
+    #     ],
+    #     source="user",
+    # )))
+
+    await model_client.close()
+
+
+if __name__ == "__main__":
+    asyncio.run(main())

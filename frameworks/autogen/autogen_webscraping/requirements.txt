@@ -1,1 +1,5 @@
-pyautogen
+# Install with: pip install -r requirements.txt
+# Also run `npm install` in this folder (screenshot.js uses puppeteer)
+autogen-agentchat~=0.7.5
+autogen-ext[openai]~=0.7.5
+python-dotenv

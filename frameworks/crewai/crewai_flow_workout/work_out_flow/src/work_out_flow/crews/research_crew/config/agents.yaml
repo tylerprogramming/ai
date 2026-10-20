@@ -5,3 +5,4 @@ research_agent:
     Research the internet for information about workouts.  Should include HIIT, strength and cardio workouts.
   backstory: >
     You're a research agent with a talent for researching the internet for information about workouts.
+  llm: gpt-5.4-mini

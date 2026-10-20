@@ -2,34 +2,34 @@
 CrewAI v1.15+ Conversational Flow Example
 
 Interactive chat-style agent workflows that maintain conversation state.
+
+Decorating a Flow with @ConversationConfig turns it into a conversational flow:
+each user message is one "turn", the message history lives in self.state.messages,
+and an LLM router picks which @listen("<route>") handler answers the turn.
+Built-in routes: "converse" (plain chat over the history) and "end" (goodbye).
 """
 
 from crewai import Agent, Task, Crew, Process, LLM
-from crewai.flow import Flow, listen, start
+from crewai.flow import Flow, ConversationConfig, listen
+
+llm = LLM(model="gpt-5.4-mini")
 
 
+@ConversationConfig(
+    llm=llm,  # used for routing and for the built-in "converse" route
+    system_prompt="You are a friendly AI assistant. Keep answers short and helpful.",
+)
 class ConversationalAssistant(Flow):
     """A conversational flow that handles multi-turn interactions."""
 
-    def __init__(self):
-        super().__init__()
-        self.conversation_history = []
-        self.llm = LLM(model="gpt-5.4-mini")
-
-    @start()
-    def greet(self):
-        """Start the conversation with a greeting."""
-        self.conversation_history.append({"role": "assistant", "content": "Hello! I'm your AI assistant. How can I help you today?"})
-        return "greeting_complete"
-
-    @listen(greet)
-    def process_request(self, _):
-        """Process user requests using a research agent."""
+    @listen("research")
+    def handle_research(self):
+        """Questions that need a careful, researched answer from the research agent."""
         researcher = Agent(
             role="Research Assistant",
             goal="Help users find accurate information",
             backstory="Expert researcher with access to vast knowledge",
-            llm=self.llm,
+            llm=llm,
             verbose=True,
         )
 
@@ -46,13 +46,20 @@ class ConversationalAssistant(Flow):
             verbose=True,
         )
 
-        return crew
+        # The returned text becomes the assistant's reply for this turn
+        result = crew.kickoff(inputs={"query": self.state.current_user_message})
+        return result.raw
 
 
 def main():
     flow = ConversationalAssistant()
-    result = flow.kickoff(inputs={"query": "What are the key features of CrewAI v1.15?"})
-    print(f"\nResult: {result}")
+    print("Hello! I'm your AI assistant. How can I help you today? (type 'exit' to quit)")
+
+    # chat() runs an interactive terminal loop; each message calls flow.handle_turn()
+    flow.chat()
+
+    # For web apps / scripts, call handle_turn() directly instead:
+    #   reply = flow.handle_turn("What are the key features of CrewAI v1.15?")
 
 
 if __name__ == "__main__":

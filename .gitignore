@@ -1,27 +1,48 @@
+# Python
 .venv/
+venv/
+__pycache__/
+**/__pycache__/
+*.pyc
+*.egg-info/
+.pytest_cache/
+
+# Secrets — never commit real keys or OAuth tokens
 .env
-# AutoGen config files hold API keys; commit OAI_CONFIG_LIST.example instead
+.env.*
+!.env.example
+# AutoGen 0.2 config files held API keys; keys now come from .env
 OAI_CONFIG_LIST
 OAI_CONFIG_LIST.json
+token.json
+token.pickle
+
+# Caches, logs and run artifacts
+.cache/
 .pyautogen/
-autogen_rag_chroma/docs/ag_studio.pdf
-__pycache__
-# Ignore all __pycache__ directories
-**/__pycache__/
+.composio.lock/
+agentops.log
+*.log
+
+# Editors / OS
 .DS_Store
 .idea/
-_integrations/youtube-summarizer/
-crewai_series/ai.code-workspace
-ai_agency_08_checklistai/instance/checklists.db
-ai_agency_08_checklistai/migrations/alembic.ini
-ai_agency_08_checklistai/migrations/script.py.mako
-ai_agency_08_checklistai/migrations/versions/b1030fc3c9e7_add_checklistitem_model.py
-ai_agency_08_checklistai/migrations/versions/05fb2bd9e832_make_schedule_time_nullable.py
-ai_agency_08_checklistai/migrations/versions/d2881ce4c4cb_.py
+.vscode/
+*.code-workspace
 
-agentops.log
-.composio.lock/
+# Project-specific generated files
+# n8n_crewai appends incoming customer feedback here on every request
+integrations/n8n_crewai/**/log.txt
+integrations/n8n_crewai/log.txt
+frameworks/autogen/autogen_rag_chroma/docs/ag_studio.pdf
+mini_projects/08_checklistai/instance/
+mini_projects/05_pdf/faiss_index_react/
+mini_projects/08_checklistai/migrations/alembic.ini
+mini_projects/08_checklistai/migrations/script.py.mako
+mini_projects/08_checklistai/migrations/versions/
 
-venv/
 # git worktrees live here; each is its own checkout
 .worktrees/
+
+# Old Composio SDK lock files
+.composio.lock

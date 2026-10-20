@@ -10,8 +10,8 @@ COPY . /app
 # Install dependencies from requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy the .env file if it’s used for environment variables
-COPY .env .env
+# Don't bake API keys into the image: pass them at runtime instead, e.g.
+#   docker run --env-file ../.env <image>
 
 # Expose port 80 if your app will listen on it
 EXPOSE 80

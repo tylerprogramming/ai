@@ -1,4 +1,4 @@
-from crewai_tools import tool
+from crewai.tools import tool
 from mem0 import Memory
 from dotenv import load_dotenv
 import os
@@ -15,8 +15,6 @@ config = {
         }
     }
 }
-
-print(config)
 
 memory = Memory.from_config(config_dict=config)
 
@@ -39,11 +37,12 @@ def read_from_memory(query: str) -> str:
 
     print(f"Query: {query}")
 
-    memories = memory.get_all(user_id=user_id)
+    # mem0 2.x: scope with filters=..., results are under "results" with the text in "memory"
+    memories = memory.get_all(filters={"user_id": user_id})
 
     print(memories)
 
-    if memories["memories"]:
-        return "\n".join([mem["data"] for mem in memories["memories"]])
+    if memories["results"]:
+        return "\n".join([mem["memory"] for mem in memories["results"]])
     else:
         return "No relevant memories found."

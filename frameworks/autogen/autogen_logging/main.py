@@ -1,49 +1,46 @@
+import asyncio
 import json
-import autogen
+import logging
+
 import pandas as pd
-import sqlite3
+from autogen_agentchat.agents import AssistantAgent
+from autogen_agentchat.ui import Console
+from autogen_core import EVENT_LOGGER_NAME
+from autogen_ext.models.openai import OpenAIChatCompletionClient
+from dotenv import load_dotenv
 
-# setup the llm_configuration
-llm_config = {
-    "config_list": autogen.config_list_from_json(
-        env_or_file="OAI_CONFIG_LIST.json",
-    ),
-    "temperature": 0,
-}
+load_dotenv()  # OPENAI_API_KEY from .env
 
-# Start logging
-logging_session_id = autogen.runtime_logging.start(config={"dbname": "logs.db"})
-print("Started Logging session ID: " + str(logging_session_id))
-
-# Create an agent workflow and run it
-assistant = autogen.AssistantAgent(name="assistant", llm_config=llm_config)
-user_proxy = autogen.UserProxyAgent(
-    name="user_proxy",
-    code_execution_config=False,
-    human_input_mode="NEVER",
-    is_termination_msg=lambda msg: "TERMINATE" in msg["content"],
-)
-
-user_proxy.initiate_chat(
-    assistant, message="What is the height of the Sears Tower? Only respond with the answer and terminate"
-)
-
-# Stop logging
-autogen.runtime_logging.stop()
+LOG_FILE = "logs.jsonl"
 
 
-# create function to get log
-def get_log(dbname="logs.db", table="chat_completions"):
-    con = sqlite3.connect(dbname)
-    query = f"SELECT request, response, cost, start_time, end_time from {table}"
-    cursor = con.execute(query)
-    rows = cursor.fetchall()
-    column_names = [description[0] for description in cursor.description]
+def start_logging(log_file=LOG_FILE):
+    """AutoGen v0.7 logs structured events (including every LLM call) to a standard Python logger.
+    Each event is written as one JSON line in the log file."""
+    handler = logging.FileHandler(log_file, mode="w")
+    handler.setFormatter(logging.Formatter("%(message)s"))
+    logger = logging.getLogger(EVENT_LOGGER_NAME)
+    logger.setLevel(logging.INFO)
+    logger.addHandler(handler)
+    return handler
 
-    data = [dict(zip(column_names, row)) for row in rows]
 
-    con.close()
+def stop_logging(handler):
+    logging.getLogger(EVENT_LOGGER_NAME).removeHandler(handler)
+    handler.close()
 
+
+# create function to get log: read the JSON lines back and keep only the LLM calls
+def get_log(log_file=LOG_FILE, event_type="LLMCall"):
+    data = []
+    with open(log_file) as f:
+        for line in f:
+            try:
+                event = str_to_dict(line)
+            except json.JSONDecodeError:
+                continue  # skip anything that isn't a JSON event
+            if event.get("type") == event_type:
+                data.append(event)
     return data
 
 
@@ -51,5 +48,47 @@ def str_to_dict(s):
     return json.loads(s)
 
 
-# use pandas to get extra information and print out to terminal
+async def main():
+    # setup the model client
+    model_client = OpenAIChatCompletionClient(
+        model="gpt-5.4-mini",
+        # AutoGen 0.7.5 predates gpt-5.4-mini, so its capabilities must be given explicitly
+        model_info={"vision": True, "function_calling": True, "json_output": True, "family": "gpt-5", "structured_output": True},
+        # GPT-5 models only accept the default temperature (and max_completion_tokens, not max_tokens), so the old GPT-4 sampling settings were dropped
+    )
 
+    # Start logging
+    handler = start_logging()
+    print("Started logging to " + LOG_FILE)
+
+    # Create an agent and run it
+    assistant = AssistantAgent(name="assistant", model_client=model_client)
+    result = await Console(
+        assistant.run_stream(task="What is the height of the Sears Tower? Only respond with the answer and terminate")
+    )
+
+    # Stop logging
+    stop_logging(handler)
+    await model_client.close()
+
+    # Token usage straight from the run result
+    prompt_tokens = sum(m.models_usage.prompt_tokens for m in result.messages if m.models_usage)
+    completion_tokens = sum(m.models_usage.completion_tokens for m in result.messages if m.models_usage)
+    print(f"\nTokens used: {prompt_tokens} prompt + {completion_tokens} completion = {prompt_tokens + completion_tokens}")
+
+    # use pandas to get extra information from the log and print out to terminal
+    log_data = get_log()
+    if log_data:
+        df = pd.DataFrame(log_data)
+        df["total_tokens"] = df["prompt_tokens"] + df["completion_tokens"]
+        df["request"] = df["messages"].apply(lambda msgs: msgs[-1].get("content") if msgs else None)
+        df["response"] = df["response"].apply(
+            lambda r: r.get("choices", [{}])[0].get("message", {}).get("content") if isinstance(r, dict) else r
+        )
+        print(df[["agent_id", "request", "response", "prompt_tokens", "completion_tokens", "total_tokens"]].to_string())
+    else:
+        print("No LLM calls found in " + LOG_FILE)
+
+
+if __name__ == "__main__":
+    asyncio.run(main())

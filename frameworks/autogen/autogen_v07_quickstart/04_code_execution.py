@@ -5,7 +5,7 @@ An agent that can write and execute Python code using a Docker sandbox.
 """
 
 import asyncio
-from autogen_agentchat.agents import AssistantAgent
+from autogen_agentchat.agents import AssistantAgent, CodeExecutorAgent
 from autogen_agentchat.conditions import TextMentionTermination
 from autogen_agentchat.teams import RoundRobinGroupChat
 from autogen_agentchat.ui import Console
@@ -14,7 +14,11 @@ from autogen_ext.code_executors.docker import DockerCommandLineCodeExecutor
 
 
 async def main():
-    model_client = OpenAIChatCompletionClient(model="gpt-5.4-mini")
+    model_client = OpenAIChatCompletionClient(
+        model="gpt-5.4-mini",
+        # AutoGen 0.7.5 predates gpt-5.4-mini, so its capabilities must be given explicitly
+        model_info={"vision": True, "function_calling": True, "json_output": True, "family": "gpt-5", "structured_output": True},
+    )
 
     code_executor = DockerCommandLineCodeExecutor(
         image="python:3.12-slim",
@@ -31,11 +35,10 @@ async def main():
         After your code is executed and verified, say TERMINATE.""",
     )
 
-    executor = AssistantAgent(
+    # CodeExecutorAgent runs the code blocks the coder writes, inside the Docker sandbox.
+    executor = CodeExecutorAgent(
         name="executor",
-        model_client=model_client,
         code_executor=code_executor,
-        system_message="Execute the code and report results.",
     )
 
     termination = TextMentionTermination("TERMINATE")

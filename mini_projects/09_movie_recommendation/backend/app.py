@@ -1,3 +1,5 @@
+import os
+
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 
@@ -24,4 +26,5 @@ def get_recommendations():
     return jsonify({"movies": movies})
 
 if __name__ == '__main__':
-    app.run(debug=True, port=5555) 
+    # debug is opt-in (FLASK_DEBUG=1); localhost only, the Vite frontend calls http://localhost:5555
+    app.run(debug=os.getenv('FLASK_DEBUG') == '1', host='127.0.0.1', port=5555) 

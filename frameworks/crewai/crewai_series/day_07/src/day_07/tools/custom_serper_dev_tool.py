@@ -1,9 +1,9 @@
-from crewai_tools import BaseTool
+from crewai.tools import BaseTool
 import requests
 import json
 import os
 from dotenv import load_dotenv
-from agentops import record_tool
+import agentops
 
 load_dotenv()
 
@@ -11,7 +11,7 @@ class CustomSerperDevTool(BaseTool):
     name: str = "Custom Serper Dev Tool"
     description: str = "Search the internet for news."
 
-    @record_tool(tool_name="My own google search tool")
+    @agentops.tool(name="My own google search tool")
     def _run(self, query: str) -> str:
         """
         Search the internet for news.

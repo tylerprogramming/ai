@@ -26,17 +26,18 @@ This is an AI projects repository containing:
 2. **AgentOps IS a framework** - It's for agent monitoring/observability
 3. **This repo is for examples, not courses** - Full courses live in `ai-courses` repo
 
-## Current Framework Versions (September 2026)
+## Current Framework Versions (October 2026)
 
 **CRITICAL:** AutoGen has completely changed its API in v0.7+!
 
 | Framework | Package | Current Pattern |
 |-----------|---------|-----------------|
-| AutoGen v0.7+ | `autogen-agentchat`, `autogen-ext` | Async, event-driven |
-| CrewAI v1.15+ | `crewai>=1.15.0` | Decorators, YAML config, Flows |
-| PydanticAI v2.x | `pydantic-ai>=2.40.0` | Type-safe, structured outputs |
-| Smolagents v1.26+ | `smolagents>=1.26.0` | Code agents, LiteLLM |
-| OpenAI Agents | `openai>=1.50.0` | Chat completions, tools |
+| AutoGen v0.7 | `autogen-agentchat~=0.7.5`, `autogen-ext[openai]~=0.7.5` | Async, event-driven; pass `model_info` for gpt-5.4-mini |
+| CrewAI v1.15 | `crewai[tools]>=1.15,<2` | Decorators, YAML config, Flows |
+| PydanticAI v2 | `pydantic-ai>=2.58,<3` | `output_type`, `result.output` |
+| Smolagents v1.26 | `smolagents[toolkit,litellm]>=1.26,<2` | Code agents, LiteLLM |
+| OpenAI Agents SDK | `openai-agents~=0.24` | Agents, tools, handoffs |
+| OpenAI SDK | `openai>=3.35,<4` | Chat completions, `chat.completions.parse`, hosted Agents API |
 
 ### AutoGen v0.7+ Migration
 
@@ -51,15 +52,21 @@ agent = autogen.AssistantAgent(name="...", llm_config={...})
 from autogen_agentchat.agents import AssistantAgent
 from autogen_ext.models.openai import OpenAIChatCompletionClient
 
-model_client = OpenAIChatCompletionClient(model="gpt-5.4-mini")
+model_client = OpenAIChatCompletionClient(
+    model="gpt-5.4-mini",
+    # AutoGen 0.7.5 predates gpt-5.4-mini, so its capabilities must be given explicitly
+    model_info={"vision": True, "function_calling": True, "json_output": True, "family": "gpt-5", "structured_output": True},
+)
 agent = AssistantAgent(name="...", model_client=model_client)
-await agent.run_stream(task="...")
+await Console(agent.run_stream(task="..."))  # from autogen_agentchat.ui import Console; or: result = await agent.run(task="...")
 ```
+
+All AutoGen examples use the v0.7 API, including older ones first recorded on 0.2 (migrated in place — YouTube descriptions link to these paths, so don't move or rename project folders).
 
 ## Code Style
 
 - Python projects typically use virtual environments
-- Configuration files often named `OAI_CONFIG_LIST.json` for OpenAI config
+- API keys come from environment variables / `.env` (no `OAI_CONFIG_LIST` files)
 - Environment variables in `.env` files (see `.env.example`)
 - Most projects are standalone and self-contained
 - Default model: `gpt-5.4-mini`
@@ -70,6 +77,8 @@ await agent.run_stream(task="...")
 2. **New mini project**: `mini_projects/<number>_<name>/`
 3. **New integration**: `integrations/<integration_name>/`
 4. **New tool**: `tools/<tool_name>/`
+
+Every new project should include a `requirements.txt` (or `pyproject.toml`) listing its dependencies.
 
 ## Testing
 

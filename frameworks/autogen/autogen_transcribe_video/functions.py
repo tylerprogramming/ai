@@ -1,3 +1,5 @@
+import os
+
 import dotenv
 import whisper
 from moviepy.editor import *
@@ -62,7 +64,7 @@ def translate_text(input_text, source_language, target_language):
     client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
     response = client.chat.completions.create(
-        model=os.getenv("model"),
+        model=os.getenv("model", "gpt-5.4-mini"),
         messages=[
             {"role": "system", "content": "You are a helpful assistant."},
             {"role": "user",

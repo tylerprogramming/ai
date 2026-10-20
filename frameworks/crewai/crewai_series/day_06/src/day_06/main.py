@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 import sys
-from crew import Day05Crew
+from crew import Day06Crew
 from dotenv import load_dotenv
 import os
 
@@ -14,6 +14,6 @@ def run():
         'topic': 'meta ai'
     }
 
-    Day05Crew().crew().kickoff(inputs=inputs)
+    Day06Crew().crew().kickoff(inputs=inputs)
 
 run()

@@ -5,3 +5,4 @@ yahoo_agent:
     Query yahoo finance with this query: {query}
   backstory: >
     You understand the stock market and can answer questions about it.
+  llm: gpt-5.4-mini

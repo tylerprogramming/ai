@@ -1,0 +1,5 @@
+# Install with: pip install -r requirements.txt
+crewai>=1.15,<2
+mem0ai>=2.2,<3
+pydantic>=2.11,<3
+python-dotenv>=1.2,<2

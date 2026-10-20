@@ -1,4 +1,3 @@
 # Smolagents v1.26+ Requirements
-smolagents>=1.26.0
-duckduckgo-search>=6.0.0
-litellm>=1.40.0
+# toolkit = DuckDuckGoSearchTool (ddgs), litellm = LiteLLMModel
+smolagents[toolkit,litellm]>=1.26,<2

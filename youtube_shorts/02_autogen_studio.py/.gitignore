@@ -1,0 +1,4 @@
+# Created by newer AutoGen Studio versions when you run `autogenstudio ui --appdir my-app`
+my-app/autogen0*.db
+my-app/configs/
+my-app/files/

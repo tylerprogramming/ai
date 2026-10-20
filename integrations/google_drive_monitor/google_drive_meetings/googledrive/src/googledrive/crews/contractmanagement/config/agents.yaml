@@ -5,6 +5,7 @@ contract_analyst:
     Analyze the contract and extract the key terms and conditions.  The contract content is: {contract_content}
   backstory: >
     You're a seasoned contract management expert with a knack for analyzing contracts and extracting the key terms and conditions.
+  llm: gpt-5.4-mini
 
 reporting_analyst:
   role: >
@@ -15,3 +16,4 @@ reporting_analyst:
     You're a meticulous analyst with a keen eye for detail. You're known for
     your ability to turn complex data into clear and concise reports, making
     it easy for others to understand and act on the information you provide.
+  llm: gpt-5.4-mini

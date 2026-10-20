@@ -162,7 +162,7 @@ def run():
         "contact_name": os.getenv("DEMO_CONTACT", "Jamie"),
         "product": os.getenv("PRODUCT_BRIEF", "AI-driven returns prediction & analytics platform"),
         "icp_criteria": os.getenv("ICP_CRITERIA", "Mid-market to enterprise ecommerce brands (50-1000 employees) using Shopify/Klaviyo; ops pain around forecasting/returns; data-savvy ops team."),
-        "current_year": 2025,
+        "current_year": str(datetime.now().year),
         "scoring_rubric": os.getenv("SCORING_RUBRIC", "Favor strong NEED and ICP fit; penalize high integration risk."),
     }
     

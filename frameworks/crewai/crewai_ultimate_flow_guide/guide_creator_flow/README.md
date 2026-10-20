@@ -1,6 +1,10 @@
-# {{crew_name}} Crew
+# Guide Creator Flow
 
-Welcome to the {{crew_name}} Crew project, powered by [crewAI](https://crewai.com). This template is designed to help you set up a multi-agent AI system with ease, leveraging the powerful and flexible framework provided by crewAI. Our goal is to enable your agents to collaborate effectively on complex tasks, maximizing their collective intelligence and capabilities.
+> **Note:** Updated for CrewAI 1.15 and firecrawl-py 4; the code may differ slightly from the video.
+
+A CrewAI Flow that asks for a topic and audience level, researches the topic with Firecrawl web search, creates a structured outline with a direct `LLM` call (`response_format=GuideOutline`), then has a content crew write and review each section. The result is saved to `output/guide_outline.json` and `output/complete_guide.md`.
+
+Welcome to the Guide Creator Flow project, powered by [crewAI](https://crewai.com). This template is designed to help you set up a multi-agent AI system with ease, leveraging the powerful and flexible framework provided by crewAI. Our goal is to enable your agents to collaborate effectively on complex tasks, maximizing their collective intelligence and capabilities.
 
 ## Installation
 
@@ -21,12 +25,12 @@ crewai install
 
 ### Customizing
 
-**Add your `OPENAI_API_KEY` into the `.env` file**
+**Add your `OPENAI_API_KEY` and `FIRECRAWL_API_KEY` into the `.env` file**
 
-- Modify `src/guide_creator_flow/config/agents.yaml` to define your agents
-- Modify `src/guide_creator_flow/config/tasks.yaml` to define your tasks
-- Modify `src/guide_creator_flow/crew.py` to add your own logic, tools and specific args
-- Modify `src/guide_creator_flow/main.py` to add custom inputs for your agents and tasks
+- Modify `src/guide_creator_flow/crews/content_crew/config/agents.yaml` to define your agents (model: `gpt-5.4-mini`)
+- Modify `src/guide_creator_flow/crews/content_crew/config/tasks.yaml` to define your tasks
+- Modify `src/guide_creator_flow/crews/content_crew/content_crew.py` to add your own logic, tools and specific args
+- Modify `src/guide_creator_flow/main.py` to change the flow
 
 ## Running the Project
 
@@ -38,7 +42,7 @@ crewai run
 
 This command initializes the guide_creator_flow Flow as defined in your configuration.
 
-This example, unmodified, will run the create a `report.md` file with the output of a research on LLMs in the root folder.
+This example, unmodified, asks for a topic and audience level in the terminal and writes the guide to the `output/` folder.
 
 ## Understanding Your Crew
 
@@ -46,7 +50,7 @@ The guide_creator_flow Crew is composed of multiple AI agents, each with unique 
 
 ## Support
 
-For support, questions, or feedback regarding the {{crew_name}} Crew or crewAI.
+For support, questions, or feedback regarding crewAI:
 
 - Visit our [documentation](https://docs.crewai.com)
 - Reach out to us through our [GitHub repository](https://github.com/joaomdmoura/crewai)

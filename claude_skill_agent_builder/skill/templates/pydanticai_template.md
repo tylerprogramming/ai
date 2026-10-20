@@ -21,9 +21,9 @@
 ## requirements.txt
 
 ```
-pydantic-ai>=2.40.0
-pydantic>=2.0.0
-python-dotenv>=1.0.0
+pydantic-ai>=2.58,<3
+pydantic>=2.14,<3
+python-dotenv>=1.0,<2
 ```
 
 ## models/schemas.py
@@ -59,7 +59,7 @@ class {AgentDeps}:
 agent = Agent(
     "openai:gpt-5.4-mini",
     deps_type={AgentDeps},
-    result_type={OutputModel},
+    output_type={OutputModel},
     system_prompt="""{system_prompt}""",
 )
 
@@ -104,8 +104,8 @@ async def main():
     )
 
     print("\nResult:")
-    print(f"  {field1}: {result.data.{field1}}")
-    print(f"  {field2}: {result.data.{field2}}")
+    print(f"  {field1}: {result.output.{field1}}")
+    print(f"  {field2}: {result.output.{field2}}")
 
 
 if __name__ == "__main__":
@@ -118,13 +118,22 @@ if __name__ == "__main__":
 async def main_streaming():
     deps = {AgentDeps}(...)
 
+    # Structured agent (output_type set): stream partial models, then the final one.
     async with agent.run_stream("{prompt}", deps=deps) as response:
-        async for chunk in response.stream_text():
-            print(chunk, end="", flush=True)
-    
-    # Get final structured result
-    result = await response.get_data()
+        async for partial in response.stream_output():
+            print(partial)
+        result = await response.get_output()
     print(f"\nFinal: {result}")
+
+
+# Plain-text agent (no output_type): stream only the new text each time.
+text_agent = Agent("openai:gpt-5.4-mini", system_prompt="{system_prompt}")
+
+
+async def main_streaming_text():
+    async with text_agent.run_stream("{prompt}") as response:
+        async for chunk in response.stream_text(delta=True):
+            print(chunk, end="", flush=True)
 ```
 
 ## Multi-Agent Template
@@ -135,13 +144,13 @@ from models.schemas import ResearchResult, ReviewResult
 
 researcher = Agent(
     "openai:gpt-5.4-mini",
-    result_type=ResearchResult,
+    output_type=ResearchResult,
     system_prompt="You are a thorough researcher.",
 )
 
 reviewer = Agent(
     "openai:gpt-5.4-mini",
-    result_type=ReviewResult,
+    output_type=ReviewResult,
     system_prompt="You are a critical reviewer.",
 )
 
@@ -152,10 +161,10 @@ async def pipeline(topic: str):
     
     # Review phase
     review = await reviewer.run(
-        f"Review this research:\n{research.data.model_dump_json()}"
+        f"Review this research:\n{research.output.model_dump_json()}"
     )
     
-    return research.data, review.data
+    return research.output, review.output
 ```
 
 ## README.md Template

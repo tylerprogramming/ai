@@ -1,14 +1,16 @@
 from crewai_tools import PDFSearchTool
 from crewai import Agent, Task, Crew, Process, LLM
 from dotenv import load_dotenv
-import os
+from pathlib import Path
 
 load_dotenv()
 
-tool = PDFSearchTool(pdf='/Users/tylerreed/_ai-projects/ai/crewai_tools_11/pdf/AutoGen_Studio-12.pdf')
+BASE_DIR = Path(__file__).parent
 
-# Create an LLM with a temperature of 0 to ensure deterministic outputs
-llm = LLM(model="gpt-5.4-mini", temperature=0)
+tool = PDFSearchTool(pdf=str(BASE_DIR / "pdf" / "AutoGen_Studio-12.pdf"))
+
+# GPT-5 models only accept the default temperature (temperature=0 is rejected)
+llm = LLM(model="gpt-5.4-mini")
 
 # Create an agent with the knowledge store
 agent = Agent(
@@ -35,6 +37,8 @@ crew = Crew(
 
 while True:
     question = input("Enter a question about the pdf documentation: ")
+    if question == "exit":
+        break
     result = crew.kickoff(inputs={"question": question})
     print(result)
 

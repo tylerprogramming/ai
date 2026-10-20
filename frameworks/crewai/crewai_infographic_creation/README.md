@@ -1,5 +1,7 @@
 # Infographic Creation with OpenAI and Airtable
 
+> **Note:** Updated for CrewAI 1.15; the code may differ slightly from the video. Images now use `gpt-image-2.5-flare` (gpt-image-1 shuts down 2026-10-23).
+
 This project is designed to generate infographics based on a given topic using the OpenAI API for image generation and Airtable for storing the generated images. The process is managed through a flow-based architecture using the `crewai.flow` library.
 
 ## Overview of main.py
@@ -34,6 +36,25 @@ The `main.py` script is the core of the infographic creation process. It orchest
 - **Image Generation**: Uses the OpenAI API to generate images based on key points and flow steps, specifying styles, layouts, and color palettes.
 - **File Handling**: Saves images locally in a specified output directory, ensuring the directory exists before saving files.
 - **Airtable Integration**: Uses the Airtable API to upload images as attachments to records in a specified table, iterating over all files in the output directory.
+
+## Running
+
+```bash
+cd infographic_flow && pip install -e . && cd ..
+python main.py
+```
+
+Run it from this folder (`crewai_infographic_creation`). Set these in a `.env` file:
+
+```
+OPENAI_API_KEY=sk-...
+OPENAI_ORGANIZATION=org-...   # optional
+AIRTABLE_API_KEY=pat...       # optional: if the three Airtable values are missing, the upload is skipped
+AIRTABLE_BASE_ID=app...
+AIRTABLE_TABLE_ID=tbl...
+```
+
+Images are saved to `images_infographic_output/`. The Airtable table needs an `image_name` text field and an `Attachments` attachment field.
 
 ### Error Handling
 The script includes try-except blocks to handle potential errors during image generation and file reading, ensuring that the process continues even if some operations fail.

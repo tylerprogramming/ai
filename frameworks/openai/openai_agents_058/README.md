@@ -14,7 +14,7 @@ Each script is under 80 lines and meant to be read top to bottom on screen.
 | `03_subagents.py` | Demo 3 | `multi_agent.enabled` on a hosted sandbox. The harness spawns parallel subagents; you watch them in the event stream. | You want fan-out without writing an orchestrator. |
 | `04_self_hosted.py` | Demo 4 | Same create call as demo 1 with `environment: self_hosted` pointed at a folder on your disk. Prints the ids and the `codex exec-server` command to run next. | You want the commands to run on your machine, not in a container. |
 | `self_hosted/` | Demo 4 kit | `create_session.py`, `send.py`, `stream.py`, `sessions.py` (list, cost, cancel, delete), a sample `workspace/`, `EXAMPLES.md` with messages to send, and a README that explains self-hosting and walks the three terminals. | Following the self-hosted demo end to end. |
-| `pyproject.toml`, `uv.lock` | Deps | `openai>=3.14`, `python-dotenv`. Python 3.11+. | Installing. |
+| `pyproject.toml`, `uv.lock` | Deps | `openai>=3.35,<4`, `python-dotenv`. Python 3.11+. | Installing. |
 | `.env.example` | Secrets | Template for `OPENAI_API_KEY`. Copy to `.env`, never commit `.env`. | Before the first run. |
 | `AGENTS.md` | Agent context | Layout, commands, rules, and the verified API shapes for any coding agent working in this folder. Read by Codex, Hermes, and (via import) Claude Code. | You ask an agent to add or change a demo. |
 | `CLAUDE.md` | Agent context | `@AGENTS.md` plus two Claude Code specifics. | Same. |
@@ -48,7 +48,7 @@ With pip:
 cd openai_agents_058
 cp .env.example .env        # then paste your key into .env
 python -m venv .venv && source .venv/bin/activate
-pip install "openai>=3.14" python-dotenv
+pip install "openai>=3.35,<4" python-dotenv
 ```
 
 ## Run

@@ -1,3 +1,4 @@
+import asyncio
 import os
 from dotenv import load_dotenv
 
@@ -24,7 +25,7 @@ def main():
 
     # ai agents summarize/translate
     autogen_interaction = AutoGenInteraction(api_key=openai_api_key, transcription=transcription)
-    autogen_interaction.initiate_chat()
+    asyncio.run(autogen_interaction.initiate_chat())
     print("Chat completed.")
 
 

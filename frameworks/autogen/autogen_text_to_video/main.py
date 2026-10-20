@@ -1,5 +1,4 @@
 import torch
-import cv2
 from diffusers import DiffusionPipeline, DPMSolverMultistepScheduler
 from diffusers.utils import export_to_video
 
@@ -16,7 +15,7 @@ pipe.enable_model_cpu_offload()
 
 # memory optimization
 pipe.unet.enable_forward_chunking(chunk_size=1, dim=1)
-pipe.enable_vae_slicing()
+pipe.vae.enable_slicing()  # pipe.enable_vae_slicing() was removed in newer diffusers
 
 # prompt = "spiderman surfing a wave"
 # video_frames = pipe(prompt, num_frames=24).frames[0]

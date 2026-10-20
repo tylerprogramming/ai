@@ -5,7 +5,8 @@
   python3 jev_vs_llm.py email.txt       # any text file
   python3 jev_vs_llm.py email.txt --llm-only   # skip Jev (saves quota while iterating)
 
-Keys: OPENAI_API_KEY and TYPESAFE_API_KEY, read from ~/.hermes/.env then ~/.claude/.env.
+Requires: pip install "openai>=3.35,<4"   (the Jev side is standard library only)
+Keys: OPENAI_API_KEY and TYPESAFE_API_KEY, from the environment, else ~/.hermes/.env then ~/.claude/.env.
 Jev side goes through the jev-agent.com gateway (field-for-field the TypeSafe API; swap host
 and key when a TypeSafe key arrives). LLM side uses OpenAI structured outputs so the answer
 shape matches Jev's and the comparison is fair: one call, JSON out, no retries.

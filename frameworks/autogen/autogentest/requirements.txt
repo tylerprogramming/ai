@@ -1,0 +1,11 @@
+# Install with: pip install -r requirements.txt
+autogen-agentchat~=0.7.5
+autogen-ext[openai]~=0.7.5
+python-dotenv
+# Used by the code the agents generate (code/ and feedback/ folders)
+APScheduler
+beautifulsoup4
+flask
+matplotlib
+pandas
+requests

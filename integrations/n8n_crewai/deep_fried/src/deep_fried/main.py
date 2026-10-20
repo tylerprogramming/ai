@@ -1,6 +1,4 @@
 #!/usr/bin/env python
-from random import randint
-
 from pydantic import BaseModel
 
 from crewai.flow.flow import Flow, listen, start
@@ -35,7 +33,19 @@ class DeepFriedFlow(Flow[DeepFriedState]):
         self.state.response = result.raw
         return self.state.response
 
-def kickoff(data):
+# Sample feedback (the same shape n8n sends) so `kickoff` also works on its own
+SAMPLE_DATA = {
+    "arrival_rating": 3,
+    "comments": "Please...no...",
+    "feedback": "It wasn't even fried....",
+    "overall": 2,
+    "timestamp": "12/12/2024 16:46:12",
+}
+
+
+def kickoff(data=None):
+    if data is None:  # only the CLI uses the sample; an empty request stays empty
+        data = SAMPLE_DATA
     deep_fried_flow = DeepFriedFlow()
     result = deep_fried_flow.kickoff(inputs={
         "arrival_rating": data.get("arrival_rating"), 
@@ -46,6 +56,10 @@ def kickoff(data):
     })
     
     return result
+
+def plot():
+    DeepFriedFlow().plot()
+
 
 if __name__ == "__main__":
     kickoff()

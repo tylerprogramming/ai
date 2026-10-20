@@ -7,7 +7,7 @@ import os
 from pyairtable import Api
 from pathlib import Path
 
-from crewai.flow import Flow, listen, start, or_
+from crewai.flow import Flow, listen, start, and_
 from .crews.infographic_research_crew.infographic_research_crew import InfographicResearchCrew
 
 load_dotenv()
@@ -33,10 +33,10 @@ class InfographicState(BaseModel):
     infographic_steps: InfographicStepList = InfographicStepList(steps=[])
     image_resolution: str = "1536x1024"
     image_quality: str = "high"
-    image_model: str = "gpt-image-1"
-    airtable_api_key: str = os.getenv("AIRTABLE_API_KEY")
-    airtable_base_id: str = os.getenv("AIRTABLE_BASE_ID")
-    airtable_table_id: str = os.getenv("AIRTABLE_TABLE_ID")
+    image_model: str = "gpt-image-2.5-flare"  # gpt-image-1 shuts down 2026-10-23; OpenAI recommends the gpt-image-2.5 models
+    airtable_api_key: str | None = os.getenv("AIRTABLE_API_KEY")
+    airtable_base_id: str | None = os.getenv("AIRTABLE_BASE_ID")
+    airtable_table_id: str | None = os.getenv("AIRTABLE_TABLE_ID")
     output_dir: str = "images_infographic_output"
 
 class InfographicFlow(Flow[InfographicState]):
@@ -65,7 +65,7 @@ class InfographicFlow(Flow[InfographicState]):
                     quality=self.state.image_quality,
                 )
 
-                self.save_image_locally(self, keypoint.image_name, result)
+                self.save_image_locally(keypoint.image_name, result)
             except Exception as e:
                 print(f"Error generating image: {e}")
                 continue
@@ -76,7 +76,7 @@ class InfographicFlow(Flow[InfographicState]):
             with open(__file__, 'r') as file:
                 contents = file.read()
                 
-            completion = client.beta.chat.completions.parse(
+            completion = client.chat.completions.parse(
                 model="gpt-5.4-mini",
                 messages=[
                     {"role": "system", "content": "I need all the steps simplified in under 5 words of the flow involved in the crewai flow file provided.  Only return the steps, no other text."},
@@ -85,7 +85,7 @@ class InfographicFlow(Flow[InfographicState]):
                 response_format=InfographicStepList,
             )
 
-            self.state.infographic_steps = completion.choices[0].message.parsed.steps
+            self.state.infographic_steps = completion.choices[0].message.parsed
 
             result = client.images.generate(
                 model=self.state.image_model,
@@ -95,13 +95,13 @@ class InfographicFlow(Flow[InfographicState]):
                 quality=self.state.image_quality,
             )
 
-            self.save_image_locally(self, "infographic_flow", result)
+            self.save_image_locally("infographic_flow", result)
         except Exception as e:
             print(f"An error occurred while reading the file: {e}")
         
         print(self.state)
 
-    @listen(or_(generate_infographic_images, generate_infographic_flow_steps))
+    # Helper (not a flow step): called by the two image steps above
     def save_image_locally(self, image_name, result):
         print(f"Saving image: {image_name}")
         image_base64 = result.data[0].b64_json
@@ -113,8 +113,13 @@ class InfographicFlow(Flow[InfographicState]):
         with open(f"{self.state.output_dir}/{image_name}.png", "wb") as f:
             f.write(image_bytes)
 
-    @start()
+    # Runs once both image steps are done, so the new images get uploaded
+    @listen(and_(generate_infographic_images, generate_infographic_flow_steps))
     def save_flow_to_airtable(self):
+        if not (self.state.airtable_api_key and self.state.airtable_base_id and self.state.airtable_table_id):
+            print("Airtable env vars not set - skipping upload (images are saved locally).")
+            return
+
         api = Api(self.state.airtable_api_key)
         base = api.base(self.state.airtable_base_id)
         table = base.table(self.state.airtable_table_id)
@@ -136,7 +141,7 @@ class InfographicFlow(Flow[InfographicState]):
                         filename=f"{directory_path}/{file_path.name}",
                     )
 
-def kickoff(topic: str):
+def kickoff(topic: str = "The best way to learn a new language"):
     infographic_flow = InfographicFlow()
     infographic_flow.kickoff(inputs={"infographic_topic": topic})
 

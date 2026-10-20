@@ -194,7 +194,8 @@ if __name__ == "__main__":
 """
 
 result = client.images.generate(
-    model="gpt-image-1",
+    # gpt-image-1 shuts down 2026-10-23; OpenAI recommends the gpt-image-2.5 models (flare: fast, everyday images)
+    model="gpt-image-2.5-flare",
     prompt=prompt
 )
 

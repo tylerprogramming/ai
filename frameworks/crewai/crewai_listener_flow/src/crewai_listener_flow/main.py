@@ -2,8 +2,8 @@
 from random import randint
 from pydantic import BaseModel
 from crewai.flow import Flow, listen, start
-from src.crewai_listener_flow.crews.poem_crew.poem_crew import PoemCrew
-from src.crewai_listener_flow.listeners import my_custom_listener
+from crewai_listener_flow.crews.poem_crew.poem_crew import PoemCrew
+from crewai_listener_flow.listeners import my_custom_listener
 
 listener = my_custom_listener
 

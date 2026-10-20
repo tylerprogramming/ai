@@ -42,16 +42,21 @@ A collection of AI agent projects, framework tutorials, and integrations. This i
 └── claude_skill_agent_builder/  # Claude skill for building AI agents
 ```
 
-## Framework Versions (September 2026)
+## Framework Versions (October 2026)
 
-| Framework | Version | Highlights |
-|-----------|---------|------------|
-| **AutoGen** | v0.7+ | ⚠️ Breaking change from v0.2! New async API, event-driven |
-| **CrewAI** | v1.15+ | Conversational flows, LLM overlay, streaming |
-| **PydanticAI** | v2.46+ | TypeSafe models, realtime sessions, tools with context |
-| **Smolagents** | v1.26+ | Code agents, Exa search, improved executors |
-| **OpenAI Agents** | v0.58+ | Hosted sandbox, streaming, subagents |
-| **AgentOps** | Latest | Agent monitoring and observability |
+Every project in the repo was updated for these versions and smoke-tested offline (LLM calls faked; external services stubbed). A few projects run on older pins because of upstream caps: CrewAI 1.15 requires `openai<3` and `mcp~=1.28`, litellm requires `openai<3`, and the archived Swarm needs `openai` 3.3.
+
+| Framework | Package / version | Highlights |
+|-----------|-------------------|------------|
+| **AutoGen** | `autogen-agentchat` 0.7.5 | ⚠️ Breaking change from v0.2! New async API, event-driven |
+| **CrewAI** | `crewai[tools]` 1.15 | Conversational flows, LLM overlay, streaming |
+| **PydanticAI** | `pydantic-ai` 2.58 | Typed outputs (`output_type`), tools with context, streaming |
+| **Smolagents** | `smolagents` 1.26 | Code agents, managed agents, LiteLLM models |
+| **OpenAI Agents SDK** | `openai-agents` 0.24 | Agents, tools, handoffs |
+| **OpenAI Agents API** (hosted) | `openai` 3.35 | Hosted sandbox, sessions, subagents (`openai_agents_058`) |
+| **AgentOps** | `agentops` 0.4 | Agent monitoring and observability |
+
+Default model in the examples is `gpt-5.4-mini`. Image examples use `gpt-image-2.5-flare` / `-sunburst` (`gpt-image-1` shuts down 2026-10-23).
 
 ## Framework Quick Reference
 
@@ -61,14 +66,21 @@ The old `import autogen` API is deprecated. New pattern:
 
 ```python
 from autogen_agentchat.agents import AssistantAgent
+from autogen_agentchat.ui import Console
 from autogen_ext.models.openai import OpenAIChatCompletionClient
 
-model_client = OpenAIChatCompletionClient(model="gpt-5.4-mini")
+model_client = OpenAIChatCompletionClient(
+    model="gpt-5.4-mini",
+    # AutoGen 0.7.5 predates gpt-5.4-mini, so its capabilities must be given explicitly
+    model_info={"vision": True, "function_calling": True, "json_output": True, "family": "gpt-5", "structured_output": True},
+)
 agent = AssistantAgent(name="my_agent", model_client=model_client)
-await agent.run_stream(task="...")
+await Console(agent.run_stream(task="..."))  # or: result = await agent.run(task="...")
 ```
 
 See `frameworks/autogen/autogen_v07_quickstart/` for examples.
+
+All AutoGen examples in this repo use the v0.7 API. Many were first recorded on AutoGen 0.2, so the code may differ from what's on screen in older videos.
 
 ### CrewAI v1.15+
 
@@ -84,8 +96,9 @@ See `frameworks/crewai/crewai_v115_features/` for new features.
 ```python
 from pydantic_ai import Agent
 
-agent = Agent("openai:gpt-5.4-mini", result_type=MyModel)
+agent = Agent("openai:gpt-5.4-mini", output_type=MyModel)
 result = await agent.run("...")
+print(result.output)
 ```
 
 See `frameworks/pydanticai/pydanticai_v2_features/` for examples.
@@ -98,7 +111,7 @@ See `frameworks/pydanticai/pydanticai_v2_features/` for examples.
 
 ### Prerequisites
 
-- Python 3.10+
+- Python 3.11–3.13 (3.12 recommended; CrewAI doesn't support 3.14 yet)
 - [Ollama](https://ollama.com/) (for local LLMs)
 - [LM Studio](https://lmstudio.ai/) (alternative local LLM option)
 
@@ -114,7 +127,7 @@ Most examples are standalone. Navigate to a project folder and run:
 
 ```bash
 cd frameworks/crewai/crewai_first_crew
-pip install -r requirements.txt  # if exists
+pip install -r requirements.txt
 python main.py
 ```
 

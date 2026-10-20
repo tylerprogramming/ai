@@ -77,9 +77,10 @@ class GuideCreatorFlow(Flow[GuideCreatorState]):
         # Make the LLM call with JSON response format
         response = llm.call(messages=messages)
 
-        # Parse the JSON response
-        outline_dict = json.loads(response)
-        self.state.guide_outline = GuideOutline(**outline_dict)
+        # CrewAI 1.x returns a GuideOutline instance when response_format is a Pydantic model
+        outline = response if isinstance(response, GuideOutline) else GuideOutline.model_validate_json(response)
+        outline_dict = outline.model_dump()
+        self.state.guide_outline = outline
 
         # Ensure output directory exists before saving
         os.makedirs("output", exist_ok=True)
@@ -141,12 +142,11 @@ class GuideCreatorFlow(Flow[GuideCreatorState]):
             # Print the result to debug
             print("LLM Result:", result)
 
-            # Parse the JSON response
-            outline_dict = json.loads(result)
-            print(outline_dict)
+            # CrewAI 1.x returns a SectionContent instance when response_format is a Pydantic model
+            section_content = result if isinstance(result, SectionContent) else SectionContent.model_validate_json(result)
 
             # Store the content
-            self.state.sections_content[section.title] = outline_dict["content"]
+            self.state.sections_content[section.title] = section_content.content
             completed_sections.append(section.title)
             print(f"Section completed: {section.title}")
 
@@ -179,8 +179,8 @@ def kickoff():
 def plot():
     """Generate a visualization of the flow"""
     flow = GuideCreatorFlow()
-    flow.plot("guide_creator_flow")
-    print("Flow visualization saved to guide_creator_flow.html")
+    path = flow.plot("guide_creator_flow.html")  # CrewAI 1.x returns the saved path and opens it
+    print(f"Flow visualization saved to {path}")
 
 if __name__ == "__main__":
     kickoff()

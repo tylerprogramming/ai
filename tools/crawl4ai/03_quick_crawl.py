@@ -31,10 +31,9 @@ async def crawl_parallel(urls: List[str], max_concurrent: int = 3):
             batch = urls[i : i + max_concurrent]
             tasks = []
 
-            for j, url in enumerate(batch):
-                # Unique session_id per concurrent sub-task
-                session_id = f"parallel_session_{i + j}"
-                task = crawler.arun(url=url, config=crawl_config, session_id=session_id)
+            for url in batch:
+                # Each arun() gets its own browser page, so the calls can run concurrently
+                task = crawler.arun(url=url, config=crawl_config)
                 tasks.append(task)
 
             # Gather results

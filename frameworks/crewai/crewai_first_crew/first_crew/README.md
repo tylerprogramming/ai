@@ -20,7 +20,7 @@ crewai install
 ```
 ### Customizing
 
-**Add your `OPENAI_API_KEY` into the `.env` file**
+**Add your `OPENAI_API_KEY` into the `.env` file** (the agents use `gpt-5.4-mini`, set with `llm:` in `config/agents.yaml`)
 
 - Modify `src/first_crew/config/agents.yaml` to define your agents
 - Modify `src/first_crew/config/tasks.yaml` to define your tasks

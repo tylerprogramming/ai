@@ -1,3 +1,4 @@
+import re
 from openai import OpenAI
 import base64
 from dotenv import load_dotenv
@@ -15,7 +16,7 @@ class PixelArtImagePrompt(BaseModel):
 class PixelArtImagePromptList(BaseModel):
     image_prompts: list[PixelArtImagePrompt]
 
-completion = client.beta.chat.completions.parse(
+completion = client.chat.completions.parse(
     model="gpt-5.4-mini",
     messages=[
         {"role": "system", "content": "I need 3 different prompts for images of the code presented.  I need the first image prompt to be an overview of the code.  The second image prompt should be for creating an image of the workflow.  The third image prompt should be a detailed description of the code."},
@@ -206,7 +207,8 @@ image_prompts = completion.choices[0].message.parsed.image_prompts
 for image_prompt in image_prompts:
     try:
         result = client.images.generate(
-            model="gpt-image-1",
+            # gpt-image-1 shuts down 2026-10-23; OpenAI recommends the gpt-image-2.5 models (flare: fast, everyday images)
+            model="gpt-image-2.5-flare",
             prompt=f"generate an illustration with icons of: {image_prompt.image_prompt}",
             size="1024x1024",
             # background="transparent",
@@ -217,7 +219,9 @@ for image_prompt in image_prompts:
         image_bytes = base64.b64decode(image_base64)
 
         # Save the image to a file
-        with open(f"images_pixel_art_output/{image_prompt.image_name}.png", "wb") as f:
+        # image_name comes from the model, so keep only a safe file name (no "../" or paths)
+        safe_name = re.sub(r"[^A-Za-z0-9_-]", "_", os.path.basename(image_prompt.image_name)) or "image"
+        with open(f"images_pixel_art_output/{safe_name}.png", "wb") as f:
             f.write(image_bytes)
     except Exception as e:
         print(f"Error generating image: {e}")

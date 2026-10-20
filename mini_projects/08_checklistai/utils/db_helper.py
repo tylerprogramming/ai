@@ -2,7 +2,7 @@ from datetime import datetime
 from db.models import db, Checklist, ChecklistItem
 
 def delete_checklist_item(item_id):
-    item = ChecklistItem.query.get(item_id)
+    item = db.session.get(ChecklistItem, item_id)
     if item:
         db.session.delete(item)
         db.session.commit()
@@ -14,7 +14,7 @@ def add_checklist_item(checklist_id, content):
         db.session.commit()
 
 def update_checklist_item(item_id, content):
-    item = ChecklistItem.query.get(item_id)
+    item = db.session.get(ChecklistItem, item_id)
     if item:
         item.content = content
         db.session.commit()

@@ -1,10 +1,11 @@
+import asyncio
 import json
-import os
 from datetime import datetime
 
-import autogen
 import dotenv
 import streamlit as st
+from autogen_agentchat.agents import AssistantAgent
+from autogen_ext.models.openai import OpenAIChatCompletionClient
 from langchain.chains import ConversationalRetrievalChain
 from langchain.memory import ConversationBufferMemory
 from langchain.text_splitter import RecursiveCharacterTextSplitter
@@ -14,7 +15,92 @@ from langchain_community.vectorstores import Chroma
 from langchain_openai import OpenAI
 from typing_extensions import Annotated
 
-dotenv.load_dotenv()
+dotenv.load_dotenv()  # OPENAI_API_KEY from .env
+
+
+async def create_question(qa, file_name):
+    """Have the agents write a multiple choice question from the PDF and save it to file_name as json."""
+    # set the model client for autogen
+    model_client = OpenAIChatCompletionClient(
+        model="gpt-5.4-mini",
+        # AutoGen 0.7.5 predates gpt-5.4-mini, so its capabilities must be given explicitly
+        model_info={"vision": True, "function_calling": True, "json_output": True, "family": "gpt-5", "structured_output": True},
+        # GPT-5 models only accept the default temperature (and max_completion_tokens, not max_tokens), so the old GPT-4 sampling settings were dropped
+        seed=42,
+        timeout=600,
+    )
+
+    # the tools are plain functions with type hints, given to the agents that call them
+    def ask_question(question: Annotated[str, "The question to be asked"]) -> json:
+        """PDF Assistant."""
+        response = qa({"question": question})
+        current_json = json.dumps(response["answer"])
+        cleaner_json_content = current_json.replace("\\", "").replace("\n", "")
+        return json.dumps(cleaner_json_content)
+
+    def json_format(mcq: Annotated[str, "The converted json to be saved"]) -> str:
+        """JSON Formatter"""
+        with open(file_name, 'w') as json_file:
+            json.dump(mcq, json_file, indent=2)
+        return mcq
+
+    # create an AssistantAgent instance "assistant"
+    assistant = AssistantAgent(
+        name="assistant",
+        system_message="As the assistant agent, the question, multiple choice answers, the answer to the "
+                       "question, and the reason should be put into json format and returned in proper format.",
+        model_client=model_client,
+        tools=[ask_question],
+        reflect_on_tool_use=True,
+    )
+
+    json_assistant = AssistantAgent(
+        name="json_assistant",
+        system_message="As the json assistant agent, my only purpose is to take the response from the assistant "
+                       "agent,"
+                       "and format the question, multiple choices answers, the answer to the question and the "
+                       "reason"
+                       "and put them into a json format.",
+        model_client=model_client,
+        tools=[json_format],
+        reflect_on_tool_use=True,
+    )
+
+    converter = AssistantAgent(
+        name="converter",
+        system_message="I only convert the response given to me to json format, and that is all and return it.",
+        model_client=model_client,
+    )
+
+    # The old initiate_chats ran these chats one after another, carrying the earlier chats'
+    # results over into the next one. Here each agent gets its message plus that carryover.
+    chats = [
+        (assistant, """
+            Find the answers to the question below from the uploaded PDF and do not write any code.
+
+            1. Can you give me a multiple choice question from the pdf with 4 choices and 1 of them being the answer?  Also give the reason for the answer and the page it was found on.
+            2. Make all the choices under the property choices, and the answer to be called correct_answer
+        """, []),
+        (converter, """
+            The only job here is to convert the json from previous agent into json format 
+            and also remove newline characters and return updated json format.
+        """, []),
+        (json_assistant, """
+            Take the context from the assistant and convert it to json and save it to disk to a 
+            json file in this directory.
+         """, ["I want to save this to disk with the name tester.json"]),
+    ]
+
+    carryover = []
+    try:
+        for agent, message, extra_carryover in chats:
+            context = "\n".join(extra_carryover + carryover)
+            task = f"{message}\nContext:\n{context}" if context else message
+            result = await agent.run(task=task)
+            carryover.append(result.messages[-1].to_text())  # like summary_method="last_msg"
+    finally:
+        await model_client.close()
+
 
 with st.sidebar:
     uploaded_file = st.file_uploader("Upload a PDF file", type=["pdf"])
@@ -54,106 +140,8 @@ if uploaded_file is not None:
             memory=ConversationBufferMemory(memory_key="chat_history", return_messages=True)
         )
 
-        # set config for autogen
-        config_list = [
-            {
-                # "base_url": os.getenv("BASE_URL"),
-                "api_key": os.getenv("OPENAI_API_KEY"),
-                "model": "gpt-5.4-mini"
-            }
-        ]
-
-        # set autogen user agent and assistant agent with function calling
-        llm_config = {
-            "timeout": 600,
-            "seed": 42,
-            "config_list": config_list,
-            "temperature": 0,
-        }
-
-        # create an AssistantAgent instance "assistant"
-        assistant = autogen.AssistantAgent(
-            name="assistant",
-            system_message="As the assistant agent, the question, multiple choice answers, the answer to the "
-                           "question, and the reason should be put into json format and returned in proper format.",
-            llm_config=llm_config,
-        )
-
-        json_assistant = autogen.AssistantAgent(
-            name="json_assistant",
-            system_message="As the json assistant agent, my only purpose is to take the response from the assistant "
-                           "agent,"
-                           "and format the question, multiple choices answers, the answer to the question and the "
-                           "reason"
-                           "and put them into a json format.",
-            llm_config=llm_config
-        )
-
-        converter = autogen.AssistantAgent(
-            name="converter",
-            system_message="I only convert the response given to me to json format, and that is all and return it.",
-            llm_config=llm_config
-        )
-
-        # create a UserProxyAgent instance "user_proxy"
-        user_proxy = autogen.UserProxyAgent(
-            name="user_proxy",
-            human_input_mode="NEVER",
-            max_consecutive_auto_reply=1,
-            code_execution_config=False,
-            llm_config=llm_config
-        )
-
-
-        @user_proxy.register_for_execution()
-        @assistant.register_for_llm(description="PDF Assistant.")
-        def ask_question(question: Annotated[str, "The question to be asked"]) -> json:
-            response = qa({"question": question})
-            current_json = json.dumps(response["answer"])
-            cleaner_json_content = current_json.replace("\\", "").replace("\n", "")
-            return json.dumps(cleaner_json_content)
-
-
-        @user_proxy.register_for_execution()
-        @json_assistant.register_for_llm(description="JSON Formatter")
-        def json_format(mcq: Annotated[str, "The converted json to be saved"]) -> str:
-            with open(file_name, 'w') as json_file:
-                json.dump(mcq, json_file, indent=2)
-            return mcq
-
-
-        chat_results = user_proxy.initiate_chats(
-            [
-                {
-                    "recipient": assistant,
-                    "message": """
-                        Find the answers to the question below from the {uploaded_file} and do not write any code.
-        
-                        1. Can you give me a multiple choice question from the pdf with 4 choices and 1 of them being the answer?  Also give the reason for the answer and the page it was found on.
-                        2. Make all the choices under the property choices, and the answer to be called correct_answer
-                    """,
-                    "clear_history": True,
-                    "silent": False,
-                },
-                {
-                    "recipient": converter,
-                    "message": """
-                        The only job here is to convert the json from previous agent into json format 
-                        and also remove newline characters and return updated json format.
-                    """,
-                    "summary_method": "last_msg"
-                },
-                {
-                    "recipient": json_assistant,
-                    "message": """
-                        Take the context from the assistant and convert it to json and save it to disk to a 
-                        json file in this directory.
-                     """,
-                    "summary_method": "reflection_with_llm",
-                    "carryover": "I want to save this to disk with the name tester.json"
-                }
-            ]
-        )
+        # AutoGen v0.7 is async, so run the agents with asyncio.run inside the Streamlit script
+        asyncio.run(create_question(qa, file_name))
 
         # Read JSON data from the file
         with open(file_name, 'r') as json_file:

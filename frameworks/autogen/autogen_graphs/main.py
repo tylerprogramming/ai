@@ -1,28 +1,29 @@
-import autogen
+import asyncio
 
-config_list = autogen.config_list_from_json(
-    "OAI_CONFIG_LIST.json",
-    filter_dict={
-        "model": ["gpt-5.4-mini"],
-    },
-)
+from dotenv import load_dotenv
+from autogen_agentchat.agents import AssistantAgent, CodeExecutorAgent
+from autogen_agentchat.conditions import SourceMatchTermination, MaxMessageTermination
+from autogen_agentchat.teams import SelectorGroupChat
+from autogen_agentchat.ui import Console
+from autogen_ext.code_executors.local import LocalCommandLineCodeExecutor
+from autogen_ext.models.openai import OpenAIChatCompletionClient
 
-llm_config = {
-    "cache_seed": 42,
-    "temperature": 0,
-    "config_list": config_list,
-    "timeout": 120,
-}
+load_dotenv()  # OPENAI_API_KEY from .env
 
-initializer = autogen.UserProxyAgent(
-    name="Init",
-    code_execution_config=False
-)
 
-coder = autogen.AssistantAgent(
-    name="coder",
-    llm_config=llm_config,
-    system_message="""
+async def main():
+    model_client = OpenAIChatCompletionClient(
+        model="gpt-5.4-mini",
+        # AutoGen 0.7.5 predates gpt-5.4-mini, so its capabilities must be given explicitly
+        model_info={"vision": True, "function_calling": True, "json_output": True, "family": "gpt-5", "structured_output": True},
+        # GPT-5 models only accept the default temperature (and max_completion_tokens, not max_tokens), so the old GPT-4 sampling settings were dropped
+        timeout=120,
+    )
+
+    coder = AssistantAgent(
+        name="coder",
+        model_client=model_client,
+        system_message="""
     Make sure to save the code to disk.
     You are the Coder. Given a topic, write code to retrieve related papers from the arXiv API, 
     print their title, authors, abstract, and link. You write python/shell code to solve tasks. Wrap the code in a 
@@ -34,50 +35,60 @@ coder = autogen.AssistantAgent(
     the task is not solved even after the code is executed successfully, analyze the problem, revisit your 
     assumption, collect additional info you need, and think of a different approach to try.
     """,
-)
+    )
 
-executor = autogen.UserProxyAgent(
-    name="executor",
-    system_message="Executor. Execute the code written by the Coder and report the result.",
-    human_input_mode="NEVER",
-    code_execution_config={
-        "last_n_messages": 3,
-        "work_dir": "paper",
-        "use_docker": False,
-    },
-)
-scientist = autogen.AssistantAgent(
-    name="scientist",
-    llm_config=llm_config,
-    system_message="""You are the Scientist. Please categorize papers after seeing their abstracts printed and create 
+    # Executor. Executes the code written by the Coder (saved in the "paper" folder) and reports the result.
+    executor = CodeExecutorAgent(
+        "executor",
+        # cleanup_temp_files=False keeps the files the agents write (v0.7 deletes them by default)
+        code_executor=LocalCommandLineCodeExecutor(work_dir="paper", cleanup_temp_files=False),
+    )
+
+    scientist = AssistantAgent(
+        name="scientist",
+        model_client=model_client,
+        system_message="""You are the Scientist. Please categorize papers after seeing their abstracts printed and create 
     a markdown table with Domain, Title, Authors, Summary and Link""",
-)
+    )
 
+    # Our own speaker selection: decides who talks next based on who spoke last.
+    # The task message (source "user") plays the role of the old "Init" agent.
+    def state_transition(messages):
+        last_speaker = messages[-1].source
 
-def state_transition(last_speaker, groupchat):
-    messages = groupchat.messages
-
-    if last_speaker is initializer:
-        return coder
-    elif last_speaker is coder:
-        return executor
-    elif last_speaker is executor:
-        if "exitcode: 1" in messages[-1]["content"]:
-            return coder
-        else:
-            return scientist
-    elif last_speaker is scientist:
+        if last_speaker == "user":
+            return "coder"
+        elif last_speaker == "coder":
+            return "executor"
+        elif last_speaker == "executor":
+            # the code failed (or there was no code to run) -> back to the coder to fix it
+            result = messages[-1].to_text()
+            failed = (
+                "exited with an error" in result
+                or "No code blocks found" in result
+                or ("produced no output" in result and "exit code was: 0" not in result)
+            )
+            if failed:
+                return "coder"
+            else:
+                return "scientist"
         return None
 
+    # The chat ends after the scientist has written the table (or after 20 messages)
+    termination = SourceMatchTermination(["scientist"]) | MaxMessageTermination(20)
 
-groupchat = autogen.GroupChat(
-    agents=[initializer, coder, executor, scientist],
-    messages=[],
-    max_round=20,
-    speaker_selection_method=state_transition,
-)
-manager = autogen.GroupChatManager(groupchat=groupchat, llm_config=llm_config)
+    groupchat = SelectorGroupChat(
+        [coder, executor, scientist],
+        model_client=model_client,
+        selector_func=state_transition,
+        termination_condition=termination,
+    )
 
-initializer.initiate_chat(
-    manager, message="Topic: LLM applications papers from last week. Requirement: 5 - 10 papers from different domains."
-)
+    await Console(groupchat.run_stream(
+        task="Topic: LLM applications papers from last week. Requirement: 5 - 10 papers from different domains."
+    ))
+    await model_client.close()
+
+
+if __name__ == "__main__":
+    asyncio.run(main())

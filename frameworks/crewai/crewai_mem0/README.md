@@ -1,5 +1,7 @@
-# agenttests
-Testing this project
+# CrewAI + mem0
+A joke-writing CrewAI agent that saves its jokes to [mem0](https://github.com/mem0ai/mem0) long-term memory (Qdrant vector store) through custom `@tool`s in `src/tools/mem0_tool.py`.
+
+> **Note:** Updated for CrewAI 1.15 and mem0ai 2.2; the code may differ slightly from the video.
 
 ~~ Built with AgentStack ~~
 
@@ -18,10 +20,12 @@ Similarly, tasks can be created with `agentstack g t <tool_name>`
 Add tools with `agentstack tools add <tool_name>` and view tools available with `agentstack tools list`
 
 ## How to use your Crew
+Copy `.env.example` to `.env` and fill in `OPENAI_API_KEY` and your Qdrant `QDRANT_URL`, `QDRANT_API_KEY` and `QDRANT_COLLECTION_NAME`.
+
 In this directory, run `poetry install`  
 
 To run your project, use the following command:  
-`crewai run` or `python src/main.py`
+`poetry run python src/main.py`
 
 This will initialize your crew of AI agents and begin task execution as defined in your configuration in the main.py file.
 

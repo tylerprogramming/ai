@@ -1,0 +1,13 @@
+# Install with: pip install -r requirements.txt
+# Also needs FFmpeg installed (pydub reads the meeting audio)
+crewai[tools]>=1.15,<2
+google-api-python-client>=2.201,<3
+google-auth>=2.62,<3
+google-auth-oauthlib>=1.5,<2
+llama-cloud>=2.18,<3
+openai>=2.30,<3
+pyairtable>=3.5,<4
+pydub
+audioop-lts; python_version >= "3.13"  # pydub needs audioop, removed from the stdlib in Python 3.13
+python-dotenv
+requests

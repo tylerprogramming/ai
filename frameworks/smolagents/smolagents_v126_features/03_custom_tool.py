@@ -4,7 +4,44 @@ Smolagents Custom Tool Example
 Creating custom tools for agents.
 """
 
+import ast
+import operator
+
 from smolagents import CodeAgent, Tool, LiteLLMModel
+
+# Safe arithmetic: walk the expression's syntax tree and allow only numbers,
+# arithmetic operators and a few math functions. No eval() on model input.
+_OPERATORS = {
+    ast.Add: operator.add, ast.Sub: operator.sub, ast.Mult: operator.mul,
+    ast.Div: operator.truediv, ast.FloorDiv: operator.floordiv, ast.Mod: operator.mod,
+    ast.Pow: operator.pow, ast.USub: operator.neg, ast.UAdd: operator.pos,
+}
+_FUNCTIONS = {"abs": abs, "round": round, "min": min, "max": max, "sum": sum, "pow": pow}
+
+
+def safe_eval(expression: str):
+    def _eval(node):
+        if isinstance(node, ast.Expression):
+            return _eval(node.body)
+        if isinstance(node, ast.Constant) and type(node.value) in (int, float):
+            return node.value
+        if isinstance(node, ast.BinOp) and type(node.op) in _OPERATORS:
+            left, right = _eval(node.left), _eval(node.right)
+            if isinstance(left, list) or isinstance(right, list):
+                raise ValueError("lists are only allowed as function arguments, e.g. sum([1, 2])")
+            if isinstance(node.op, ast.Pow) and abs(right) > 100:
+                raise ValueError("exponent too large")
+            return _OPERATORS[type(node.op)](left, right)
+        if isinstance(node, ast.UnaryOp) and type(node.op) in _OPERATORS:
+            return _OPERATORS[type(node.op)](_eval(node.operand))
+        if isinstance(node, (ast.List, ast.Tuple)):
+            return [_eval(e) for e in node.elts]
+        if (isinstance(node, ast.Call) and isinstance(node.func, ast.Name)
+                and node.func.id in _FUNCTIONS and not node.keywords):
+            return _FUNCTIONS[node.func.id](*[_eval(a) for a in node.args])
+        raise ValueError(f"unsupported expression: {ast.dump(node)[:60]}")
+
+    return _eval(ast.parse(expression, mode="eval"))
 
 
 class CalculatorTool(Tool):
@@ -22,11 +59,7 @@ class CalculatorTool(Tool):
 
     def forward(self, expression: str) -> str:
         try:
-            allowed_names = {
-                "abs": abs, "round": round, "min": min, "max": max,
-                "sum": sum, "pow": pow,
-            }
-            result = eval(expression, {"__builtins__": {}}, allowed_names)
+            result = safe_eval(expression)
             return f"Result: {result}"
         except Exception as e:
             return f"Error: {str(e)}"

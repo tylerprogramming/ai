@@ -1,2 +1,2 @@
-crewai
-crewai[tools]
+crewai>=1.15,<2
+python-dotenv>=1.2,<2

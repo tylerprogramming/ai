@@ -1,5 +1,9 @@
 from crewai import Agent, Task, Crew, Process, LLM
 from dotenv import load_dotenv
+
+# Load SUPABASE_URL / SUPABASE_KEY before the tools create their Supabase clients
+load_dotenv()
+
 from supabase_tools import (
     supabase_get_row_tool, 
     supabase_get_all_rows_tool, 
@@ -13,12 +17,11 @@ from crewai.knowledge.source.string_knowledge_source import StringKnowledgeSourc
 
 text_knowledge = open("knowledge/table_info.txt", "r").read()
 
+# Writes are confined to ./knowledge, so the agent updates knowledge/table_info.txt
 file_writer = FileWriterTool(
-    file_path="./knowledge/table_info.txt",
+    base_dir="./knowledge",
     name="Table Info"
 )
-
-load_dotenv()
 
 # Create instances of the tools
 get_row_tool = supabase_get_row_tool()  # Instantiate the tool
@@ -27,7 +30,8 @@ insert_row = supabase_insert_row_tool()
 delete_row = supabase_delete_row_tool()
 update_row = supabase_update_row_tool()
 
-llm = LLM(model="gpt-5.4-mini", temperature=0, api_key="sk-111")
+# GPT-5 models only accept the default temperature; the API key comes from OPENAI_API_KEY
+llm = LLM(model="gpt-5.4-mini")
 
 # Create an agent with supabase tools
 agent = Agent(
@@ -60,7 +64,9 @@ agent = Agent(
         that is not just retrieving data, then make sure you have the correct format for the tables with columns.  If
         the data coming in doesn't have all the necessary information but is also not needed, then fill in defaults.
         
-        If you need to update the table info, then use the file writer tool to update the file.
+        If you need to update the table info, then use the file writer tool to update the file:
+        write the full updated table info to filename "table_info.txt" with overwrite set to true
+        (the file already exists, and the tool refuses to replace it otherwise).
         
         Here is the table info:
         A list of tables and their columns: {text_knowledge}
@@ -87,6 +93,8 @@ crew = Crew(
 )
 
 while True:
-    question = input("Input: ")
+    question = input("Input (or 'exit'): ")
+    if question.strip().lower() in ("exit", "quit"):
+        break
     result = crew.kickoff(inputs={"question": question})
     print(result)

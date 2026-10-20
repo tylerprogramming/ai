@@ -1,3 +1,4 @@
+# Requires: pip install "crewai>=1.15,<2"  and OPENAI_API_KEY set in your environment
 from crewai import Agent, Crew, Process, Task
 from pydantic import BaseModel
 

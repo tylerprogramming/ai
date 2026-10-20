@@ -5,7 +5,7 @@ import logging
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from checklist_flow.src.checklist_flow.main import main
-from db.models import Checklist
+from db.models import db, Checklist
 
 logger = logging.getLogger(__name__)
 
@@ -40,7 +40,7 @@ def send_checklist_email(checklist_id, app):
     with app.app_context():
         logger.info(f"Attempting to send email for checklist ID: {checklist_id}")
         try:
-            checklist = Checklist.query.get(checklist_id)
+            checklist = db.session.get(Checklist, checklist_id)
             
             if checklist:
                 logger.info(f"Checklist found: {checklist.title}")

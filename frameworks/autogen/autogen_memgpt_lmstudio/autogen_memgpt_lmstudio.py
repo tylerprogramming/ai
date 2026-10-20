@@ -1,141 +1,128 @@
+import asyncio
 import os
-import autogen
-import dotenv
-from memgpt.autogen.memgpt_agent import create_memgpt_autogen_agent_from_config
-from memgpt.presets.presets import DEFAULT_PRESET
-from memgpt.constants import LLM_MAX_TOKENS
 
-dotenv.load_dotenv()
+from dotenv import load_dotenv
+from autogen_agentchat.agents import AssistantAgent, CodeExecutorAgent
+from autogen_agentchat.conditions import MaxMessageTermination
+from autogen_agentchat.teams import SelectorGroupChat
+from autogen_agentchat.ui import Console
+from autogen_core.memory import ListMemory, MemoryContent, MemoryMimeType
+from autogen_ext.code_executors.local import LocalCommandLineCodeExecutor
+from autogen_ext.models.openai import OpenAIChatCompletionClient
 
-LLM_BACKEND = os.getenv("LLM_BACKEND")
+load_dotenv()
 
-if LLM_BACKEND == "openai":
-    model = os.getenv("model")
+# "openai" uses OPENAI_API_KEY from .env, "local" uses the LM Studio server on your machine
+LLM_BACKEND = os.getenv("LLM_BACKEND", "local")
 
-    # assertion check to make sure you exported or set the key
-    openai_api_key = os.getenv("OPENAI_API_KEY")
-    assert openai_api_key, "You must set OPENAI_API_KEY to run this example"
-
-    # This config is for AutoGen agents that are not powered by MemGPT
-    config_list = [
-        {
-            "model": model,
-            "api_key": os.getenv("OPENAI_API_KEY"),
-        }
-    ]
-
-    # This config is for AutoGen agents that powered by MemGPT
-    config_list_memgpt = [
-        {
-            "model": model,
-            "context_window": LLM_MAX_TOKENS[model],
-            "preset": DEFAULT_PRESET,
-            "model_wrapper": None,
-            # new to 0.2.6 - open specific
-            "model_endpoint_type": "openai",
-            "model_endpoint": "https://api.openai.com/v1",
-            "openai_key": openai_api_key,
-        },
-    ]
-
-elif LLM_BACKEND == "local":
-    # Example using LM Studio on a local machine
-    # You will have to change the parameters based on your setup
-
-    # Non-MemGPT agents will still use local LLMs, but they will use the ChatCompletions endpoint
-    config_list = [
-        {
-            "model": "NULL",  # not needed
-            # NOTE: on versions of pyautogen < 0.2.0 use "api_base", and also uncomment "api_type"
-            # "api_base": "http://localhost:1234/v1",
-            # "api_type": "open_ai",
-            "base_url": "http://localhost:1234/v1",
-            "api_key": "NULL",  # not needed
-        },
-    ]
-
-    # MemGPT-powered agents will also use local LLMs, but they need additional setup (also they use the Completions
-    # endpoint)
-    config_list_memgpt = [
-        {
-            "preset": DEFAULT_PRESET,
-            "model": None,  # only required for Ollama, see: https://memgpt.readthedocs.io/en/latest/ollama/
-            "context_window": 8192,  # the context window of your model (for Mistral 7B-based models, it's likely 8192)
-            "model_wrapper": "airoboros-l2-70b-2.1",  # airoboros is the default wrapper and should work for most models
-            "model_endpoint_type": "lmstudio",  # can use webui, ollama, llamacpp, etc.
-            "model_endpoint": "http://localhost:1234/v1",  # the IP address of your LLM backend
-        },
-    ]
-
-else:
-    raise ValueError(LLM_BACKEND)
-
-# If USE_MEMGPT is False, then this example will be the same as the official AutoGen repo
-# (https://github.com/microsoft/autogen/blob/main/notebook/agentchat_groupchat.ipynb)
-# If USE_MEMGPT is True, then we swap out the "coder" agent with a MemGPT agent
+# If USE_MEMGPT is False, then this example is a plain AutoGen group chat (user, PM and coder)
+# If USE_MEMGPT is True, then we swap out the "coder" agent with an agent that has its own memory.
+# NOTE: MemGPT (pymemgpt) has been discontinued and is now Letta. AutoGen v0.7 has no MemGPT agent,
+# so we rebuild the idea with AutoGen's built-in ListMemory plus a "remember" tool the agent can call.
 USE_MEMGPT = False
 
-# Set to True if you want to print MemGPT's inner workings.
-DEBUG = False
 
-interface_kwargs = {
-    "debug": DEBUG,
-    "show_inner_thoughts": True,
-    "show_function_outputs": DEBUG,
-}
+def create_model_client() -> OpenAIChatCompletionClient:
+    if LLM_BACKEND == "openai":
+        return OpenAIChatCompletionClient(
+            model="gpt-5.4-mini",
+            # AutoGen 0.7.5 predates gpt-5.4-mini, so its capabilities must be given explicitly
+            model_info={"vision": True, "function_calling": True, "json_output": True, "family": "gpt-5", "structured_output": True},
+        )
 
-llm_config = {"config_list": config_list, "seed": 42}
-llm_config_memgpt = {"config_list": config_list_memgpt, "seed": 42}
+    if LLM_BACKEND == "local":
+        # Example using LM Studio on a local machine
+        # You will have to change the parameters based on your setup.
+        # LM Studio speaks the OpenAI API, so we use the OpenAI client with a custom base_url.
+        # model_info is required because "local-model" isn't an OpenAI model name.
+        return OpenAIChatCompletionClient(
+            model="local-model",  # LM Studio uses whichever model you loaded
+            base_url="http://localhost:1234/v1",
+            api_key="lm-studio",  # not needed, but can't be empty
+            model_info={
+                "vision": False,
+                # The memory agent's "remember" tool needs a model that supports tool calling in LM Studio
+                "function_calling": True,
+                "json_output": False,
+                "family": "unknown",
+                "structured_output": False,
+            },
+        )
 
-# The user agent
-user_proxy = autogen.UserProxyAgent(
-    name="User_proxy",
-    system_message="A human admin.",
-    code_execution_config={"last_n_messages": 2, "work_dir": "groupchat", "use_docker": False},
-    human_input_mode="TERMINATE",  # needed?
-    default_auto_reply="...",  # Set a default auto-reply message here (non-empty auto-reply is required for LM Studio)
-)
+    raise ValueError(LLM_BACKEND)
 
-# The agent playing the role of the product manager (PM)
-pm = autogen.AssistantAgent(
-    name="Product_manager",
-    system_message="Creative in software product ideas.",
-    llm_config=llm_config,
-    default_auto_reply="...",  # Set a default auto-reply message here (non-empty auto-reply is required for LM Studio)
-)
 
-if not USE_MEMGPT:
-    # In the AutoGen example, we create an AssistantAgent to play the role of the coder
-    print("AutoGen Coder")
-    coder = autogen.AssistantAgent(
-        name="Coder",
-        llm_config=llm_config,
+async def main():
+    model_client = create_model_client()
+
+    # The user agent: runs the code the other agents write (in the "groupchat" folder)
+    # cleanup_temp_files=False keeps the files the agents write (v0.7 deletes them by default)
+    code_executor = LocalCommandLineCodeExecutor(work_dir="groupchat", cleanup_temp_files=False)
+    user_proxy = CodeExecutorAgent(
+        "User_proxy",
+        code_executor=code_executor,
+        description="A human admin who executes the code written by the coder.",
     )
 
-else:
-    # In our example, we swap this AutoGen agent with a MemGPT agent
-    # This MemGPT agent will have all the benefits of MemGPT, ie persistent memory, etc.
-    coder = create_memgpt_autogen_agent_from_config(
-        "MemGPT_coder",
-        llm_config=llm_config_memgpt,
-        system_message=f"I am a 10x engineer, trained in Python. I was the first engineer at Uber "
-                       f"(which I make sure to tell everyone I work with).\n"
-                       f"You are participating in a group chat with a user ({user_proxy.name}) "
-                       f"and a product manager ({pm.name}).",
-        interface_kwargs=interface_kwargs,
-        default_auto_reply="...",
-        # Set a default auto-reply message here (non-empty auto-reply is required for LM Studio)
-        # skip_verify=False,
-        # NOTE: you should set this to True if you expect your MemGPT AutoGen agent to call a function other than
-        # send_message on the first turn
+    # The agent playing the role of the product manager (PM)
+    pm = AssistantAgent(
+        "Product_manager",
+        model_client=model_client,
+        system_message="Creative in software product ideas.",
     )
 
-# Initialize the group chat between the user and two LLM agents (PM and coder)
-groupchat = autogen.GroupChat(agents=[user_proxy, pm, coder], messages=[], max_round=12)
-manager = autogen.GroupChatManager(groupchat=groupchat, llm_config=llm_config)
+    if not USE_MEMGPT:
+        # In the AutoGen example, we create an AssistantAgent to play the role of the coder
+        print("AutoGen Coder")
+        coder = AssistantAgent(
+            "Coder",
+            model_client=model_client,
+            # A short version of AutoGen 0.2's default assistant prompt, which this agent used before
+            system_message="You are a helpful AI assistant. Solve tasks using your coding and language skills. "
+                           "Write python code in a code block for User_proxy to execute, and check the result it "
+                           "returns. Only reply TERMINATE after you have seen the code run successfully, in its own message (never in the same message as a code block).",
+        )
 
-# Begin the group chat with a message from the user
-user_proxy.initiate_chat(
-    manager,
-    message="Create a simple random number generator in python, that's it."
-)
+    else:
+        # In our example, we swap this agent with a memory-powered agent.
+        # ListMemory is injected into the model context on every turn, and the agent can add to it
+        # with the "remember" tool (MemGPT's core idea: the agent manages its own memory).
+        # ListMemory lives in-process; use ChromaDBVectorMemory if you want it to persist between runs.
+        memory = ListMemory(name="coder_memory")
+
+        async def remember(fact: str) -> str:
+            """Save an important fact to your long-term memory so you can recall it later."""
+            await memory.add(MemoryContent(content=fact, mime_type=MemoryMimeType.TEXT))
+            return f"Remembered: {fact}"
+
+        coder = AssistantAgent(
+            "MemGPT_coder",
+            model_client=model_client,
+            tools=[remember],
+            memory=[memory],
+            reflect_on_tool_use=True,
+            system_message=f"I am a 10x engineer, trained in Python. I was the first engineer at Uber "
+                           f"(which I make sure to tell everyone I work with).\n"
+                           f"You are participating in a group chat with a user ({user_proxy.name}) "
+                           f"and a product manager ({pm.name}).\n"
+                           f"Use the remember tool to save anything important you'll need later.",
+        )
+
+    # Initialize the group chat between the user and two LLM agents (PM and coder).
+    # The model picks who speaks next, like the old GroupChatManager. Stop after 12 messages (max_round=12).
+    team = SelectorGroupChat(
+        [user_proxy, pm, coder],
+        model_client=model_client,
+        termination_condition=MaxMessageTermination(12),
+    )
+
+    # Begin the group chat with a message from the user
+    try:
+        await Console(team.run_stream(task="Create a simple random number generator in python, that's it."))
+    finally:
+        await code_executor.stop()
+        await model_client.close()
+
+
+if __name__ == "__main__":
+    asyncio.run(main())

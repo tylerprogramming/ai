@@ -1,5 +1,7 @@
 # Day04 Crew
 
+> **Note:** Updated for CrewAI 1.15; the code may differ slightly from the video.
+
 Welcome to the Day04 Crew project, powered by [crewAI](https://crewai.com). This project demonstrates how to set up a multi-agent AI system for automated news analysis and report generation.
 
 ## Project Overview
@@ -8,12 +10,12 @@ The Day04 Crew project focuses on creating an automated workflow for analyzing n
 
 ## Installation
 
-Ensure you have Python >=3.10 <=3.13 installed on your system. This project uses [Poetry](https://python-poetry.org/) for dependency management.
+Ensure you have Python >=3.10 <3.14 installed on your system. This project uses [Poetry](https://python-poetry.org/) for dependency management.
 
 First, if you haven't already, install Poetry:
 
 ```bash
-pip install poetry
+pip install -U "poetry>=2.0"   # Poetry 2.0+ reads the PEP 621 [project] table in pyproject.toml
 ```
 
 Next, navigate to your project directory and install the dependencies:
@@ -24,7 +26,7 @@ poetry install
 
 ### Configuration
 
-**Add your `OPENAI_API_KEY` into the `.env` file**
+**Add your `OPENAI_API_KEY` and `SERPER_API_KEY` into the `.env` file** (see `../.env.example`)
 
 ## Project Structure
 
@@ -58,7 +60,7 @@ These agents collaborate on a series of tasks defined in `config/tasks.yaml`, le
 
 ## Output
 
-The project generates a `news_report.md` file in the root directory, containing the final news analysis report produced by the AI agents.
+The project generates a `report.md` file in the folder you run it from, containing the final news analysis report produced by the AI agents.
 
 ## Support
 

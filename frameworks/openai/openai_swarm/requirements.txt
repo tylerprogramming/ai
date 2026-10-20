@@ -1,0 +1,4 @@
+# Install with: pip install -r requirements.txt
+# Swarm is archived and was never on PyPI; pin the final commit.
+# Note: Swarm depends on `instructor`, which caps openai at 3.3.x (jiter<0.15).
+swarm @ git+https://github.com/openai/swarm.git@6af0b4caf37dca4526dfd98e9fbd8ce36e7eeb22

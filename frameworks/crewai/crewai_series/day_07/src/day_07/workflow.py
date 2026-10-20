@@ -1,6 +1,4 @@
 import asyncio
-import schedule
-import time
 from crewai.flow.flow import Flow, listen, start, or_, and_
 from litellm import completion
 from dotenv import load_dotenv
@@ -9,7 +7,6 @@ from crew import NewsAggregatorCrew
 from pydantic import BaseModel
 from file_writer_crew import FileWriterCrew
 import agentops
-from agentops.enums import EndState
 
 load_dotenv()
 
@@ -84,13 +81,14 @@ class NewsFlow(Flow[News]):
         print("News Complete!")
 
 async def run_flow():
+    # AgentOps 0.4+: sessions are now "traces"
     agentops.init(api_key=os.getenv("AGENTOPS_API_KEY"), auto_start_session=False)
-    session = agentops.start_session()
+    trace = agentops.start_trace("news_flow")
 
     flow = NewsFlow()
-    await flow.kickoff()
+    await flow.kickoff_async()
 
-    session.end_session(EndState.SUCCESS.value)
+    agentops.end_trace(trace, end_state="Success")
 
 async def main():
     print("Flow scheduled to run every 1 minute. Press Ctrl+C to stop.")

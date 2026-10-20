@@ -1,11 +1,15 @@
 from crewai import Agent, Task, Crew, Process, LLM
-from crewai_tools import CodeInterpreterTool, FileWriterTool
+# CodeInterpreterTool was removed in crewai-tools 1.x; E2BPythonTool runs the code
+# in an E2B cloud sandbox instead (needs E2B_API_KEY, see README)
+from crewai_tools import E2BPythonTool, FileWriterTool
 from dotenv import load_dotenv
 
 load_dotenv()
 
-tool = CodeInterpreterTool()
+tool = E2BPythonTool()
 file_writer = FileWriterTool()
+
+llm = LLM(model="gpt-5.4-mini")
 
 agent = Agent(
     role="Code Execution Agent",
@@ -14,6 +18,7 @@ agent = Agent(
     tools=[tool, file_writer],
     verbose=True,
     allow_delegation=False,
+    llm=llm,
 )
 
 task = Task(

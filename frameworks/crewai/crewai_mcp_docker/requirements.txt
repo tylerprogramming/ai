@@ -1,5 +1,9 @@
-fastapi
-uvicorn
-sqlalchemy
-psycopg2
-pydantic
+# Baseline dependencies for the FastAPI app the crew generates into app/
+# (the crew normally writes its own app/requirements.txt as well).
+# The crew itself is installed from fastapi_crew/pyproject.toml (crewai install).
+fastapi>=0.154,<1
+uvicorn~=0.54
+sqlalchemy>=2.1,<3
+psycopg2>=2.9.13,<3
+pydantic>=2.14,<3
+pydantic-settings>=2,<3

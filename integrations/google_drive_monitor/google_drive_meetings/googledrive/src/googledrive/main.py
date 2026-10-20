@@ -7,16 +7,14 @@ from dotenv import load_dotenv
 from pydub import AudioSegment
 from pydub.utils import make_chunks
 from pathlib import Path
-from dotenv import load_dotenv
 from pyairtable import Api
-from llama_cloud_services import LlamaParse
-import nest_asyncio
+from llama_cloud import LlamaCloud
 import os
 
-from googledrive.src.googledrive.crews.meeting_minutes_crew.meeting_minutes_crew import MeetingMinutesCrew
-from googledrive.src.googledrive.crews.contractmanagement.contractmanagement import Contractmanagement
-
-nest_asyncio.apply()
+# Relative imports work both for `crewai run` (package `googledrive`) and for
+# ../../../drive_monitor.py (which imports this file as `googledrive.src.googledrive.main`)
+from .crews.meeting_minutes_crew.meeting_minutes_crew import MeetingMinutesCrew
+from .crews.contractmanagement.contractmanagement import Contractmanagement
 
 load_dotenv()
 
@@ -107,17 +105,23 @@ class GoogleDriveFlow(Flow[GoogleDriveState]):
         SCRIPT_DIR = Path(__file__).parent.parent.parent.parent / "downloads"
         pdf_path = str(SCRIPT_DIR / self.state.file_name)
 
-        parser = LlamaParse(
-            api_key=os.getenv("LLAMA_API_KEY"),
-            result_type="markdown"
-        )
-        
-        documents = parser.load_data(pdf_path)
+        # LlamaParse now lives in the `llama-cloud` SDK (llama-cloud-services is deprecated)
+        llama_client = LlamaCloud(api_key=os.getenv("LLAMA_API_KEY"))
+
+        with open(pdf_path, "rb") as pdf_file:
+            parsed = llama_client.parsing.parse(
+                upload_file=(self.state.file_name, pdf_file),
+                tier="cost_effective",
+                version="latest",
+                expand=["markdown"],
+            )
+
+        contract_content = "\n\n".join(page.markdown for page in parsed.markdown.pages if page.success)
         
         result = (
             Contractmanagement()
             .crew()
-            .kickoff(inputs={"contract_content": documents[0].text_resource.text})
+            .kickoff(inputs={"contract_content": contract_content})
         )
         
         return GoogleDriveOutput(
@@ -127,9 +131,8 @@ class GoogleDriveFlow(Flow[GoogleDriveState]):
         )
     
 
-def kickoff(file_name: str):
+def kickoff(file_name: str = "example_construction_contract.pdf"):
     print("Kicking off with file name", file_name)
-    print(os.getenv("AIRTABLE_API_KEY"))
     drive_flow = GoogleDriveFlow()
     inputs = {
         "file_name": file_name
@@ -154,6 +157,10 @@ def kickoff(file_name: str):
     table.create(record_data)
 
     return response.telegram_message
+
+
+def plot():
+    GoogleDriveFlow().plot()
 
 
 if __name__ == "__main__":

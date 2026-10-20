@@ -90,29 +90,51 @@ database.preview_table("PurchaseHistory")
 database.preview_table("Products")
 
 # Define the agents
+# Swarm's Agent only knows `instructions` and `functions`. Handoffs are plain
+# functions that return the next agent, so each agent gets its transfer functions.
+MODEL = "gpt-5.4-mini"
+
+
+def transfer_to_sales_agent():
+    """Transfer to the Sales Agent for orders and purchases."""
+    return sales_agent
+
+
+def transfer_to_refunds_agent():
+    """Transfer to the Refunds Agent for refunds and returns."""
+    return refunds_agent
+
+
+def transfer_back_to_triage():
+    """Transfer back to the Triage Agent if the request is outside your scope."""
+    return triage_agent
+
 
 refunds_agent = Agent(
     name="Refunds Agent",
-    description=f"""You are a refund agent that handles all actions related to refunds after a return has been processed.
+    model=MODEL,
+    instructions=f"""You are a refund agent that handles all actions related to refunds after a return has been processed.
     You must ask for both the user ID and item ID to initiate a refund. Ask for both user_id and item_id in one message.
     If the user asks you to notify them, you must ask them what their preferred method of notification is. For notifications, you must
     ask them for user_id and method in one message.""",
-    functions=[refund_item, notify_customer],
+    functions=[refund_item, notify_customer, transfer_back_to_triage],
 )
 
 sales_agent = Agent(
     name="Sales Agent",
-    description=f"""You are a sales agent that handles all actions related to placing an order to purchase an item.
+    model=MODEL,
+    instructions=f"""You are a sales agent that handles all actions related to placing an order to purchase an item.
     Regardless of what the user wants to purchase, must ask for BOTH the user ID and product ID to place an order.
     An order cannot be placed without these two pieces of information. Ask for both user_id and product_id in one message.
     If the user asks you to notify them, you must ask them what their preferred method is. For notifications, you must
     ask them for user_id and method in one message.
     """,
-    functions=[order_item, notify_customer],
+    functions=[order_item, notify_customer, transfer_back_to_triage],
 )
 
 triage_agent = Agent(
     name="Triage Agent",
+    model=MODEL,
     instructions=f"""You are to triage a users request, and call a tool to transfer to the right intent.
     Once you are ready to transfer to the right intent, call the tool to transfer to the right intent.
     You dont need to know specifics, just the topic of the request.
@@ -120,8 +142,7 @@ triage_agent = Agent(
     If the user request is about getting a refund on an item or returning a product, transfer to the Refunds Agent.
     When you need more information to triage the request to an agent, ask a direct question without explaining why you're asking it.
     Do not share your thought process with the user! Do not make unreasonable assumptions on behalf of user.""",
-    agents=[sales_agent, refunds_agent],
-    add_backlinks=True,
+    functions=[transfer_to_sales_agent, transfer_to_refunds_agent],
 )
 
 for f in triage_agent.functions:

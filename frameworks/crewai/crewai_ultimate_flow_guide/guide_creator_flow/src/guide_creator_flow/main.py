@@ -5,7 +5,7 @@ from typing import Dict, Optional, List
 from pydantic import BaseModel, Field
 from crewai import LLM
 from crewai.flow.flow import Flow, listen, start
-from firecrawl import FirecrawlApp, ScrapeOptions
+from firecrawl import Firecrawl, ScrapeOptions
 from dotenv import load_dotenv
 from guide_creator_flow.crews.content_crew.content_crew import ContentCrew
 from guide_creator_flow.models.guides import GuideOutline, WebResearch
@@ -36,7 +36,7 @@ class GuideCreatorFlow(Flow[GuideCreatorState]):
         """Perform web research for the guide topic"""
         print("Performing web research...")
 
-        app = FirecrawlApp(api_key=os.getenv("FIRECRAWL_API_KEY"))
+        app = Firecrawl(api_key=os.getenv("FIRECRAWL_API_KEY"))
 
         search_result = app.search(
             query=self.state.topic,
@@ -48,19 +48,24 @@ class GuideCreatorFlow(Flow[GuideCreatorState]):
         web_research = []
 
         # Print the search results
-        for result in search_result.data:
+        # firecrawl-py v4: web results are in .web; with scrape_options each one is a
+        # scraped Document whose title/url/description live in .metadata
+        for result in search_result.web or []:
+            meta = getattr(result, "metadata", None) or result
+            markdown = getattr(result, "markdown", None) or ""
+            links = getattr(result, "links", None) or []
             web_research.append(WebResearch(
-                search_results_title=result['title'],
-                search_results_url=result['url'],
-                search_results_description=result['description'],
-                search_results_content=result['markdown'],
-                search_results_links=result['links']
+                search_results_title=meta.title,
+                search_results_url=meta.url,
+                search_results_description=meta.description,
+                search_results_content=markdown,
+                search_results_links=links
             ))
-            print(result['title'])
-            print(result['url'])
-            print(result['description'])
-            print(result['markdown'][:150] + "...")
-            print(result['links'])
+            print(meta.title)
+            print(meta.url)
+            print(meta.description)
+            print(markdown[:150] + "...")
+            print(links)
             print("-"*100)
         
         self.state.web_research = web_research
@@ -94,8 +99,10 @@ class GuideCreatorFlow(Flow[GuideCreatorState]):
         # Make the LLM call with JSON response format
         response = llm.call(messages=messages)
 
-        # Parse the JSON response handling both str and dict responses
-        if isinstance(response, str):
+        # Parse the response: with response_format set, crewai returns a GuideOutline instance
+        if isinstance(response, BaseModel):
+            outline_dict = response.model_dump()
+        elif isinstance(response, str):
             outline_dict = json.loads(response)
         elif isinstance(response, dict):
             outline_dict = response
@@ -202,8 +209,9 @@ def kickoff():
 def plot():
     """Generate a visualization of the flow"""
     flow = GuideCreatorFlow()
-    flow.plot("guide_creator_flow")
-    print("Flow visualization saved to guide_creator_flow.html")
+    # plot() writes the HTML file and returns its path (crewai 1.15 saves it to a temp folder)
+    path = flow.plot("guide_creator_flow.html")
+    print(f"Flow visualization saved to {path}")
 
 if __name__ == "__main__":
     kickoff()

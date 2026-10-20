@@ -1,67 +1,72 @@
+import asyncio
 import os
 
-import autogen
-from autogen.coding import LocalCommandLineCodeExecutor
 import agentops
 from dotenv import load_dotenv
+from autogen_agentchat.agents import AssistantAgent, CodeExecutorAgent
+from autogen_agentchat.conditions import TextMentionTermination, MaxMessageTermination
+from autogen_agentchat.teams import SelectorGroupChat
+from autogen_agentchat.ui import Console
+from autogen_ext.code_executors.local import LocalCommandLineCodeExecutor
+from autogen_ext.models.openai import OpenAIChatCompletionClient
 
-load_dotenv()
+load_dotenv()  # OPENAI_API_KEY and AGENTOPS_API_KEY from .env
 
-agentops.init("agentops-api-key-here")
+# Start recording this run in AgentOps
+agentops.init(os.getenv("AGENTOPS_API_KEY"))
 
-config_list = [
-    {
-        "model": "gpt-5.4-mini",
-        "api_key": os.getenv("OPENAI_API_KEY")
-    }
-]
 
-executor = LocalCommandLineCodeExecutor(
-    timeout=10,  # Timeout for each code execution in seconds.
-    work_dir="code"  # the directory
-)
+async def main():
+    model_client = OpenAIChatCompletionClient(
+        model="gpt-5.4-mini",
+        # AutoGen 0.7.5 predates gpt-5.4-mini, so its capabilities must be given explicitly
+        model_info={"vision": True, "function_calling": True, "json_output": True, "family": "gpt-5", "structured_output": True},
+    )
 
-user_proxy = autogen.UserProxyAgent(
-    "user",
-    code_execution_config={"executor": executor},
-    human_input_mode="TERMINATE",
-    is_termination_msg=lambda x: x.get("content", "") and x.get("content", "").rstrip().endswith("TERMINATE"),
-)
+    # Runs the code blocks the engineer writes and saves them into the "code" folder
+    executor = CodeExecutorAgent(
+        "executor",
+        # cleanup_temp_files=False keeps the files the agents write (v0.7 deletes them by default)
+        code_executor=LocalCommandLineCodeExecutor(
+            timeout=10,  # Timeout for each code execution in seconds.
+            work_dir="code",  # the directory
+            cleanup_temp_files=False,
+        ),
+    )
 
-planner = autogen.AssistantAgent(
-    "planner",
-    llm_config={
-        "config_list": config_list
-    },
-    system_message="You are a planner.  When you get the message, your job is to come up with a plan.  "
-                   "When you are done, reply with TERMINATE"
-)
+    planner = AssistantAgent(
+        "planner",
+        model_client=model_client,
+        system_message="You are a planner.  When you get the message, your job is to come up with a plan.  "
+                       "When you are done, reply with TERMINATE"
+    )
 
-engineer = autogen.AssistantAgent(
-    "engineer",
-    llm_config={
-        "config_list": config_list
-    },
-    system_message="You are a 10x Python Engineer.  You only code in Python.  You create excellent front-end "
-                   "developer.  When you are done, reply with "
-                   "TERMINATE.  Make sure to have # <name of the file>.py after the ``` on each piece of code.",
-)
+    engineer = AssistantAgent(
+        "engineer",
+        model_client=model_client,
+        system_message="You are a 10x Python Engineer.  You only code in Python.  You create excellent front-end "
+                       "developer.  When you are done, reply with "
+                       "TERMINATE.  Make sure to have # <name of the file>.py after the ``` on each piece of code.",
+    )
 
-critic = autogen.AssistantAgent(
-    "critic",
-    llm_config={
-        "config_list": config_list
-    },
-    system_message="Your job is to critique the plan and code, and modify anything if necessary.  If it looks good "
-                   "then just let it be.  When you are done, reply with TERMINATE",
-)
+    critic = AssistantAgent(
+        "critic",
+        model_client=model_client,
+        system_message="Your job is to critique the plan and code, and modify anything if necessary.  If it looks good "
+                       "then just let it be.  When you are done, reply with TERMINATE",
+    )
 
-group_chat = autogen.GroupChat(agents=[user_proxy, planner, engineer, critic], messages=[], max_round=15)
-manager = autogen.GroupChatManager(groupchat=group_chat, llm_config={"config_list": config_list})
+    # The model picks who speaks next (like the old GroupChatManager)
+    # Every agent says TERMINATE when *it* is done, so only stop when the critic (the last reviewer)
+    # signs off. Otherwise the planner's first reply would end the chat. Cap at 15 messages like max_round=15.
+    termination = TextMentionTermination("TERMINATE", sources=["critic"]) | MaxMessageTermination(15)
+    group_chat = SelectorGroupChat(
+        [planner, engineer, critic, executor],
+        model_client=model_client,
+        termination_condition=termination,
+    )
 
-user_proxy.initiate_chat(
-    manager,
-    message="""
+    task = """
         I want you to come up with a plan on how we would create a full front end with:
 
         1. multiple html pages
@@ -71,6 +76,19 @@ user_proxy.initiate_chat(
 
         Save all of these in the necessary files.  The first line of each file should have # <filename> and the extension of the file, i.e. 
         index.html, index.js, etc.  
-    """)
+    """
 
-agentops.end_session("Success")
+    # Like the old human_input_mode="TERMINATE": when the agents finish, you can
+    # give feedback to continue the conversation, or type "exit" to end it.
+    while True:
+        await Console(group_chat.run_stream(task=task))
+        task = input("Give feedback to the agents, or type 'exit' to end: ")
+        if task.strip().lower() == "exit":
+            break
+
+    await model_client.close()
+
+
+if __name__ == "__main__":
+    asyncio.run(main())
+    agentops.end_session("Success")

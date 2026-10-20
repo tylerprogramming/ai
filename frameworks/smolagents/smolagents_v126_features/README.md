@@ -5,7 +5,7 @@ HuggingFace's lightweight agent framework examples.
 ## Installation
 
 ```bash
-pip install -U smolagents
+pip install -r requirements.txt
 ```
 
 ## Features Covered
@@ -26,6 +26,8 @@ pip install -U smolagents
 ## Running
 
 ```bash
-export OPENAI_API_KEY="your-key"  # or HF_TOKEN for Hugging Face
+export OPENAI_API_KEY="your-key"  # LiteLLMModel(model_id="gpt-5.4-mini") calls OpenAI
 python 01_code_agent.py
 ```
+
+> **Note:** Updated for smolagents 1.26 (`ManagedAgent` was removed; the search tool now uses `ddgs`) and the calculator tool no longer uses `eval()`; the code may differ slightly from the video.

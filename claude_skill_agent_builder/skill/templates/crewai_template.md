@@ -18,8 +18,7 @@
 ## requirements.txt
 
 ```
-crewai>=1.15.0
-crewai-tools>=0.17.0
+crewai[tools]>=1.15.28,<2
 python-dotenv>=1.0.0
 ```
 
@@ -32,7 +31,6 @@ python-dotenv>=1.0.0
 {description}
 """
 
-import os
 from dotenv import load_dotenv
 from crew import {CrewClass}
 
@@ -166,7 +164,8 @@ class {ToolName}(BaseTool):
     args_schema: Type[BaseModel] = {ToolName}Input
 
     def _run(self, {param}: str) -> str:
-        # Implementation
+        # Implementation: replace with the tool's real logic
+        result = {param}
         return result
 ```
 

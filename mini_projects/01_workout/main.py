@@ -1,9 +1,13 @@
+import asyncio
+import os
+
 from flask import Flask, render_template, request, Response
 
 import agents
-import system_messages
 
 app = Flask(__name__)
+
+doc = ""
 
 
 @app.route('/download_text_file')
@@ -22,13 +26,10 @@ def index():
         selected_options = request.form.getlist('option')
         level_option = request.form.getlist('level')
 
-        agents.user_proxy.initiate_chat(
-            agents.fitness_expert,
-            message=system_messages.get_initiate_message(days_option, selected_options, level_option),
+        # AutoGen v0.7 is async, so run the agent with asyncio.run inside the route
+        response_text = asyncio.run(
+            agents.create_workout_plan(days_option, selected_options, level_option)
         )
-
-        last_message = agents.user_proxy.last_message()["content"]
-        response_text = last_message
 
         global doc
         doc = response_text
@@ -37,4 +38,5 @@ def index():
 
 
 if __name__ == '__main__':
-    app.run(debug=True, port=5001)
+    # Debug mode is off by default; set FLASK_DEBUG=1 to turn it on while developing
+    app.run(debug=os.getenv("FLASK_DEBUG", "0").lower() in ("1", "true"), port=5001)

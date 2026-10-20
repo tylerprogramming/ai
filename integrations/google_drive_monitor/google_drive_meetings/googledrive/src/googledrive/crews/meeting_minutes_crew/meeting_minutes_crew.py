@@ -2,9 +2,10 @@ from crewai import Agent, Crew, Process, Task
 from crewai.project import CrewBase, agent, crew, task
 from crewai_tools import FileWriterTool
 
-file_writer_tool_summary = FileWriterTool(file_name='summary.txt', directory='meeting_minutes')
-file_writer_tool_action_items = FileWriterTool(file_name='action_items.txt', directory='meeting_minutes')
-file_writer_tool_sentiment = FileWriterTool(file_name='sentiment.txt', directory='meeting_minutes')
+# FileWriterTool no longer takes a fixed file name: the agent passes filename + directory
+# (summary.txt / action_items.txt / sentiment.txt in meeting_minutes/) and overwrite=true
+# (the tool refuses to replace an existing file otherwise) as the task describes.
+file_writer_tool = FileWriterTool()
 
 @CrewBase
 class MeetingMinutesCrew():
@@ -17,7 +18,7 @@ class MeetingMinutesCrew():
 	def meeting_minutes_summarizer(self) -> Agent:
 		return Agent(
 			config=self.agents_config['meeting_minutes_summarizer'],
-			tools=[file_writer_tool_summary, file_writer_tool_action_items, file_writer_tool_sentiment],
+			tools=[file_writer_tool],
 		)
 	
 	@agent

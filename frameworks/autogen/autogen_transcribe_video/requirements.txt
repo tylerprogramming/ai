@@ -1,4 +1,7 @@
-pyautogen
+# Install with: pip install -r requirements.txt
+autogen-agentchat~=0.7.5
+autogen-ext[openai]~=0.7.5
+python-dotenv
 openai-whisper
 openai
-moviepy
+moviepy<2  # code uses moviepy.editor, removed in 2.0

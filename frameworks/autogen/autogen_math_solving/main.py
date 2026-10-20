@@ -1,38 +1,59 @@
-import autogen
-from autogen.agentchat.contrib.math_user_proxy_agent import MathUserProxyAgent
+import asyncio
 
-# configuration
-config_list = autogen.config_list_from_json(
-    "OAI_CONFIG_LIST.json",
-)
+from autogen_agentchat.agents import AssistantAgent, CodeExecutorAgent
+from autogen_agentchat.conditions import MaxMessageTermination, TextMentionTermination
+from autogen_agentchat.teams import RoundRobinGroupChat
+from autogen_agentchat.ui import Console
+from autogen_ext.code_executors.local import LocalCommandLineCodeExecutor
+from autogen_ext.models.openai import OpenAIChatCompletionClient
+from dotenv import load_dotenv
 
-llm_config = {
-    "timeout": 600,
-    "seed": 42,
-    "config_list": config_list,
-}
-
-# create assistants
-assistant = autogen.AssistantAgent(
-    name="assistant",
-    system_message="You are a helpful assistant.",
-    llm_config=llm_config
-)
+load_dotenv()  # OPENAI_API_KEY from .env
 
 
-math_proxy_agent = MathUserProxyAgent(
-    name="math_proxy_agent",
-    human_input_mode="NEVER",
-    code_execution_config={"use_docker": False},
-)
+async def main():
+    # configuration
+    model_client = OpenAIChatCompletionClient(
+        model="gpt-5.4-mini",
+        # AutoGen 0.7.5 predates gpt-5.4-mini, so its capabilities must be given explicitly
+        model_info={"vision": True, "function_calling": True, "json_output": True, "family": "gpt-5", "structured_output": True},
+        timeout=600,
+        seed=42,
+    )
 
-# the math problem and initiate chat
-# math_problem = (
-#     """
-#     Find all $x$ that satisfy the inequality $(2x+10)(x+3)<(3x+9)(x+8)$.
-#     Express your answer in interval notation.
-#     """
-# )
+    # AutoGen 0.2 had a dedicated MathUserProxyAgent (MathChat). In v0.7 we get the same idea
+    # with an assistant that solves the problem with Python, plus an agent that runs that code.
+    assistant = AssistantAgent(
+        name="assistant",
+        model_client=model_client,
+        system_message="You are a helpful assistant. Solve math problems step by step. "
+                       "Use Python code in a single ```python code block to do the calculations, "
+                       "and print the results. After the code has run, give the final answer "
+                       "in \\boxed{} and then reply with TERMINATE.",
+    )
 
-math_problem = "Problem: If $725x + 727y = 1500$ and $729x+ 731y = 1508$, what is the value of $x - y$ ?"
-math_proxy_agent.initiate_chat(assistant, problem=math_problem)
+    # cleanup_temp_files=False keeps the files the agents write (v0.7 deletes them by default)
+    code_executor = LocalCommandLineCodeExecutor(work_dir="coding", cleanup_temp_files=False)
+    math_proxy_agent = CodeExecutorAgent("math_proxy_agent", code_executor=code_executor)
+
+    termination = TextMentionTermination("TERMINATE") | MaxMessageTermination(12)
+    team = RoundRobinGroupChat([assistant, math_proxy_agent], termination_condition=termination)
+
+    # the math problem and initiate chat
+    # math_problem = (
+    #     """
+    #     Find all $x$ that satisfy the inequality $(2x+10)(x+3)<(3x+9)(x+8)$.
+    #     Express your answer in interval notation.
+    #     """
+    # )
+
+    math_problem = "Problem: If $725x + 727y = 1500$ and $729x+ 731y = 1508$, what is the value of $x - y$ ?"
+    try:
+        await Console(team.run_stream(task=math_problem))
+    finally:
+        await code_executor.stop()
+        await model_client.close()
+
+
+if __name__ == "__main__":
+    asyncio.run(main())

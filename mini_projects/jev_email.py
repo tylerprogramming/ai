@@ -1,14 +1,17 @@
 #!/usr/bin/env python3
 """Jev smoke test: the docs quickstart shape (one support email, three typed questions).
-Reads TYPESAFE_API_KEY from ~/.hermes/.env (currently a jev-agent.com gateway key, 5 free decisions/month). Prints the raw response, then the read.
+Standard library only, no installs. Reads TYPESAFE_API_KEY from the environment, else ~/.hermes/.env (currently a jev-agent.com gateway key, 5 free decisions/month). Prints the raw response, then the read.
 Usage: python3 jev_email.py [path-to-email.txt]   (no arg = the built-in sample)"""
 import json, os, sys, time, urllib.request, urllib.error
 
 def key():
-    for l in open(os.path.expanduser("~/.hermes/.env")):
+    if os.environ.get("TYPESAFE_API_KEY"):
+        return os.environ["TYPESAFE_API_KEY"]
+    path = os.path.expanduser("~/.hermes/.env")
+    for l in (open(path) if os.path.exists(path) else []):
         if l.startswith("TYPESAFE_API_KEY="):
             return l.split("=", 1)[1].strip()
-    sys.exit("TYPESAFE_API_KEY missing in ~/.hermes/.env")
+    sys.exit("TYPESAFE_API_KEY not set (env var or ~/.hermes/.env)")
 
 SAMPLE = """From: dana@northwindcoffee.com
 Subject: charged twice this month??
