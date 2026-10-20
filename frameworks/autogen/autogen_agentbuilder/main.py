@@ -92,8 +92,17 @@ async def start_task(execution_task: str, agent_list: list, model_client: OpenAI
 
 
 async def main():
-    build_manager = OpenAIChatCompletionClient(model="gpt-5.4-mini")
-    agent_client = OpenAIChatCompletionClient(model="gpt-5.4-mini", temperature=0.7)
+    build_manager = OpenAIChatCompletionClient(
+        model="gpt-5.4-mini",
+        # AutoGen 0.7.5 predates gpt-5.4-mini, so its capabilities must be given explicitly
+        model_info={"vision": True, "function_calling": True, "json_output": True, "family": "gpt-5", "structured_output": True},
+    )
+    agent_client = OpenAIChatCompletionClient(
+        model="gpt-5.4-mini",
+        # AutoGen 0.7.5 predates gpt-5.4-mini, so its capabilities must be given explicitly
+        model_info={"vision": True, "function_calling": True, "json_output": True, "family": "gpt-5", "structured_output": True},
+        temperature=0.7,
+    )
 
     # 1. Create the agent library
     sys_msg_list = await generate_agents(build_manager)

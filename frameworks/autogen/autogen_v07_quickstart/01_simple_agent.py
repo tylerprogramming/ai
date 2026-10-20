@@ -16,7 +16,11 @@ async def get_weather(city: str) -> str:
 
 
 async def main():
-    model_client = OpenAIChatCompletionClient(model="gpt-5.4-mini")
+    model_client = OpenAIChatCompletionClient(
+        model="gpt-5.4-mini",
+        # AutoGen 0.7.5 predates gpt-5.4-mini, so its capabilities must be given explicitly
+        model_info={"vision": True, "function_calling": True, "json_output": True, "family": "gpt-5", "structured_output": True},
+    )
 
     agent = AssistantAgent(
         name="weather_agent",

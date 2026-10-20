@@ -11,8 +11,18 @@ from autogen_ext.models.openai import OpenAIChatCompletionClient
 
 load_dotenv()  # OPENAI_API_KEY from .env
 
-model_client = OpenAIChatCompletionClient(model="gpt-5.4-mini")
-assistant_client = OpenAIChatCompletionClient(model="gpt-5.4-mini", temperature=0, timeout=300)
+model_client = OpenAIChatCompletionClient(
+    model="gpt-5.4-mini",
+    # AutoGen 0.7.5 predates gpt-5.4-mini, so its capabilities must be given explicitly
+    model_info={"vision": True, "function_calling": True, "json_output": True, "family": "gpt-5", "structured_output": True},
+)
+assistant_client = OpenAIChatCompletionClient(
+    model="gpt-5.4-mini",
+    # AutoGen 0.7.5 predates gpt-5.4-mini, so its capabilities must be given explicitly
+    model_info={"vision": True, "function_calling": True, "json_output": True, "family": "gpt-5", "structured_output": True},
+    temperature=0,
+    timeout=300,
+)
 
 planner = AssistantAgent(
     name="planner",

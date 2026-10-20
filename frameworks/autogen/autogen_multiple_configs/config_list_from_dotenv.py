@@ -9,7 +9,17 @@ from autogen_ext.models.openai import OpenAIChatCompletionClient
 load_dotenv(".env")
 
 model_api_key_map = {
-    "gpt-5.4-mini": {"api_key_env_var": "OPENAI_API_KEY"},
+    "gpt-5.4-mini": {
+        "api_key_env_var": "OPENAI_API_KEY",
+        # AutoGen 0.7.5 predates gpt-5.4-mini, so its capabilities must be given explicitly
+        "model_info": {
+            "vision": True,
+            "function_calling": True,
+            "json_output": True,
+            "family": "gpt-5",
+            "structured_output": True,
+        },
+    },
     "gpt-5.4-mini-alt": {
         "api_key_env_var": "ANOTHER_API_KEY",
         "base_url": "http://someapi.com",

@@ -10,7 +10,11 @@ load_dotenv()  # OPENAI_API_KEY from .env
 
 class WorkoutPlannerSystem:
     def __init__(self):
-        self.model_client = OpenAIChatCompletionClient(model="gpt-5.4-mini")
+        self.model_client = OpenAIChatCompletionClient(
+            model="gpt-5.4-mini",
+            # AutoGen 0.7.5 predates gpt-5.4-mini, so its capabilities must be given explicitly
+            model_info={"vision": True, "function_calling": True, "json_output": True, "family": "gpt-5", "structured_output": True},
+        )
 
         self.workout_planning_agent = AssistantAgent(
             name="workout_planning_agent",

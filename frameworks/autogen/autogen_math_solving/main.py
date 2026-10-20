@@ -13,7 +13,13 @@ load_dotenv()  # OPENAI_API_KEY from .env
 
 async def main():
     # configuration
-    model_client = OpenAIChatCompletionClient(model="gpt-5.4-mini", timeout=600, seed=42)
+    model_client = OpenAIChatCompletionClient(
+        model="gpt-5.4-mini",
+        # AutoGen 0.7.5 predates gpt-5.4-mini, so its capabilities must be given explicitly
+        model_info={"vision": True, "function_calling": True, "json_output": True, "family": "gpt-5", "structured_output": True},
+        timeout=600,
+        seed=42,
+    )
 
     # AutoGen 0.2 had a dedicated MathUserProxyAgent (MathChat). In v0.7 we get the same idea
     # with an assistant that solves the problem with Python, plus an agent that runs that code.

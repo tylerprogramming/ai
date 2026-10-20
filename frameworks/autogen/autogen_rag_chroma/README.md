@@ -12,7 +12,11 @@ The main script `rag_01.py` sets up a RAG system using an AutoGen agent and Chro
 
 ### 1. Configuration
 
-- The model client is `OpenAIChatCompletionClient(model="gpt-5.4-mini")`.
+- The model client is `OpenAIChatCompletionClient(
+    model="gpt-5.4-mini",
+    # AutoGen 0.7.5 predates gpt-5.4-mini, so its capabilities must be given explicitly
+    model_info={"vision": True, "function_calling": True, "json_output": True, "family": "gpt-5", "structured_output": True},
+)`.
 - Environment variables (`OPENAI_API_KEY`) are loaded from a `.env` file.
 
 ### 2. Documents

@@ -33,7 +33,12 @@ async def initiate_chat():
     source_language = input("What is the source language? (i.e. English): ")
     target_language = input("What is destination language? (i.e. French): ")
 
-    model_client = OpenAIChatCompletionClient(model="gpt-5.4-mini", timeout=120)
+    model_client = OpenAIChatCompletionClient(
+        model="gpt-5.4-mini",
+        # AutoGen 0.7.5 predates gpt-5.4-mini, so its capabilities must be given explicitly
+        model_info={"vision": True, "function_calling": True, "json_output": True, "family": "gpt-5", "structured_output": True},
+        timeout=120,
+    )
 
     chatbot = AssistantAgent(
         name="chatbot",

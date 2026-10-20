@@ -23,7 +23,13 @@ CODER_SYSTEM_MESSAGE = (
 
 
 async def main():
-    model_client = OpenAIChatCompletionClient(model="gpt-5.4-mini", seed=42, timeout=600)
+    model_client = OpenAIChatCompletionClient(
+        model="gpt-5.4-mini",
+        # AutoGen 0.7.5 predates gpt-5.4-mini, so its capabilities must be given explicitly
+        model_info={"vision": True, "function_calling": True, "json_output": True, "family": "gpt-5", "structured_output": True},
+        seed=42,
+        timeout=600,
+    )
 
     # The user agent: a human admin. Type a reply when it's your turn, or "exit" to end the chat.
     user_proxy = UserProxyAgent("User_proxy", description="A human admin.")

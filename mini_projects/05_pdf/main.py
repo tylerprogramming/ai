@@ -21,7 +21,14 @@ dotenv.load_dotenv()  # OPENAI_API_KEY from .env
 async def create_question(qa, file_name):
     """Have the agents write a multiple choice question from the PDF and save it to file_name as json."""
     # set the model client for autogen
-    model_client = OpenAIChatCompletionClient(model="gpt-5.4-mini", temperature=0, seed=42, timeout=600)
+    model_client = OpenAIChatCompletionClient(
+        model="gpt-5.4-mini",
+        # AutoGen 0.7.5 predates gpt-5.4-mini, so its capabilities must be given explicitly
+        model_info={"vision": True, "function_calling": True, "json_output": True, "family": "gpt-5", "structured_output": True},
+        temperature=0,
+        seed=42,
+        timeout=600,
+    )
 
     # the tools are plain functions with type hints, given to the agents that call them
     def ask_question(question: Annotated[str, "The question to be asked"]) -> json:

@@ -16,6 +16,8 @@ async def main():
     # OpenAI-compatible endpoint (key_openai.txt + base_openai.txt)
     openai_client = OpenAIChatCompletionClient(
         model="gpt-5.4-mini",
+        # AutoGen 0.7.5 predates gpt-5.4-mini, so its capabilities must be given explicitly
+        model_info={"vision": True, "function_calling": True, "json_output": True, "family": "gpt-5", "structured_output": True},
         api_key=read_txt("key_openai.txt"),
         base_url=read_txt("base_openai.txt"),
     )
