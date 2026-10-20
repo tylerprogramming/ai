@@ -21,7 +21,8 @@ async def main():
     )
 
     # Runs the code the assistant writes, in the "coding" folder.
-    code_executor = LocalCommandLineCodeExecutor(work_dir="coding")
+    # cleanup_temp_files=False keeps the files the agents write (v0.7 deletes them by default)
+    code_executor = LocalCommandLineCodeExecutor(work_dir="coding", cleanup_temp_files=False)
     executor = CodeExecutorAgent("executor", code_executor=code_executor)
 
     # Small local models don't always say TERMINATE, so also cap the number of messages.

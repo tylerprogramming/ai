@@ -32,7 +32,8 @@ async def main():
                        "in \\boxed{} and then reply with TERMINATE.",
     )
 
-    code_executor = LocalCommandLineCodeExecutor(work_dir="coding")
+    # cleanup_temp_files=False keeps the files the agents write (v0.7 deletes them by default)
+    code_executor = LocalCommandLineCodeExecutor(work_dir="coding", cleanup_temp_files=False)
     math_proxy_agent = CodeExecutorAgent("math_proxy_agent", code_executor=code_executor)
 
     termination = TextMentionTermination("TERMINATE") | MaxMessageTermination(12)

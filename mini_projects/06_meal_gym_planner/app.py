@@ -1,3 +1,4 @@
+import secrets
 from flask import Flask, render_template, request, redirect, url_for, session
 from workout_agents import WorkoutPlannerSystem  # Import the class
 import asyncio
@@ -9,7 +10,8 @@ from flask import send_file
 import io
 
 app = Flask(__name__)
-app.secret_key = 'your_secret_key'  # Replace with a real secret key
+# Signs the session cookie. Set FLASK_SECRET_KEY in .env; a random key is used otherwise (sessions reset on restart).
+app.secret_key = os.getenv("FLASK_SECRET_KEY") or secrets.token_hex(32)
 
 @app.route('/', methods=['GET', 'POST'])
 def screen1():

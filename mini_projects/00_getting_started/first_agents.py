@@ -21,7 +21,8 @@ async def main():
     # Runs the engineer's code blocks and saves the files into the "coding" folder
     executor = CodeExecutorAgent(
         "executor",
-        code_executor=LocalCommandLineCodeExecutor(work_dir="coding"),
+        # cleanup_temp_files=False keeps the files the agents write (v0.7 deletes them by default)
+        code_executor=LocalCommandLineCodeExecutor(work_dir="coding", cleanup_temp_files=False),
     )
 
     engineer = AssistantAgent(
@@ -29,7 +30,7 @@ async def main():
         model_client=model_client,
         system_message="You are a 10x Python Engineer.  You only code in Python.  You create excellent front-end "
                        "developer. Make sure to have # filename: <name of the file>.py as the first line after the triple tick marks. "
-                       "When you are done, reply with TERMINATE.",
+                       "Only reply TERMINATE after you have seen the code run successfully, in its own message (never in the same message as a code block).",
     )
 
     # The engineer writes code, the executor runs it, until the engineer says TERMINATE

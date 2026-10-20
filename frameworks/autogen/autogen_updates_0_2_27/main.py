@@ -20,9 +20,11 @@ async def main():
 
     # Create a local command line code executor.
     # Code blocks that start with "# filename: <filename>" are saved under that name in the "code" folder.
+    # cleanup_temp_files=False keeps the files the agents write (v0.7 deletes them by default)
     executor = LocalCommandLineCodeExecutor(
         timeout=10,
         work_dir="code",
+        cleanup_temp_files=False,
     )
 
     assistant = AssistantAgent(

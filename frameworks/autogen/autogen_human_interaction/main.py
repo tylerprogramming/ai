@@ -30,7 +30,7 @@ async def main():
         model="gpt-5.4-mini",
         # AutoGen 0.7.5 predates gpt-5.4-mini, so its capabilities must be given explicitly
         model_info={"vision": True, "function_calling": True, "json_output": True, "family": "gpt-5", "structured_output": True},
-        temperature=0.7,
+        # GPT-5 models only accept the default temperature (and max_completion_tokens, not max_tokens), so the old GPT-4 sampling settings were dropped
     )
 
     # To use a local model in LM Studio instead (like the original 0.2 version did), swap in:
@@ -49,13 +49,14 @@ async def main():
         model_client=model_client,
         system_message="You are a helpful AI assistant. Solve tasks using your coding and language skills. Write "
                        "python code in a code block, with '# filename: <filename>' as the first line when the code "
-                       "should be saved to a file. Reply TERMINATE in the end when everything is done.",
+                       "should be saved to a file. Only reply TERMINATE after you have seen the code run successfully, in its own message (never in the same message as a code block).",
     )
 
     # executes the code the assistant writes and saves it to the "tested_code" directory
     executor = CodeExecutorAgent(
         "executor",
-        code_executor=LocalCommandLineCodeExecutor(work_dir="tested_code"),
+        # cleanup_temp_files=False keeps the files the agents write (v0.7 deletes them by default)
+        code_executor=LocalCommandLineCodeExecutor(work_dir="tested_code", cleanup_temp_files=False),
     )
 
     # the user agent asks YOU for feedback every round (like human_input_mode="ALWAYS")

@@ -1,3 +1,4 @@
+import os
 import dotenv
 from autogen_ext.models.openai import OpenAIChatCompletionClient
 

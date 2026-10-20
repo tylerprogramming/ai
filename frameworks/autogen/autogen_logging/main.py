@@ -54,7 +54,7 @@ async def main():
         model="gpt-5.4-mini",
         # AutoGen 0.7.5 predates gpt-5.4-mini, so its capabilities must be given explicitly
         model_info={"vision": True, "function_calling": True, "json_output": True, "family": "gpt-5", "structured_output": True},
-        temperature=0,
+        # GPT-5 models only accept the default temperature (and max_completion_tokens, not max_tokens), so the old GPT-4 sampling settings were dropped
     )
 
     # Start logging

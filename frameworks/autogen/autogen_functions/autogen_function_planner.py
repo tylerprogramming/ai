@@ -20,7 +20,7 @@ assistant_client = OpenAIChatCompletionClient(
     model="gpt-5.4-mini",
     # AutoGen 0.7.5 predates gpt-5.4-mini, so its capabilities must be given explicitly
     model_info={"vision": True, "function_calling": True, "json_output": True, "family": "gpt-5", "structured_output": True},
-    temperature=0,
+    # GPT-5 models only accept the default temperature (and max_completion_tokens, not max_tokens), so the old GPT-4 sampling settings were dropped
     timeout=300,
 )
 
@@ -57,8 +57,7 @@ assistant = AssistantAgent(
     reflect_on_tool_use=True,
     system_message="You are a helpful AI assistant. Solve tasks using your coding and language skills. When you "
                    "need to collect info or do something, suggest python or shell code in a code block for the "
-                   "user to execute, and check the execution result it returns. Reply TERMINATE in the end when "
-                   "everything is done.",
+                   "user to execute, and check the execution result it returns. Only reply TERMINATE after you have seen the code run successfully, in its own message (never in the same message as a code block).",
 )
 
 # @assistant2 tool example from the original (left disabled):
@@ -72,7 +71,8 @@ async def main():
     # runs the code blocks the assistant writes, saving them into the "planning" folder
     user_proxy = CodeExecutorAgent(
         "user_proxy",
-        code_executor=LocalCommandLineCodeExecutor(work_dir="planning"),
+        # cleanup_temp_files=False keeps the files the agents write (v0.7 deletes them by default)
+        code_executor=LocalCommandLineCodeExecutor(work_dir="planning", cleanup_temp_files=False),
     )
 
     termination = TextMentionTermination("TERMINATE") | MaxMessageTermination(20)

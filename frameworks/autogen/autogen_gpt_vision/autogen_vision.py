@@ -22,7 +22,8 @@ image_waldo = "https://i.stack.imgur.com/reNlF.jpg"
 
 def image_from_url(url: str) -> Image:
     """Download an image so it can be sent to the agent (replaces the old <img url> tags)."""
-    response = requests.get(url, timeout=30)
+    # Some image hosts reject the default python-requests user agent, so look like a browser
+    response = requests.get(url, timeout=30, headers={"User-Agent": "Mozilla/5.0"})
     response.raise_for_status()
     return Image.from_pil(PILImage.open(BytesIO(response.content)))
 
@@ -34,8 +35,7 @@ async def main():
         model="gpt-5.4-mini",
         # AutoGen 0.7.5 predates gpt-5.4-mini, so its capabilities must be given explicitly
         model_info={"vision": True, "function_calling": True, "json_output": True, "family": "gpt-5", "structured_output": True},
-        temperature=0.5,
-        max_tokens=500,
+        # GPT-5 models only accept the default temperature (and max_completion_tokens, not max_tokens), so the old GPT-4 sampling settings were dropped
     )
 
     image_agent = AssistantAgent(

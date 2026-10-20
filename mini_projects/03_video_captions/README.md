@@ -10,7 +10,7 @@ Updated to AutoGen v0.7 (the new `autogen_agentchat` API).
 pip install -r requirements.txt
 ```
 
-Put your `OPENAI_API_KEY` in a `.env` file (plus `base_dir`, the folder the captioned video is written under). FFMPEG is required for Whisper. Then call the agent from your own code:
+Put your `OPENAI_API_KEY` in a `.env` file. Captioned videos are saved to the `captioned/` folder. FFMPEG is required for Whisper. Then call the agent from your own code:
 
 ```python
 import asyncio

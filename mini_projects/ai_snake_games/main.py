@@ -10,9 +10,11 @@ from autogen_ext.models.openai import OpenAIChatCompletionClient
 
 async def main():
     # Create a local command line code executor.
+    # cleanup_temp_files=False keeps the files the agents write (v0.7 deletes them by default)
     executor = LocalCommandLineCodeExecutor(
         timeout=10,
         work_dir="code",
+        cleanup_temp_files=False,
     )
 
     model_client = OpenAIChatCompletionClient(
@@ -24,7 +26,10 @@ async def main():
                     "family": "unknown", "structured_output": False},
     )
     # To use OpenAI instead (OPENAI_API_KEY in your environment):
-    # model_client = OpenAIChatCompletionClient(model="gpt-5.4-mini")
+    # model_client = OpenAIChatCompletionClient(
+    #     model="gpt-5.4-mini",
+    #     model_info={"vision": True, "function_calling": True, "json_output": True, "family": "gpt-5", "structured_output": True},
+    # )
 
     assistant = AssistantAgent(
         name="Assistant",

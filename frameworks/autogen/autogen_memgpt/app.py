@@ -35,7 +35,8 @@ async def main():
     user_proxy = UserProxyAgent("User_proxy", description="A human admin.")
 
     # In 0.2 the user proxy also ran the code. In v0.7 a separate agent does that.
-    code_executor = LocalCommandLineCodeExecutor(work_dir="groupchat")
+    # cleanup_temp_files=False keeps the files the agents write (v0.7 deletes them by default)
+    code_executor = LocalCommandLineCodeExecutor(work_dir="groupchat", cleanup_temp_files=False)
     executor = CodeExecutorAgent(
         "Code_executor", code_executor=code_executor,
         description="Runs the Python code that the Coder writes and reports the output.",

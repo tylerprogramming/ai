@@ -56,7 +56,8 @@ async def main():
     model_client = create_model_client()
 
     # The user agent: runs the code the other agents write (in the "groupchat" folder)
-    code_executor = LocalCommandLineCodeExecutor(work_dir="groupchat")
+    # cleanup_temp_files=False keeps the files the agents write (v0.7 deletes them by default)
+    code_executor = LocalCommandLineCodeExecutor(work_dir="groupchat", cleanup_temp_files=False)
     user_proxy = CodeExecutorAgent(
         "User_proxy",
         code_executor=code_executor,
@@ -76,6 +77,10 @@ async def main():
         coder = AssistantAgent(
             "Coder",
             model_client=model_client,
+            # A short version of AutoGen 0.2's default assistant prompt, which this agent used before
+            system_message="You are a helpful AI assistant. Solve tasks using your coding and language skills. "
+                           "Write python code in a code block for User_proxy to execute, and check the result it "
+                           "returns. Only reply TERMINATE after you have seen the code run successfully, in its own message (never in the same message as a code block).",
         )
 
     else:

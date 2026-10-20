@@ -25,7 +25,7 @@ async def create_question(qa, file_name):
         model="gpt-5.4-mini",
         # AutoGen 0.7.5 predates gpt-5.4-mini, so its capabilities must be given explicitly
         model_info={"vision": True, "function_calling": True, "json_output": True, "family": "gpt-5", "structured_output": True},
-        temperature=0,
+        # GPT-5 models only accept the default temperature (and max_completion_tokens, not max_tokens), so the old GPT-4 sampling settings were dropped
         seed=42,
         timeout=600,
     )
@@ -76,7 +76,7 @@ async def create_question(qa, file_name):
     # results over into the next one. Here each agent gets its message plus that carryover.
     chats = [
         (assistant, """
-            Find the answers to the question below from the {uploaded_file} and do not write any code.
+            Find the answers to the question below from the uploaded PDF and do not write any code.
 
             1. Can you give me a multiple choice question from the pdf with 4 choices and 1 of them being the answer?  Also give the reason for the answer and the page it was found on.
             2. Make all the choices under the property choices, and the answer to be called correct_answer

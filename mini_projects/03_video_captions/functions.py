@@ -78,10 +78,12 @@ def recognize_transcript_from_video(
         final_clip = concatenate_videoclips(clips)
         clip = final_clip.set_fps(24)
 
-        base_dir = os.getenv("base_dir")
+        # Save next to this project, in its captioned/ folder
+        out_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "captioned")
+        os.makedirs(out_dir, exist_ok=True)
 
         clip.write_videofile(
-            f"{base_dir}/ai/ai_agency_03_video_captions/captioned/{new_file_name}.mp4",
+            os.path.join(out_dir, f"{new_file_name}.mp4"),
             codec='libx264',
             audio_codec='aac',
             temp_audiofile='temp-audio.m4a',

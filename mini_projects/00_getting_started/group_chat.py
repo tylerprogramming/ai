@@ -21,9 +21,11 @@ async def main():
     # Runs the code blocks the engineer writes and saves them into the "code" folder
     executor = CodeExecutorAgent(
         "executor",
+        # cleanup_temp_files=False keeps the files the agents write (v0.7 deletes them by default)
         code_executor=LocalCommandLineCodeExecutor(
             timeout=10,  # Timeout for each code execution in seconds.
-            work_dir="code"  # the directory
+            work_dir="code",  # the directory
+            cleanup_temp_files=False,
         ),
     )
 
@@ -50,7 +52,9 @@ async def main():
     )
 
     # The model picks who speaks next (like the old GroupChatManager)
-    termination = TextMentionTermination("TERMINATE") | MaxMessageTermination(15)
+    # Every agent says TERMINATE when *it* is done, so only stop when the critic (the last reviewer)
+    # signs off. Otherwise the planner's first reply would end the chat. Cap at 15 messages like max_round=15.
+    termination = TextMentionTermination("TERMINATE", sources=["critic"]) | MaxMessageTermination(15)
     group_chat = SelectorGroupChat(
         [planner, engineer, critic, executor],
         model_client=model_client,
