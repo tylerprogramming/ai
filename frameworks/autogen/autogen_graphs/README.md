@@ -1,4 +1,13 @@
 # Autogen Graphs
 
-> [!WARNING]
-> **Legacy example — AutoGen 0.2 API.** This project uses the old `import autogen` API, which AutoGen v0.7+ replaced with a new async API. It still runs with the pinned version: `pip install -r requirements.txt` on **Python 3.10–3.12** (AutoGen 0.2.35 doesn't support 3.13). For new projects, start from [`autogen_v07_quickstart`](../autogen_v07_quickstart).
+A research team with a fixed speaking order: the coder writes code to fetch recent LLM papers from the arXiv API, the executor runs it (sending errors back to the coder to fix), and the scientist sorts the papers into a markdown table (see `test.md` for a sample result). The order is controlled by a custom `selector_func` instead of letting the model pick the next speaker.
+
+Updated to AutoGen v0.7 (the new `autogen_agentchat` API).
+
+## Run it
+
+```bash
+pip install -r requirements.txt
+echo "OPENAI_API_KEY=sk-..." > .env
+python main.py
+```

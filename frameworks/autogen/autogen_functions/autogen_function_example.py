@@ -1,42 +1,13 @@
-from typing import Literal
+import asyncio
+from typing import Annotated
 
-import autogen
+from dotenv import load_dotenv
+from autogen_agentchat.agents import AssistantAgent
+from autogen_agentchat.ui import Console
+from autogen_ext.models.openai import OpenAIChatCompletionClient
+from autogen_core.tools import FunctionTool
 
-config_list = autogen.config_list_from_json(
-    env_or_file="config/OAI_CONFIG_LIST.json",
-    filter_dict={
-        "model": ["gpt-5.4-mini"]
-    },
-)
-
-llm_config = {
-    "functions": [
-        {
-            "name": "currency_calculator",
-            "description": "Currency exchange calculator.",
-            "parameters": {
-                "type": "object",
-                "properties": {
-                    "base_amount": {
-                        "type": "string",
-                        "description": "the base amount",
-                    },
-                    "base_currency": {
-                        "type": "string",
-                        "description": "the base currency",
-                    },
-                    "quote_currency": {
-                        "type": "string",
-                        "description": "the quote currency",
-                    },
-                },
-                "required": ["base_amount", "base_currency", "quote_currency"],
-            },
-        },
-    ],
-    "config_list": config_list,
-    "timeout": 120,
-}
+load_dotenv()  # OPENAI_API_KEY from .env
 
 
 def exchange_rate(base_currency, quote_currency) -> float:
@@ -51,43 +22,40 @@ def exchange_rate(base_currency, quote_currency) -> float:
 
 
 def currency_calculator(
-        base_amount=0.0,
-        base_currency="USD",
-        quote_currency="EUR",
+        base_amount: Annotated[str, "the base amount"] = "0.0",
+        base_currency: Annotated[str, "the base currency"] = "USD",
+        quote_currency: Annotated[str, "the quote currency"] = "EUR",
 ) -> str:
     quote_amount = exchange_rate(base_currency, quote_currency) * float(base_amount)
     return f"{quote_amount} {quote_currency}"
 
 
-currency_bot = autogen.AssistantAgent(
-    name="currency_bot",
-    system_message="For currency exchange tasks, only use the functions you have been provided with. Reply TERMINATE "
-                   "when the task is done.",
-    llm_config=llm_config,
+# In v0.7 the tool's JSON schema is built from the function signature, so there's no
+# hand-written "functions" list in llm_config anymore. FunctionTool lets us give it the
+# name and description explicitly (this replaces register_function(function_map=...)).
+currency_tool = FunctionTool(
+    currency_calculator,
+    name="currency_calculator",
+    description="Currency exchange calculator.",
 )
 
-user_proxy = autogen.UserProxyAgent(
-    name="user_proxy",
-    is_termination_msg=lambda x: x.get("content", "") and x.get("content", "").rstrip().endswith("TERMINATE"),
-    human_input_mode="NEVER",
-    max_consecutive_auto_reply=10,
-    code_execution_config={
-        "work_dir": "code",
-        "use_docker": False
-    }
-)
 
-CurrencySymbol = Literal["USD", "EUR"]
+async def main():
+    model_client = OpenAIChatCompletionClient(model="gpt-5.4-mini", timeout=120)
 
-# register the functions
-user_proxy.register_function(
-    function_map={
-        "currency_calculator": currency_calculator
-    }
-)
+    currency_bot = AssistantAgent(
+        name="currency_bot",
+        model_client=model_client,
+        tools=[currency_tool],
+        reflect_on_tool_use=True,  # after calling the tool, the bot answers with the result
+        system_message="For currency exchange tasks, only use the functions you have been provided with. Reply TERMINATE "
+                       "when the task is done.",
+    )
 
-# start the conversation
-user_proxy.initiate_chat(
-    currency_bot,
-    message="How much is 123.45 USD in EUR?",
-)
+    # start the conversation (the agent calls the tool and runs it itself, no user_proxy needed)
+    await Console(currency_bot.run_stream(task="How much is 123.45 USD in EUR?"))
+    await model_client.close()
+
+
+if __name__ == "__main__":
+    asyncio.run(main())

@@ -1,12 +1,13 @@
 # **Create and Edit Software**
 
-> [!WARNING]
-> **Legacy example — AutoGen 0.2 API.** This project uses the old `import autogen` API, which AutoGen v0.7+ replaced with a new async API. It still runs with the pinned version: `pip install -r requirements.txt` on **Python 3.10–3.12** (AutoGen 0.2.35 doesn't support 3.13). For new projects, start from [`autogen_v07_quickstart`](../autogen_v07_quickstart).
+> **Note:** Updated to AutoGen v0.7. The original video used the older AutoGen 0.2 API, so the code here differs from what's on screen.
 
 I think a realistic version of an AI Engineer is to also allow it to edit already existing code.  You won't always be creating new code the way you want, and you will probably have to adhere to how existing code is written.
 
-## Imports Needed:
-- pyautogen
+## Run it:
+- `pip install -r requirements.txt`
+- Put `OPENAI_API_KEY` in a `.env` file
+- `python main.py` (you are the Admin: type instructions for the Engineer, or `exit` to stop)
 
 ## YouTube Link:
 - [Accelerate Software Creation with AI Agents: Quick Tutorial](https://youtu.be/tT-I0ImNcQ0)
