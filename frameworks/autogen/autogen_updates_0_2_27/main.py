@@ -1,47 +1,55 @@
-import autogen
-from autogen.coding import LocalCommandLineCodeExecutor
+import asyncio
+
+from dotenv import load_dotenv
+from autogen_agentchat.agents import AssistantAgent, CodeExecutorAgent
+from autogen_agentchat.conditions import MaxMessageTermination, TextMentionTermination
+from autogen_agentchat.teams import RoundRobinGroupChat
+from autogen_agentchat.ui import Console
+from autogen_ext.code_executors.local import LocalCommandLineCodeExecutor
+from autogen_ext.models.openai import OpenAIChatCompletionClient
+
+load_dotenv()  # OPENAI_API_KEY from .env
 
 
-def main():
-    config_list = autogen.config_list_from_json(
-        env_or_file="OAI_CONFIG_LIST.json"
-    )
+async def main():
+    model_client = OpenAIChatCompletionClient(model="gpt-5.4-mini")
 
     # Create a local command line code executor.
+    # Code blocks that start with "# filename: <filename>" are saved under that name in the "code" folder.
     executor = LocalCommandLineCodeExecutor(
         timeout=10,
         work_dir="code",
     )
 
-    assistant = autogen.AssistantAgent(
+    assistant = AssistantAgent(
         name="Assistant",
-        llm_config={
-            "config_list": config_list
-        },
+        model_client=model_client,
         system_message="If you want the user to save the code in a file before executing it, put # filename: "
-                       "<filename> inside the code block as the first line.  You are a helpful assistant.  Return "
-                       "'TERMINATE' when the task is done."
+                       "<filename> inside the code block as the first line.  Only python and sh code blocks are "
+                       "executed, so save HTML, CSS and JavaScript files by writing them from a python script.  "
+                       "You are a helpful assistant.  Return 'TERMINATE' when the task is done."
     )
 
-    user_proxy = autogen.UserProxyAgent(
-        name="user",
-        human_input_mode="NEVER",
-        is_termination_msg=lambda msg: msg.get("content") is not None and "TERMINATE" in msg["content"],
-        code_execution_config={"executor": executor},
-    )
+    # The user agent runs the code blocks the assistant writes
+    user_proxy = CodeExecutorAgent("user", code_executor=executor)
+
+    # Stop when the assistant says TERMINATE, or after 20 messages as a safety net
+    termination = TextMentionTermination("TERMINATE") | MaxMessageTermination(20)
+    team = RoundRobinGroupChat([assistant, user_proxy], termination_condition=termination)
 
     # trying this out with saving html file!
-    user_proxy.initiate_chat(
-        assistant,
-        message="""
+    try:
+        await Console(team.run_stream(task="""
         Create a simple html that opens a simple home page and stylize it
-        with some css and save that in a separate file.  Create a simple 
+        with some css and save that in a separate file.  Create a simple
         button on the html page that when clicked, just displays 'Hello!'.
         You can also create a javascript file to make this happen.
         Make sure to comment out the file names at the top of each file.
-        """
-    )
+        """))
+    finally:
+        await executor.stop()
+        await model_client.close()
 
 
 if __name__ == "__main__":
-    main()
+    asyncio.run(main())

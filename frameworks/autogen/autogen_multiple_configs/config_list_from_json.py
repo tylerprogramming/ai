@@ -1,43 +1,38 @@
-import autogen
+import asyncio
 
-cheap_config_list = autogen.config_list_from_json(
-    env_or_file="OAI_CONFIG_LIST.json",
-    filter_dict={
-        "model": {
-            "gpt-5.4-mini",
-        }
-    }
-)
+from dotenv import load_dotenv
+from autogen_agentchat.agents import AssistantAgent
+from autogen_ext.models.openai import OpenAIChatCompletionClient
 
-costly_config_list = autogen.config_list_from_json(
-    env_or_file="OAI_CONFIG_LIST.json",
-    filter_dict={
-        "model": {
-            "gpt-5.4-mini",
-        }
-    }
-)
+load_dotenv()  # OPENAI_API_KEY from .env
 
-# Assistant using GPT 3.5 Turbo
-assistant_one = autogen.AssistantAgent(
-    name="3.5-assistant",
-    llm_config={
-        "timeout": 600,
-        "cache_seed": 42,
-        "config_list": cheap_config_list,
-        "temperature": 0,
-    },
-)
 
-# Assistant using GPT 4
-assistant_two = autogen.AssistantAgent(
-    name="4-assistant",
-    llm_config={
-        "timeout": 600,
-        "cache_seed": 42,
-        "config_list": costly_config_list,
-        "temperature": 0,
-    },
-)
+async def main():
+    # AutoGen v0.7 replaces config lists (a JSON file of models + filter_dict) with one model client per model.
+    # Swap in a cheaper or more capable model name for each client.
+    cheap_model_client = OpenAIChatCompletionClient(model="gpt-5.4-mini", temperature=0, timeout=600)
+    costly_model_client = OpenAIChatCompletionClient(model="gpt-5.4-mini", temperature=0, timeout=600)
 
-print(costly_config_list)
+    # Assistant using the cheap model
+    assistant_one = AssistantAgent(
+        name="cheap_assistant",
+        model_client=cheap_model_client,
+    )
+
+    # Assistant using the costly model
+    assistant_two = AssistantAgent(
+        name="costly_assistant",
+        model_client=costly_model_client,
+    )
+
+    print(assistant_one.name, "and", assistant_two.name, "are ready.")
+
+    # Print the costly client's config (the API key is masked)
+    print(costly_model_client.dump_component().model_dump_json(indent=2))
+
+    await cheap_model_client.close()
+    await costly_model_client.close()
+
+
+if __name__ == "__main__":
+    asyncio.run(main())

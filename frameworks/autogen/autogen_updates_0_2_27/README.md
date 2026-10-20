@@ -1,4 +1,18 @@
 # Autogen Updates 0 2 27
 
-> [!WARNING]
-> **Legacy example — AutoGen 0.2 API.** This project uses the old `import autogen` API, which AutoGen v0.7+ replaced with a new async API. It still runs with the pinned version: `pip install -r requirements.txt` on **Python 3.10–3.12** (AutoGen 0.2.35 doesn't support 3.13). For new projects, start from [`autogen_v07_quickstart`](../autogen_v07_quickstart).
+Shows off the features from the AutoGen 0.2.27 update video, rebuilt on the current API:
+
+- `main.py`: an assistant writes a small web page (HTML, CSS and a JavaScript "Hello!" button) and a code-executor agent saves the files into the `code` folder using `# filename:` comments. The files already in `code/` are sample output from a previous run.
+- `dotnet-autogen.cs`: the AutoGen for .NET sample from the video (C#, unchanged).
+
+> **Note:** Updated to AutoGen v0.7. The original video used the older AutoGen 0.2 API, so the code here differs from what's on screen.
+
+## Run it
+
+```bash
+pip install -r requirements.txt
+# put OPENAI_API_KEY in .env
+python main.py
+```
+
+> Code the model writes is executed on your machine without a sandbox.

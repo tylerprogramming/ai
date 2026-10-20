@@ -1,4 +1,15 @@
 # Autogen Multiple Configs
 
-> [!WARNING]
-> **Legacy example — AutoGen 0.2 API.** This project uses the old `import autogen` API, which AutoGen v0.7+ replaced with a new async API. It still runs with the pinned version: `pip install -r requirements.txt` on **Python 3.10–3.12** (AutoGen 0.2.35 doesn't support 3.13). For new projects, start from [`autogen_v07_quickstart`](../autogen_v07_quickstart).
+Different ways to set up model connections for your agents: from a `.env` file, from key/base-URL text files, from lists of keys and URLs, and two assistants that each use their own model. Each script builds the model clients and prints their config (API keys are masked).
+
+Updated to AutoGen v0.7 (the new `autogen_agentchat` API). v0.7 has no config lists (the JSON config file and its helper functions): you create one `OpenAIChatCompletionClient` per model and pass it to the agent as `model_client`.
+
+## Run it
+
+```bash
+pip install -r requirements.txt
+# put OPENAI_API_KEY in .env
+python config_list_from_json.py      # or config_list_from_dotenv.py, config_list_openai_aoai.py, get_config_list.py
+```
+
+The files in `txt/` hold sample placeholder keys and URLs for `config_list_openai_aoai.py`; replace them with your own.
