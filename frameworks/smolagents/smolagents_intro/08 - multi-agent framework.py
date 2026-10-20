@@ -40,22 +40,18 @@ def visit_webpage(url: str) -> str:
 from smolagents import (
     CodeAgent,
     ToolCallingAgent,
-    HfApiModel,
-    ManagedAgent,
+    InferenceClientModel,
     DuckDuckGoSearchTool,
     LiteLLMModel,
 )
 
-model = HfApiModel()
+model = InferenceClientModel()
 
+# ManagedAgent was removed: a name and description make the agent callable by the manager.
 web_agent = ToolCallingAgent(
     tools=[DuckDuckGoSearchTool(), visit_webpage],
     model=model,
     max_steps=10,
-)
-
-managed_web_agent = ManagedAgent(
-    agent=web_agent,
     name="search",
     description="Runs web searches for you. Give it your query as an argument.",
 )
@@ -63,7 +59,7 @@ managed_web_agent = ManagedAgent(
 manager_agent = CodeAgent(
     tools=[],
     model=model,
-    managed_agents=[managed_web_agent],
+    managed_agents=[web_agent],
     additional_authorized_imports=["time", "numpy", "pandas"],
 )
 

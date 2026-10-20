@@ -1,0 +1,10 @@
+# Install with: pip install -r requirements.txt
+# toolkit = DuckDuckGoSearchTool/VisitWebpageTool, litellm = LiteLLMModel (06), e2b = remote executor (02)
+smolagents[toolkit,litellm,e2b]>=1.26,<2
+huggingface-hub>=1.33,<2
+gradio>=6.30,<7
+gradio-client>=2.7,<3
+pillow>=12.3,<13
+requests>=2.34,<3
+markdownify>=1.2,<2
+python-dotenv>=1.0,<2

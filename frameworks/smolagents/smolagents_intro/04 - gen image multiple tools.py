@@ -1,4 +1,4 @@
-from smolagents import CodeAgent, HfApiModel
+from smolagents import CodeAgent, InferenceClientModel
 from smolagents import tool, Tool
 
 from huggingface_hub import InferenceClient
@@ -17,7 +17,7 @@ def model_download_tool(task: str) -> str:
     Args:
         task: The task for which to get the download count.
     """
-    most_downloaded_model = next(iter(list_models(filter=task, sort="downloads", direction=-1)))
+    most_downloaded_model = next(iter(list_models(filter=task, sort="downloads")))  # hub 1.x sorts descending; `direction` was removed
     
     return most_downloaded_model.id
 
@@ -31,13 +31,15 @@ class TextToImageTool(Tool):
         },
         "model": {
             "type": "string",
-            "description": "The Hugging Face model ID to use for image generation. If not provided, will use the default model."
+            "description": "The Hugging Face model ID to use for image generation. If not provided, will use the default model.",
+            "nullable": True,
         }
     }
     output_type = "image"
     current_model = "black-forest-labs/FLUX.1-schnell"
+    client = None
 
-    def forward(self, prompt, model):
+    def forward(self, prompt, model=None):
         if model:
             if model != self.current_model:
                 self.current_model = model
@@ -54,7 +56,7 @@ image_generator = TextToImageTool()
 
 model_id = "Qwen/QwQ-32B-Preview"
 
-agent = CodeAgent(tools=[image_generator, model_download_tool], model=HfApiModel())
+agent = CodeAgent(tools=[image_generator, model_download_tool], model=InferenceClientModel())
 agent.run(
     "Improve this prompt, then generate an image of it. Prompt: A cat wearing a hazmat suit in contaminated area.  Get the latest model for text-to-image from the Hugging Face Hub."
 )
