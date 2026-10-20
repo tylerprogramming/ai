@@ -1,3 +1,4 @@
+import random
 from dataclasses import dataclass, asdict, field
 from typing import Optional, Sequence, List, Dict
 
@@ -111,7 +112,8 @@ class RedditPostsLoader:
             self,
             category: str,
             reddit: praw.reddit.Reddit) -> list[RedditReader]:
-        subreddit = reddit.random_subreddit()
+        # PRAW 8 removed random_subreddit() (Reddit retired r/random), so pick one of the popular subreddits
+        subreddit = random.choice(list(reddit.subreddits.popular(limit=100)))
         method = getattr(subreddit, category)
         cat_posts = method(limit=self.number_posts)
 

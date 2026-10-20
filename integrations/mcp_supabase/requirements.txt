@@ -1,7 +1,8 @@
 # Install with: pip install -r requirements.txt
-APScheduler
-crewai
-crewai-tools
-mcp
+# Also needs Node.js (npx) for the Supabase MCP server
+APScheduler>=3.11,<4
+crewai>=1.15,<2
+crewai-tools[mcp]>=1.15,<2
+mcp>=1.28,<2  # crewai 1.15 requires mcp 1.28.x
 python-dotenv
 requests

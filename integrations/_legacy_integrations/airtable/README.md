@@ -1,4 +1,27 @@
 # Airtable
 
-> [!WARNING]
-> **Legacy example — AutoGen 0.2 API.** This project uses the old `import autogen` API, which AutoGen v0.7+ replaced with a new async API. It still runs with the pinned version: `pip install -r requirements.txt` on **Python 3.10–3.12** (AutoGen 0.2.35 doesn't support 3.13). For new projects, start from [`autogen_v07_quickstart`](../../../frameworks/autogen/autogen_v07_quickstart).
+An AutoGen "Engineer" agent with Airtable tools (create a record, get a table's record structure, list all records). You give it instructions in the terminal and it calls the Airtable API for you.
+
+Updated to AutoGen v0.7 (the new `autogen_agentchat` API).
+
+## Run it
+
+```bash
+pip install -r requirements.txt
+```
+
+Create a `.env` file in this folder:
+
+```
+OPENAI_API_KEY=your-openai-key
+API_KEY=your-airtable-personal-access-token
+BASE_ID=your-airtable-base-id
+```
+
+Then run:
+
+```bash
+python airtable.py
+```
+
+Type your instructions when prompted (e.g. "Create a record in the Contacts table for Jane"). Type `exit` to stop.

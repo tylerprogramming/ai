@@ -1,10 +1,27 @@
-from flask import Flask, request, jsonify
-from flask_cors import CORS
-from deep_fried.src.deep_fried.main import kickoff
+import hmac
+import os
 from datetime import datetime
 
+from dotenv import load_dotenv
+from flask import Flask, request, jsonify
+from deep_fried.src.deep_fried.main import kickoff
+
+load_dotenv()  # OPENAI_API_KEY and N8N_SHARED_SECRET from .env
+
 app = Flask(__name__)
-CORS(app)  # This enables CORS for all routes
+# No CORS: n8n calls this server-to-server, not from a browser.
+
+# Shared secret that n8n sends in the X-API-Key header (set it in .env)
+N8N_SHARED_SECRET = os.getenv("N8N_SHARED_SECRET", "")
+
+
+@app.before_request
+def require_api_key():
+    provided = request.headers.get("X-API-Key", "")
+    # compare_digest avoids leaking the secret through response timing
+    if not N8N_SHARED_SECRET or not hmac.compare_digest(provided.encode(), N8N_SHARED_SECRET.encode()):
+        return jsonify({"status": "error", "message": "Unauthorized"}), 401
+
 
 @app.route('/process', methods=['POST'])
 def process_request():
@@ -28,5 +45,13 @@ def process_request():
     
     return jsonify(sample_response)
 
+
 if __name__ == '__main__':
-    app.run(debug=True, port=5003, host='0.0.0.0') 
+    if not N8N_SHARED_SECRET:
+        raise SystemExit("Set N8N_SHARED_SECRET in .env (n8n sends it in the X-API-Key header).")
+    app.run(
+        debug=os.getenv("FLASK_DEBUG") == "1",  # debug is opt-in: FLASK_DEBUG=1
+        port=int(os.getenv("PORT", "5003")),
+        # Local only by default. If n8n runs in Docker, set HOST=0.0.0.0 so the container can reach it.
+        host=os.getenv("HOST", "127.0.0.1"),
+    )

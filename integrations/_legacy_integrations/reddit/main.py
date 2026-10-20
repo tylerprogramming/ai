@@ -2,7 +2,7 @@ import streamlit as st
 import json
 import reddit
 
-st.title = "Reddit App"
+st.title("Reddit App")
 
 with st.container(border=True):
     mode = st.radio(
@@ -23,7 +23,7 @@ with st.container(border=True):
             response = reddit.start_chat(prompt)
 
     if mode == "***Specific Subreddit***":
-        input = st.text_input("")
+        input = st.text_input("Subreddit")
         submit = st.button(f"Give me content!")
         prompt = f"Give me {number} subreddit posts on: {input}"
 

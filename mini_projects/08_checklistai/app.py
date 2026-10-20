@@ -1,5 +1,6 @@
 import os
 import logging
+import secrets
 from datetime import datetime
 
 from flask import Flask, render_template, request, redirect, url_for, flash, jsonify
@@ -36,7 +37,8 @@ logger = logging.getLogger(__name__)
 
 # Initialize Flask app and configurations
 app = Flask(__name__)
-app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
+# Session/CSRF signing key. Set FLASK_SECRET_KEY in .env, or a random key is used (forms reset on restart)
+app.config['SECRET_KEY'] = os.getenv('FLASK_SECRET_KEY') or secrets.token_hex(32)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///checklists.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['MAIL_SERVER'] = 'smtp.gmail.com'
@@ -103,7 +105,7 @@ def create_checklist():
 
 @app.route('/checklist/<int:id>', methods=['GET', 'POST'])
 def view_checklist(id):
-    checklist = Checklist.query.get_or_404(id)
+    checklist = db.get_or_404(Checklist, id)
     form = ChecklistForm(obj=checklist)
     
     if request.method == 'POST':
@@ -130,7 +132,7 @@ def reschedule_checklist(checklist_id):
 
 @app.route('/delete/<int:id>')
 def delete_checklist(id):
-    checklist = Checklist.query.get_or_404(id)
+    checklist = db.get_or_404(Checklist, id)
     try:
         ChecklistItem.query.filter_by(checklist_id=id).delete()
         db.session.delete(checklist)
@@ -144,7 +146,7 @@ def delete_checklist(id):
 
 @app.route('/update_title/<int:id>', methods=['POST'])
 def update_title(id):
-    checklist = Checklist.query.get_or_404(id)
+    checklist = db.get_or_404(Checklist, id)
     new_title = request.form.get('title')
     if new_title:
         checklist.title = new_title
@@ -198,7 +200,7 @@ def init_scheduler():
 # Add this function after the other helper functions
 
 def schedule_checklist(checklist_id):
-    checklist = Checklist.query.get(checklist_id)
+    checklist = db.session.get(Checklist, checklist_id)
     if checklist:
         if checklist.schedule_time:
             logger.info(f"Scheduling checklist: {checklist.title} (ID: {checklist_id}) for {checklist.schedule_time}")
@@ -221,6 +223,11 @@ def schedule_checklist(checklist_id):
 
 if __name__ == '__main__':
     with app.app_context():
+        db.create_all()  # creates instance/checklists.db on first run
         init_scheduler()
     logger.info("Starting Flask application")
-    app.run(debug=os.getenv('CHECKLIST_AI_FLASK_DEBUG'), port=os.getenv('CHECKLIST_AI_FLASK_PORT'))
+    app.run(
+        debug=os.getenv('FLASK_DEBUG') == '1',  # debug is opt-in: FLASK_DEBUG=1
+        port=int(os.getenv('CHECKLIST_AI_FLASK_PORT', '5000')),
+        host='127.0.0.1',
+    )

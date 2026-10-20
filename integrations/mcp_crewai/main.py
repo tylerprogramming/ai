@@ -3,6 +3,7 @@ from crewai_tools import MCPServerAdapter
 from mcp import StdioServerParameters
 
 import os
+import sys
 import warnings
 from pydantic import PydanticDeprecatedSince20
 from dotenv import load_dotenv
@@ -11,22 +12,36 @@ load_dotenv()
 
 warnings.filterwarnings("ignore", category=PydanticDeprecatedSince20)
 
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
+# The folder the filesystem MCP server is allowed to read/write (change it to e.g. your Downloads folder)
+DOWNLOADS_DIR = os.path.join(BASE_DIR, "downloads")
+os.makedirs(DOWNLOADS_DIR, exist_ok=True)
+
+
+def env_from(*names):
+    """Pass only the env vars that are set (a None value would crash the server launch)."""
+    return {name: os.environ[name] for name in names if os.getenv(name)}
+
+
 server_params=StdioServerParameters(
     command="npx",
     args=[
         "-y",
         "@modelcontextprotocol/server-filesystem",
-        "/Users/tylerreed/Downloads",
+        DOWNLOADS_DIR,
     ],
 )
 
+# Note: this npm package is deprecated (still runs). GitHub's official server is github/github-mcp-server
+# (Docker image ghcr.io/github/github-mcp-server, or the remote server at https://api.githubcopilot.com/mcp/).
 github_server_params=StdioServerParameters(
     command="npx",
     args=[
         "-y",
         "@modelcontextprotocol/server-github",
     ],
-    env={"GITHUB_PERSONAL_ACCESS_TOKEN": os.getenv("GITHUB_PERSONAL_ACCESS_TOKEN")},
+    env=env_from("GITHUB_PERSONAL_ACCESS_TOKEN"),
 )
       
 
@@ -34,17 +49,17 @@ brave_search_params=StdioServerParameters(
     command="npx",
     args=[
         "-y",
-        "@modelcontextprotocol/server-brave-search",
+        "@brave/brave-search-mcp-server",  # Brave's official server (replaces @modelcontextprotocol/server-brave-search)
     ],
-    env={"BRAVE_API_KEY": os.getenv("BRAVE_API_KEY")},
+    env=env_from("BRAVE_API_KEY"),
 )
 
 image_server_params=StdioServerParameters(
-    command="python3",
+    command=sys.executable,  # same Python (and venv) as this script
     args=[
-        "servers/image_server.py",
+        os.path.join(BASE_DIR, "servers", "image_server.py"),
     ],
-    env={"OPENAI_API_KEY": os.getenv("OPENAI_API_KEY"), "OPENAI_ORGANIZATION": os.getenv("OPENAI_ORGANIZATION")},
+    env=env_from("OPENAI_API_KEY", "OPENAI_ORGANIZATION"),
 )
 
 all_tools=[server_params, brave_search_params, image_server_params, github_server_params]

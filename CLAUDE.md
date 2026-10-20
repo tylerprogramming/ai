@@ -41,7 +41,7 @@ Model notes: GPT-5 models only accept the default `temperature` and use `max_com
 
 **IMPORTANT:** AutoGen v0.7+ is a breaking change from v0.2. The old `import autogen` pattern is deprecated. See `frameworks/autogen/autogen_v07_quickstart/` for current patterns.
 
-All AutoGen examples use the v0.7 API, including older ones first recorded on 0.2 (migrated in place — YouTube descriptions link to these paths, so don't move or rename project folders). The only exception is `integrations/_legacy_integrations/`, which still pins `pyautogen==0.2.35` (Python 3.10–3.12) and carries a legacy notice.
+All AutoGen examples use the v0.7 API, including older ones first recorded on 0.2 (migrated in place — YouTube descriptions link to these paths, so don't move or rename project folders).
 
 ## Key Conventions
 

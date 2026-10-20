@@ -1,52 +1,42 @@
-import autogen
+from autogen_agentchat.agents import AssistantAgent
+from autogen_agentchat.ui import Console
+from autogen_ext.models.openai import OpenAIChatCompletionClient
 
 
 class AutoGenInteraction:
     def __init__(self, api_key, transcription):
-        self.llm_config = {
-            "config_list": [{
-                "model": "gpt-3.5-turbo",
-                "api_key": api_key
-            }],
-            "temperature": 0,
-            "cache_seed": None
-        }
+        self.model_client = OpenAIChatCompletionClient(
+            model="gpt-5.4-mini",
+            api_key=api_key,
+            # AutoGen 0.7.5 predates gpt-5.4-mini, so its capabilities must be given explicitly
+            model_info={"vision": True, "function_calling": True, "json_output": True, "family": "gpt-5", "structured_output": True},
+            # temperature=0 removed: gpt-5 models only accept the default temperature
+        )
         self.transcription = transcription
 
-    def initiate_chat(self):
-        user = autogen.UserProxyAgent(
-            "user",
-            system_message="You are an administrator.",
-            human_input_mode="NEVER",
-            is_termination_msg=lambda msg: "TERMINATE" in msg["content"],
-            code_execution_config=False,
-        )
-
-        agent_summarizer = autogen.AssistantAgent(
+    async def initiate_chat(self):
+        # Each agent.run() is one turn, so the agents no longer need to reply with TERMINATE
+        agent_summarizer = AssistantAgent(
             "agent_summarizer",
-            system_message="You are an assistant agent. When you are done, reply with TERMINATE",
-            llm_config=self.llm_config
+            model_client=self.model_client,
+            system_message="You are an assistant agent.",
         )
 
-        agent_translator = autogen.AssistantAgent(
+        agent_translator = AssistantAgent(
             "ai_agent_translator",
-            system_message="You are an assistant agent. When you are done, reply with TERMINATE",
-            llm_config=self.llm_config
+            model_client=self.model_client,
+            system_message="You are an assistant agent.",
         )
 
-        user.initiate_chats(
-            [
-                {
-                    "recipient": agent_summarizer,
-                    "message": f"Can you summarize: {self.transcription} this nicely with the title and then bullet points?",
-                    "clear_history": True,
-                    "silent": False,
-                    "summary_method": "last_msg",
-                },
-                {
-                    "recipient": agent_translator,
-                    "message": "Can you translate this into Dutch?",
-                    "summary_method": "last_msg",
-                },
-            ]
-        )
+        # Chat 1: summarize the transcription
+        result = await Console(agent_summarizer.run_stream(
+            task=f"Can you summarize: {self.transcription} this nicely with the title and then bullet points?"
+        ))
+        summary = result.messages[-1].content  # "last_msg" summary, carried over to the next chat
+
+        # Chat 2: translate the summary
+        await Console(agent_translator.run_stream(
+            task=f"Can you translate this into Dutch?\n\nContext:\n{summary}"
+        ))
+
+        await self.model_client.close()

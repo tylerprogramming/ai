@@ -5,9 +5,10 @@ import json
 
 headers = {"X-OpenAI-Api-Key": "1111"}
 
-client = weaviate.connect_to_local(headers=headers)
-
 def weaviate_image_search(image_b64: str):
+    # Connect per request (the client is closed at the end, so a module-level client only worked once)
+    client = weaviate.connect_to_local(headers=headers)
+
     # Get the collection
     movies = client.collections.get("MovieMM")
 

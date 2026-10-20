@@ -1,8 +1,8 @@
 # Install with: pip install -r requirements.txt
-crewai
-crewai-tools
-httpx
-mcp
-openai
+# Also needs Node.js (npx) for the filesystem, Brave Search and GitHub MCP servers
+crewai>=1.15,<2
+crewai-tools[mcp]>=1.15,<2
+mcp>=1.28,<2  # crewai 1.15 requires mcp 1.28.x
+openai>=2.30,<3
 pydantic
 python-dotenv

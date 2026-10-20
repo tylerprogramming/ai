@@ -1,7 +1,9 @@
 # Install with: pip install -r requirements.txt
-# Legacy AutoGen 0.2 example: requires Python 3.10-3.12
-pyautogen==0.2.35
+# Also needs FFmpeg installed (yt-dlp audio extraction and pydub)
+autogen-agentchat~=0.7.5
+autogen-ext[openai]~=0.7.5
 openai
 pydub
+audioop-lts; python_version >= "3.13"  # pydub needs audioop, removed from the stdlib in Python 3.13
 python-dotenv
 yt-dlp

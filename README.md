@@ -81,8 +81,6 @@ See `frameworks/autogen/autogen_v07_quickstart/` for examples.
 
 All AutoGen examples in this repo use the v0.7 API. Many were first recorded on AutoGen 0.2, so the code may differ from what's on screen in older videos.
 
-The three archived integrations in `integrations/_legacy_integrations/` (airtable, reddit, youtube-summarizer) still use AutoGen 0.2. They pin `pyautogen==0.2.35`, which installs on Python 3.10–3.12 only.
-
 ### CrewAI v1.15+
 
 ```python

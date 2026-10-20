@@ -1,4 +1,4 @@
-from crewai import Agent, Task, Crew, Process
+from crewai import Agent, Task, Crew, Process, PlanningConfig
 from crewai_tools import MCPServerAdapter
 from mcp import StdioServerParameters
 from apscheduler.schedulers.background import BackgroundScheduler
@@ -19,9 +19,10 @@ def background_supabase_task():
         args=[
             "-y",
             "@supabase/mcp-server-supabase@latest",
-            "--access-token",
-            os.getenv("SUPABASE_ACCESS_TOKEN")
+            "--read-only",  # this crew only reads records
         ],
+        # The server reads the token from SUPABASE_ACCESS_TOKEN (keeps it out of the process list)
+        env={"SUPABASE_ACCESS_TOKEN": os.getenv("SUPABASE_ACCESS_TOKEN", "")},
     )
 
     with MCPServerAdapter(server_params) as tools:
@@ -33,7 +34,8 @@ def background_supabase_task():
             goal="Get the latest records from the database.",
             backstory="You are an agent for supabase for getting the latest records from the database.",
             tools=tools,
-            reasoning=True,
+            # Plan before acting, but cap refinement so it can't loop if the model never says READY
+            planning_config=PlanningConfig(max_attempts=3),
             verbose=True,
         )
         
@@ -66,9 +68,9 @@ def background_supabase_task():
         print("\nCrew Task Result (Stdio - Managed):\n", result)
 
 
-# Create a scheduler
+# Create a scheduler: run every morning at 6:00 AM
 scheduler = BackgroundScheduler()
-scheduler.add_job(background_supabase_task, 'cron', hour=23, minute=18)
+scheduler.add_job(background_supabase_task, 'cron', hour=6, minute=0)
 scheduler.start()
 
 try:

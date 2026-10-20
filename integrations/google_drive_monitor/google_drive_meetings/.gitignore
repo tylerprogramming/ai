@@ -1,0 +1,10 @@
+# Google OAuth secrets: never commit these
+credentials.json
+token.json
+token.pickle
+.env
+
+# Run artifacts
+__pycache__/
+chunk_*.wav
+meeting_minutes/

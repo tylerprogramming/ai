@@ -1,3 +1,9 @@
+# Supabase MCP + CrewAI
+
+Every morning a CrewAI agent connects to Supabase through the Supabase MCP server (read-only), reads the latest records from a `habits` table, pairs them with a quote from *Atomic Habits*, and sends the summary to Telegram.
+
+> **Note:** Updated for CrewAI 1.15; the code may differ slightly from the video.
+
 ## Setup
 
 1. **Clone the repository** and navigate to the project directory.
@@ -41,7 +47,7 @@
 
 ## Requirements
 
-- Python 3.12+
+- Python 3.10–3.13
 - Node.js (for MCP server)
 - Supabase account and access token
 - Telegram bot and chat ID

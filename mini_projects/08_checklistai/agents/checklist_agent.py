@@ -10,7 +10,7 @@ class ChecklistAgent:
         self.client = client
 
     def generate_checklist(self, prompt: str) -> MyChecklist:
-        completion = self.client.beta.chat.completions.parse(
+        completion = self.client.chat.completions.parse(
             model="gpt-5.4-mini",
             messages=[
                 {"role": "system", "content": "Extract the checklist information."},
