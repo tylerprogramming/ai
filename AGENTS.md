@@ -32,11 +32,12 @@ This is an AI projects repository containing:
 
 | Framework | Package | Current Pattern |
 |-----------|---------|-----------------|
-| AutoGen v0.7+ | `autogen-agentchat`, `autogen-ext` | Async, event-driven |
-| CrewAI v1.15+ | `crewai>=1.15.0` | Decorators, YAML config, Flows |
-| PydanticAI v2.x | `pydantic-ai>=2.40.0` | Type-safe, structured outputs |
-| Smolagents v1.26+ | `smolagents>=1.26.0` | Code agents, LiteLLM |
-| OpenAI Agents | `openai>=1.50.0` | Chat completions, tools |
+| AutoGen v0.7 | `autogen-agentchat~=0.7.5`, `autogen-ext[openai]~=0.7.5` | Async, event-driven; pass `model_info` for gpt-5.4-mini |
+| CrewAI v1.15 | `crewai[tools]>=1.15,<2` | Decorators, YAML config, Flows |
+| PydanticAI v2 | `pydantic-ai>=2.58,<3` | `output_type`, `result.output` |
+| Smolagents v1.26 | `smolagents[toolkit,litellm]>=1.26,<2` | Code agents, LiteLLM |
+| OpenAI Agents SDK | `openai-agents~=0.24` | Agents, tools, handoffs |
+| OpenAI SDK | `openai>=3.35,<4` | Chat completions, `chat.completions.parse`, hosted Agents API |
 
 ### AutoGen v0.7+ Migration
 

@@ -24,14 +24,20 @@ youtube_shorts/       # Code for YouTube Shorts videos
 claude_skill_agent_builder/  # Claude skill for building AI agents
 ```
 
-## Current Framework Versions (September 2026)
+## Current Framework Versions (October 2026)
+
+All projects were updated and tested against these versions (offline, with faked LLM calls):
 
 | Framework | Version | Key Changes |
 |-----------|---------|-------------|
-| AutoGen | v0.7+ | **Complete rewrite!** New async API with `autogen_agentchat` |
-| CrewAI | v1.15+ | Conversational flows, LLM overlay, human feedback |
-| PydanticAI | v2.40+ | TypeSafeModel, realtime sessions |
-| Smolagents | v1.26+ | Exa search, improved executors |
+| AutoGen | `autogen-agentchat` 0.7.5 | **Complete rewrite!** New async API with `autogen_agentchat` |
+| CrewAI | `crewai[tools]` 1.15 | Conversational flows, LLM overlay, streaming, `kickoff_async` inside async code |
+| PydanticAI | `pydantic-ai` 2.58 | `output_type` / `result.output` (not `result_type` / `.data`) |
+| Smolagents | `smolagents` 1.26 | `ManagedAgent` removed: pass agents with name/description to `managed_agents` |
+| OpenAI Agents SDK | `openai-agents` 0.24 | Agents, tools, handoffs |
+| OpenAI SDK | `openai` 3.35 | `chat.completions.parse` (no `beta.`); hosted Agents API |
+
+Model notes: GPT-5 models only accept the default `temperature` and use `max_completion_tokens`. AutoGen 0.7.5 needs `model_info` for `gpt-5.4-mini`. `gpt-image-1` shuts down 2026-10-23 — use `gpt-image-2.5-flare` / `-sunburst`.
 
 **IMPORTANT:** AutoGen v0.7+ is a breaking change from v0.2. The old `import autogen` pattern is deprecated. See `frameworks/autogen/autogen_v07_quickstart/` for current patterns.
 
@@ -62,7 +68,7 @@ The `claude_skill_agent_builder` can scaffold new agent projects. It supports Au
 ## Dependencies
 
 Most projects use:
-- Python 3.10+
+- Python 3.11–3.13 (3.12 recommended)
 - Various AI SDKs (autogen-agentchat, crewai, openai, pydantic-ai, smolagents)
 - Some projects require local LLM setup (Ollama, LM Studio)
 - FFMPEG required for Whisper AI transcription

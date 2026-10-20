@@ -42,16 +42,21 @@ A collection of AI agent projects, framework tutorials, and integrations. This i
 └── claude_skill_agent_builder/  # Claude skill for building AI agents
 ```
 
-## Framework Versions (September 2026)
+## Framework Versions (October 2026)
 
-| Framework | Version | Highlights |
-|-----------|---------|------------|
-| **AutoGen** | v0.7+ | ⚠️ Breaking change from v0.2! New async API, event-driven |
-| **CrewAI** | v1.15+ | Conversational flows, LLM overlay, streaming |
-| **PydanticAI** | v2.46+ | TypeSafe models, realtime sessions, tools with context |
-| **Smolagents** | v1.26+ | Code agents, Exa search, improved executors |
-| **OpenAI Agents** | v0.58+ | Hosted sandbox, streaming, subagents |
-| **AgentOps** | Latest | Agent monitoring and observability |
+Every project in the repo was updated and tested against these versions:
+
+| Framework | Package / version | Highlights |
+|-----------|-------------------|------------|
+| **AutoGen** | `autogen-agentchat` 0.7.5 | ⚠️ Breaking change from v0.2! New async API, event-driven |
+| **CrewAI** | `crewai[tools]` 1.15 | Conversational flows, LLM overlay, streaming |
+| **PydanticAI** | `pydantic-ai` 2.58 | Typed outputs (`output_type`), tools with context, streaming |
+| **Smolagents** | `smolagents` 1.26 | Code agents, managed agents, LiteLLM models |
+| **OpenAI Agents SDK** | `openai-agents` 0.24 | Agents, tools, handoffs |
+| **OpenAI Agents API** (hosted) | `openai` 3.35 | Hosted sandbox, sessions, subagents (`openai_agents_058`) |
+| **AgentOps** | `agentops` 0.4 | Agent monitoring and observability |
+
+Default model in the examples is `gpt-5.4-mini`. Image examples use `gpt-image-2.5-flare` / `-sunburst` (`gpt-image-1` shuts down 2026-10-23).
 
 ## Framework Quick Reference
 
@@ -92,8 +97,9 @@ See `frameworks/crewai/crewai_v115_features/` for new features.
 ```python
 from pydantic_ai import Agent
 
-agent = Agent("openai:gpt-5.4-mini", result_type=MyModel)
+agent = Agent("openai:gpt-5.4-mini", output_type=MyModel)
 result = await agent.run("...")
+print(result.output)
 ```
 
 See `frameworks/pydanticai/pydanticai_v2_features/` for examples.
@@ -106,7 +112,7 @@ See `frameworks/pydanticai/pydanticai_v2_features/` for examples.
 
 ### Prerequisites
 
-- Python 3.10+
+- Python 3.11–3.13 (3.12 recommended; CrewAI doesn't support 3.14 yet)
 - [Ollama](https://ollama.com/) (for local LLMs)
 - [LM Studio](https://lmstudio.ai/) (alternative local LLM option)
 
