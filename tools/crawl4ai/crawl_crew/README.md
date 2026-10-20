@@ -1,10 +1,12 @@
 # CrawlCrew Crew
 
+> **Note:** Updated for CrewAI 1.15 and Crawl4AI 0.9; the code may differ slightly from the video.
+
 Welcome to the CrawlCrew Crew project, powered by [crewAI](https://crewai.com). This template is designed to help you set up a multi-agent AI system with ease, leveraging the powerful and flexible framework provided by crewAI. Our goal is to enable your agents to collaborate effectively on complex tasks, maximizing their collective intelligence and capabilities.
 
 ## Installation
 
-Ensure you have Python >=3.10 <3.13 installed on your system. This project uses [UV](https://docs.astral.sh/uv/) for dependency management and package handling, offering a seamless setup and execution experience.
+Ensure you have Python >=3.10 <3.14 installed on your system. This project uses [UV](https://docs.astral.sh/uv/) for dependency management and package handling, offering a seamless setup and execution experience.
 
 First, if you haven't already, install uv:
 
@@ -18,9 +20,14 @@ Next, navigate to your project directory and install the dependencies:
 ```bash
 crewai install
 ```
+
+Crawl4AI drives a headless Chromium browser. Install it once with:
+```bash
+uv run crawl4ai-setup
+```
 ### Customizing
 
-**Add your `OPENAI_API_KEY` into the `.env` file**
+**Copy `.env.example` to `.env` and add your `OPENAI_API_KEY`** (`MODEL` picks the LLM; without it CrewAI falls back to `gpt-4.1-mini`)
 
 - Modify `src/crawl_crew/config/agents.yaml` to define your agents
 - Modify `src/crawl_crew/config/tasks.yaml` to define your tasks
@@ -37,7 +44,7 @@ $ crewai run
 
 This command initializes the crawl_crew Crew, assembling the agents and assigning them tasks as defined in your configuration.
 
-This example, unmodified, will run the create a `report.md` file with the output of a research on LLMs in the root folder.
+The crew's `Crawl Sitemap` tool fetches the sitemap passed in `src/crawl_crew/main.py` (`https://docs.crewai.com/sitemap.xml` by default), crawls every page with Crawl4AI, and the agent prints a summary of what it found.
 
 ## Understanding Your Crew
 

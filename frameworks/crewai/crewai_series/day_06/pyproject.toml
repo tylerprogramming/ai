@@ -1,21 +1,15 @@
-[tool.poetry]
+[project]
 name = "day_06"
 version = "0.1.0"
 description = "day_06 using crewAI"
-authors = ["Tyler Reed <tylerreedytlearning@gmail.com>"]
+authors = [{ name = "Tyler Reed", email = "tylerreedytlearning@gmail.com" }]
+requires-python = ">=3.10,<3.14"
+dependencies = [
+    "crewai[tools,litellm]>=1.15,<2",
+    "requests>=2.32,<3",
+    "python-dotenv>=1.2,<2",
+]
 
-[tool.poetry.dependencies]
-python = ">=3.10,<=3.13"
-crewai = { extras = ["tools"], version = ">=0.67.1,<1.0.0" }
-
-
-[tool.poetry.scripts]
-day_06 = "day_06.main:run"
-run_crew = "day_06.main:run"
-train = "day_06.main:train"
-replay = "day_06.main:replay"
-test = "day_06.main:test"
-
-[build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
+# The examples are run as scripts (see README), so Poetry only installs the dependencies.
+[tool.poetry]
+package-mode = false

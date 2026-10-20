@@ -24,6 +24,7 @@ class MyCustomTool(BaseTool):
     def _run(self, sitemap_url: str) -> str:
         # Implementation goes here
         urls = get_crewai_docs_urls(sitemap_url)
+        result = []
         if urls:
             print(f"Found {len(urls)} URLs to crawl")
             result = asyncio.run(crawl_parallel(urls, max_concurrent=10))
@@ -51,22 +52,20 @@ async def crawl_parallel(urls: List[str], max_concurrent: int = 3):
     try:
         success_count = 0
         fail_count = 0
+        markdown_results = []
         start_time = time.time()
         print(f"Start Time: {time.ctime(start_time)}")
         for i in range(0, len(urls), max_concurrent):
             batch = urls[i : i + max_concurrent]
             tasks = []
 
-            for j, url in enumerate(batch):
-                session_id = f"parallel_session_{i + j}"
-                task = crawler.arun(url=url, config=crawl_config, session_id=session_id)
+            for url in batch:
+                task = crawler.arun(url=url, config=crawl_config)
                 tasks.append(task)
 
             # Gather results
             results = await asyncio.gather(*tasks, return_exceptions=True)
 
-            markdown_results = []
-            
             for url, result in zip(batch, results):
                 if isinstance(result, Exception):
                     print(f"Error crawling {url}: {result}")
@@ -74,12 +73,12 @@ async def crawl_parallel(urls: List[str], max_concurrent: int = 3):
                 elif result.success:
                     print("Successfully crawled", url)
                     success_count += 1
-                    markdown_results.append(result.markdown_v2.raw_markdown[:1000])
+                    markdown_results.append(result.markdown.raw_markdown[:1000])
                     
                     print("--- URL ---")
                     print(url)
                     print("--- MARKDOWN ---")
-                    print(result.markdown_v2.raw_markdown[:250])
+                    print(result.markdown.raw_markdown[:250])
                     print("--------------------------------")
                 else:
                     print(f"Unsuccessful crawl of {url}")
@@ -122,18 +121,4 @@ def get_crewai_docs_urls(sitemap_url: str):
         return urls
     except Exception as e:
         print(f"Error fetching sitemap: {e}")
-        return []        
-
-async def main():
-    urls = get_crewai_docs_urls()
-    if urls:
-        print(f"Found {len(urls)} URLs to crawl")
-        await crawl_parallel(urls, max_concurrent=10)
-    else:
-        print("No URLs found to crawl")    
-
-    
-    
-    
-
-    
+        return []

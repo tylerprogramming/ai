@@ -1,6 +1,6 @@
 from crewai import Agent, Crew, Process, Task
 from crewai.project import CrewBase, agent, crew, task
-from tools.custom_tool import MyCustomTool
+from crawl_crew.tools.custom_tool import MyCustomTool
 from dotenv import load_dotenv
 
 load_dotenv()

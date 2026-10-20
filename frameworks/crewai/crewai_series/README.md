@@ -1,5 +1,7 @@
 # CrewAI Series
 
+> **Note:** Updated for CrewAI 1.15 (and AgentOps 0.4 in day 07); the code may differ slightly from the video.
+
 This repository contains a series of projects demonstrating the capabilities and evolution of CrewAI, a framework for orchestrating role-playing AI agents. Each day's project builds upon the previous, showcasing different aspects and features of CrewAI.
 
 ## Overview of Daily Projects
@@ -37,6 +39,10 @@ This repository contains a series of projects demonstrating the capabilities and
 - Using YAML files for agent and task definitions
 - Visualizing workflows with the `flow.plot()` method
 
+### Day 07: Scheduled Flow with AgentOps
+- Runs the news Flow on a schedule
+- Traces each run and the custom tools with AgentOps
+
 ## Getting Started
 
 Each day's project is contained in its own directory (e.g., `day_01`, `day_02`, etc.). To get started with a specific day:
@@ -46,7 +52,7 @@ Each day's project is contained in its own directory (e.g., `day_01`, `day_02`, 
 
 ## Prerequisites
 
-- Python >=3.10 <=3.13
+- Python >=3.10 <3.14
 - Poetry (for dependency management)
 
 ## General Setup
@@ -61,7 +67,7 @@ Each day's project is contained in its own directory (e.g., `day_01`, `day_02`, 
    ```
    poetry install
    ```
-5. Set up your OpenAI API key in the `.env` file
+5. Copy `.env.example` (in this folder) to `.env` and fill in your keys. `MODEL` picks the LLM the agents use (`gpt-5.4-mini`); without it CrewAI falls back to `gpt-4.1-mini`
 
 ## Running a Project
 
@@ -71,7 +77,7 @@ Typically, you can run a day's project with:
 poetry run python src/day_XX/main.py
 ```
 
-Replace `XX` with the day number (e.g., `01`, `02`, etc.)
+Replace `XX` with the day number (e.g., `02`, `03`, etc.). Day 01 is a plain script (`pip install -r requirements.txt && python run_crew.py`), and the Flow examples run with `python src/day_05/MyFlow.py`, `src/day_06/workflow.py` and `src/day_07/workflow.py`.
 
 
 ## Jupyter Notebooks

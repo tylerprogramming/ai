@@ -1,13 +1,13 @@
-from crewai_tools import BaseTool
+from crewai.tools import BaseTool
 import os
 from datetime import datetime
-from agentops import record_tool
+import agentops
 
 class CustomFileWriterTool(BaseTool):
     name: str = "Custom File Writer Tool"
     description: str = "Write content to a file."
 
-    @record_tool(tool_name="My own file writer tool")
+    @agentops.tool(name="My own file writer tool")
     def _run(self, filename: str, content: str) -> str:
         # Remove .md extension if present
         filename = filename.removesuffix('.md')

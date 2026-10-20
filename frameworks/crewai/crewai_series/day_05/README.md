@@ -1,5 +1,7 @@
 # Day05 Crew
 
+> **Note:** Updated for CrewAI 1.15; the code may differ slightly from the video.
+
 Welcome to the Day05 Crew project, powered by [crewAI](https://crewai.com). This project demonstrates how to set up a multi-agent AI system for automated content creation and marketing strategy development.
 
 ## Project Overview
@@ -8,7 +10,7 @@ The Day05 Crew project focuses on creating an automated workflow for developing 
 
 ## Installation
 
-Ensure you have Python >=3.10 <=3.13 installed on your system. This project uses [Poetry](https://python-poetry.org/) for dependency management.
+Ensure you have Python >=3.10 <3.14 installed on your system. This project uses [Poetry](https://python-poetry.org/) for dependency management.
 
 First, if you haven't already, install Poetry:
 
@@ -24,7 +26,7 @@ poetry install
 
 ### Configuration
 
-**Add your `OPENAI_API_KEY` into the `.env` file**
+**Add your `OPENAI_API_KEY` and `SERPER_API_KEY` into the `.env` file** (see `../.env.example`)
 
 ## Project Structure
 
@@ -44,6 +46,12 @@ To start the content marketing strategy development process, run this command fr
 poetry run python src/day_05/main.py
 ```
 
+To run the Flow version (picks a trending AI topic, runs the crew, saves `news/news.md` and writes `my_flow_plot.html`):
+
+```bash
+poetry run python src/day_05/MyFlow.py
+```
+
 This command initializes the Day05 Crew, assembling the agents and assigning them tasks as defined in your configuration.
 
 ## Understanding Your Crew
@@ -60,7 +68,7 @@ These agents collaborate on a series of tasks defined in `config/tasks.yaml`, le
 
 ## Output
 
-The project generates a `content_marketing_strategy.md` file in the root directory, containing the final content marketing strategy produced by the AI agents. This includes content ideas, SEO recommendations, and a social media distribution plan.
+`main.py` prints the crew's news report to the console; `MyFlow.py` also saves it to `news/news.md`.
 
 ## Support
 

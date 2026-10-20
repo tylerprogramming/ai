@@ -1,10 +1,12 @@
 # Day03 Crew
 
+> **Note:** Updated for CrewAI 1.15; the code may differ slightly from the video.
+
 Welcome to the Day03 Crew project, powered by [crewAI](https://crewai.com). This template is designed to help you set up a multi-agent AI system with ease, leveraging the powerful and flexible framework provided by crewAI. Our goal is to enable your agents to collaborate effectively on complex tasks, maximizing their collective intelligence and capabilities.
 
 ## Installation
 
-Ensure you have Python >=3.10 <=3.13 installed on your system. This project uses [Poetry](https://python-poetry.org/) for dependency management and package handling, offering a seamless setup and execution experience.
+Ensure you have Python >=3.10 <3.14 installed on your system. This project uses [Poetry](https://python-poetry.org/) for dependency management and package handling, offering a seamless setup and execution experience.
 
 First, if you haven't already, install Poetry:
 
@@ -14,10 +16,12 @@ pip install poetry
 
 Next, navigate to your project directory and install the dependencies:
 
-1. First lock the dependencies and install them by using the CLI command:
 ```bash
-crewai install
+poetry install
 ```
+
+(or `uv sync`)
+
 ### Customizing
 
 **Add your `OPENAI_API_KEY` into the `.env` file**
@@ -32,12 +36,12 @@ crewai install
 To kickstart your crew of AI agents and begin task execution, run this from the root folder of your project:
 
 ```bash
-$ crewai run
+poetry run python src/day_03/main.py
 ```
 
 This command initializes the day_03 Crew, assembling the agents and assigning them tasks as defined in your configuration.
 
-This example, unmodified, will run the create a `report.md` file with the output of a research on LLMs in the root folder.
+It searches the news with Serper (set `SERPER_API_KEY` too) and writes a `report.md` file in the folder you run it from.
 
 ## Understanding Your Crew
 

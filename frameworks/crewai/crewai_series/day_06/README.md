@@ -1,5 +1,7 @@
 # Day06 Crew
 
+> **Note:** Updated for CrewAI 1.15; the code may differ slightly from the video.
+
 Welcome to the Day06 Crew project, powered by [crewAI](https://crewai.com). This project demonstrates how to set up a multi-agent AI system for automated task execution in a software development context.
 
 ## Project Overview
@@ -8,7 +10,7 @@ The Day06 Crew project focuses on creating an automated workflow for executing a
 
 ## Installation
 
-Ensure you have Python >=3.10 <=3.13 installed on your system. This project uses [Poetry](https://python-poetry.org/) for dependency management.
+Ensure you have Python >=3.10 <3.14 installed on your system. This project uses [Poetry](https://python-poetry.org/) for dependency management.
 
 First, if you haven't already, install Poetry:
 
@@ -24,24 +26,24 @@ poetry install
 
 ### Configuration
 
-**Add your `OPENAI_API_KEY` into the `.env` file**
+**Add your `OPENAI_API_KEY` and `SERPER_API_KEY` into the `.env` file** (see `../.env.example`)
 
 ## Project Structure
 
 The main components of the Day06 Crew project are located in the `src/day_06` directory:
 
 - `workflow.py`: Defines the workflow class and task execution logic.
-- `main.py`: The entry point of the application, setting up the workflow and running the tasks.
+- `main.py`: Runs just the news crew once (`poetry run python src/day_06/main.py`).
 
 ## Running the Project
 
 To start the automated task execution process, run this command from the root folder of your project:
 
 ```bash
-poetry run python src/day_06/main.py
+poetry run python src/day_06/workflow.py
 ```
 
-This command initializes the Day06 Crew, setting up the workflow and executing the defined tasks.
+This runs the news Flow once a minute (press Ctrl+C to stop). Each run writes a markdown file into `ainews/` in the folder you run it from.
 
 ## Understanding Your Workflow
 

@@ -3,17 +3,17 @@ name = "crawl_crew"
 version = "0.1.0"
 description = "crawl_crew using crewAI"
 authors = [{ name = "Your Name", email = "you@example.com" }]
-requires-python = ">=3.10,<3.13"
+requires-python = ">=3.10,<3.14"
 dependencies = [
-    "crewai[tools]>=0.102.0,<1.0.0"
+    "crewai[tools]>=1.15,<2",
+    "crawl4ai~=0.9.5",
+    "requests>=2.32,<3",
+    "python-dotenv>=1.2,<2",
 ]
 
 [project.scripts]
 crawl_crew = "crawl_crew.main:run"
 run_crew = "crawl_crew.main:run"
-train = "crawl_crew.main:train"
-replay = "crawl_crew.main:replay"
-test = "crawl_crew.main:test"
 
 [build-system]
 requires = ["hatchling"]

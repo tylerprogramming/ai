@@ -96,6 +96,6 @@ async def main():
     flow = NewsFlow()
     flow.plot("my_flow_plot")
 
-    await flow.kickoff()
+    await flow.kickoff_async()
 
 asyncio.run(main())
