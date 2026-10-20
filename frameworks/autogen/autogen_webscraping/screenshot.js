@@ -6,8 +6,9 @@ const fullPath = `${ss}`
 const timeout = 75000;
 
 (async () => {
+    // headless: true is the new headless mode ("new" was removed in Puppeteer 22)
     const browser = await puppeteer.launch( {
-        headless: "new",
+        headless: true,
     } );
 
     const page = await browser.newPage();

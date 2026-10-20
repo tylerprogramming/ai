@@ -1,50 +1,21 @@
-# React + TypeScript + Vite
+# Movie Recommendation
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Describe a movie or upload an image, and get five recommendations with posters.
 
-Currently, two official plugins are available:
+- **Frontend** (this folder): React + TypeScript + Vite + Tailwind CSS.
+- **Backend** (`backend/`): a Flask API that runs a CrewAI Flow to search a local Weaviate database (keyword search for text, CLIP image search for uploads).
+- **Database** (`_weaviate-docker/`): Weaviate with the CLIP module, run with Docker.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+> **Note:** Updated to Vite 8 and Tailwind CSS 4 (the Vite 5 dev server had security fixes only in newer majors), and the backend to Flask 3 / CrewAI 1.15. The code may differ slightly from the video.
 
-## Expanding the ESLint configuration
+## Run it
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+1. Start Weaviate, load the data and start the API: see [`backend/README.md`](backend/README.md).
+2. Start the frontend from this folder:
 
-- Configure the top-level `parserOptions` property like this:
+   ```bash
+   npm install
+   npm run dev
+   ```
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
-
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
-
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
-
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
-```
+   Open http://localhost:5173. It calls the API at http://localhost:5555.

@@ -1,7 +1,7 @@
 {
   "name": "puppet_test",
   "version": "1.0.0",
-  "description": "",
+  "description": "Screenshot helper used by vision_crawl.py",
   "main": "screenshot.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -9,8 +9,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "puppeteer": "^21.6.0",
-    "puppeteer-extra": "^3.3.6",
-    "puppeteer-extra-plugin-stealth": "^2.11.2"
+    "puppeteer": "^25.15.0"
   }
 }

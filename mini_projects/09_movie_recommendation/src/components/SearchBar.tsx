@@ -46,7 +46,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({ value, onChange, onSubmit 
           value={value}
           onChange={(e) => onChange(e.target.value)}
           placeholder="Search for movies..."
-          className="flex-1 p-3 rounded-lg bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="flex-1 p-3 rounded-lg bg-gray-700 text-white focus:outline-hidden focus:ring-2 focus:ring-blue-500"
         />
         <input
           type="file"

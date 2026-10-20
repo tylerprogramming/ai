@@ -8,7 +8,7 @@ Updated to AutoGen v0.7 (the new `autogen_agentchat` API).
 
 ```bash
 pip install -r requirements.txt
-npm install            # installs puppeteer for screenshot.js
+npm install            # installs Puppeteer 25 (and its Chrome) for screenshot.js
 ```
 
 Put your `OPENAI_API_KEY` in a `.env` file, then:
