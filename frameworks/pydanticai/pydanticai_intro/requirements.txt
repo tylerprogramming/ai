@@ -1,6 +1,5 @@
 # Install with: pip install -r requirements.txt
-firecrawl-py
-httpx
-logfire
-pydantic
-pydantic-ai
+firecrawl-py>=4.53,<5
+logfire>=5.2,<6
+pydantic>=2.14,<3
+pydantic-ai>=2.58,<3

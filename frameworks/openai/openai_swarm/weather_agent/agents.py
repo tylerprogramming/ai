@@ -18,6 +18,7 @@ def send_email(recipient, subject, body):
 
 weather_agent = Agent(
     name="Weather Agent",
+    model="gpt-5.4-mini",  # Swarm would default to the older gpt-4o
     instructions="You are a helpful agent.",
     functions=[get_weather, send_email],
 )

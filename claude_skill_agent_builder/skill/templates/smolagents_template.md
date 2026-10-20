@@ -15,13 +15,14 @@
 ## requirements.txt
 
 ```
-smolagents>=1.26.0
-litellm>=1.40.0
-duckduckgo-search>=6.0.0
-python-dotenv>=1.0.0
+smolagents[toolkit,litellm]>=1.26,<2
+python-dotenv>=1.0,<2
 ```
 
 ## tools/custom_tools.py
+
+Never `eval()` a string the model passes in. For math tools, parse with `ast` and allow only
+numbers and arithmetic operators.
 
 ```python
 from smolagents import Tool
@@ -134,34 +135,26 @@ if __name__ == "__main__":
 ## Multi-Agent Template
 
 ```python
-from smolagents import CodeAgent, ManagedAgent, LiteLLMModel
+from smolagents import CodeAgent, LiteLLMModel
 
 
 def main():
     model = LiteLLMModel(model_id="gpt-5.4-mini")
 
-    # Create specialized sub-agents
+    # Create specialized sub-agents. A name and description make them callable
+    # by the manager (ManagedAgent was removed in recent smolagents).
     {sub_agent1_name} = CodeAgent(
         tools=[{sub_agent1_tools}],
         model=model,
         max_steps=3,
+        name="{sub_agent1_name}",
+        description="{sub_agent1_description}",
     )
 
     {sub_agent2_name} = CodeAgent(
         tools=[{sub_agent2_tools}],
         model=model,
         max_steps=3,
-    )
-
-    # Wrap as managed agents
-    managed_{sub_agent1_name} = ManagedAgent(
-        agent={sub_agent1_name},
-        name="{sub_agent1_name}",
-        description="{sub_agent1_description}",
-    )
-
-    managed_{sub_agent2_name} = ManagedAgent(
-        agent={sub_agent2_name},
         name="{sub_agent2_name}",
         description="{sub_agent2_description}",
     )
@@ -170,7 +163,7 @@ def main():
     manager = CodeAgent(
         tools=[],
         model=model,
-        managed_agents=[managed_{sub_agent1_name}, managed_{sub_agent2_name}],
+        managed_agents=[{sub_agent1_name}, {sub_agent2_name}],
         max_steps={max_steps},
     )
 
@@ -222,11 +215,11 @@ if __name__ == "__main__":
 # OpenAI
 model = LiteLLMModel(model_id="gpt-5.4-mini")
 
-# Anthropic
-model = LiteLLMModel(model_id="claude-3-5-sonnet-20241022")
+# Anthropic (any model id LiteLLM knows, with the provider prefix)
+model = LiteLLMModel(model_id="anthropic/claude-sonnet-4-5")
 
-# Hugging Face
-from smolagents import HfApiModel
-model = HfApiModel()
+# Hugging Face Inference Providers (HfApiModel was renamed)
+from smolagents import InferenceClientModel
+model = InferenceClientModel()
 ```
 ```

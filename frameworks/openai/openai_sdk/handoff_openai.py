@@ -8,26 +8,32 @@ then picks which agents to call, as tools. In this case, it picks from a set of 
 agents.
 """
 
+MODEL = "gpt-5.4-mini"
+
 spanish_agent = Agent(
     name="spanish_agent",
+    model=MODEL,
     instructions="You translate the user's message to Spanish",
     handoff_description="An english to spanish translator",
 )
 
 french_agent = Agent(
     name="french_agent",
+    model=MODEL,
     instructions="You translate the user's message to French",
     handoff_description="An english to french translator",
 )
 
 italian_agent = Agent(
     name="italian_agent",
+    model=MODEL,
     instructions="You translate the user's message to Italian",
     handoff_description="An english to italian translator",
 )
 
 orchestrator_agent = Agent(
     name="orchestrator_agent",
+    model=MODEL,
     instructions=(
         "You are a translation agent. You use the tools given to you to translate."
         "If asked for multiple translations, you call the relevant tools in order."
@@ -51,6 +57,7 @@ orchestrator_agent = Agent(
 
 synthesizer_agent = Agent(
     name="synthesizer_agent",
+    model=MODEL,
     instructions="You inspect translations, correct them if needed, and produce a final concatenated response.",
 )
 

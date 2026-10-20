@@ -1,2 +1,2 @@
 # Install with: pip install -r requirements.txt
-openai-agents
+openai-agents~=0.24

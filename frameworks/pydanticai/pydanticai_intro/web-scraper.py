@@ -1,9 +1,7 @@
 from __future__ import annotations as _annotations
 
 from dataclasses import dataclass
-from typing import Any
-from httpx import AsyncClient
-from firecrawl import FirecrawlApp
+from firecrawl import Firecrawl
 from pydantic import BaseModel
 from pydantic_ai import Agent, ModelRetry, RunContext
 
@@ -11,9 +9,9 @@ import asyncio
 import os
 import logfire
 
-logfire.configure()
+logfire.configure(send_to_logfire='if-token-present')  # runs without a Logfire token too
 
-app = FirecrawlApp(api_key=os.getenv('FIRECRAWL_API_KEY'))
+app = Firecrawl(api_key=os.getenv('FIRECRAWL_API_KEY'))
 
 class Keypoint(BaseModel):
     keypoint: str
@@ -32,14 +30,14 @@ web_scraper_agent = Agent(
     system_prompt='Scrape the website and return the most relevant information.',
     deps_type=Deps,
     retries=2,
-    result_type=ScrapedContent
+    output_type=ScrapedContent
 )
 
 
 @web_scraper_agent.tool
 async def scrape_website(
     ctx: RunContext[Deps], url: str
-) -> dict[str, float]:
+) -> dict[str, str]:
     """Scrape the website and return the most relevant information.
 
     Args:
@@ -48,8 +46,8 @@ async def scrape_website(
     """
 
     with logfire.span('calling firecrawl API', params={'url': url}) as span:
-        result = app.scrape_url(url, params={'formats': ['markdown', 'html']})
-        data = result
+        result = app.scrape(url, formats=['markdown'])
+        data = result.markdown
         span.set_attribute('response', data)
 
     if data:
@@ -66,7 +64,7 @@ async def main():
     result = await web_scraper_agent.run(
         'Can you give me a summary and keypoints of this website: https://firecrawl.dev', deps=deps
     )
-    print('Response:', result.data)
+    print('Response:', result.output)
 
 
 if __name__ == '__main__':

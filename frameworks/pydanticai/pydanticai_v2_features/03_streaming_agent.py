@@ -20,7 +20,7 @@ async def main():
     async with agent.run_stream(
         "Write a short story about an AI that learns to paint"
     ) as response:
-        async for chunk in response.stream_text():
+        async for chunk in response.stream_text(delta=True):  # delta=True: only the new text
             print(chunk, end="", flush=True)
 
     print("\n" + "-" * 50)

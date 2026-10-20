@@ -12,7 +12,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 from common import MODEL, make_client  # noqa: E402
 
-DEFAULT_WORKSPACE = "/Users/tylerreed/agents-demo/workspace"
+DEFAULT_WORKSPACE = Path.home() / "agents-demo" / "workspace"
 
 workspace = Path(sys.argv[1] if len(sys.argv) > 1 else DEFAULT_WORKSPACE).resolve()
 if not workspace.is_dir():

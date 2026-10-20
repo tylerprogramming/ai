@@ -13,14 +13,14 @@ This project utilizes the OpenAI API to perform various image-related tasks, inc
   openai.PermissionDeniedError: Error code: 403 - {'error': {'message': 'To access gpt-image-1, please complete organization verification: https://help.openai.com/en/articles/10910291-api-organization-verification', 'type': 'invalid_request_error', 'param': None, 'code': None}}
   ```
   then you need to do this:
-  To access the `gpt-image-1` model, organization verification is required. Please complete the verification process as described [here](https://help.openai.com/en/articles/10910291-api-organization-verification).
+  To access the GPT Image models (`gpt-image-2.5-flare` / `gpt-image-2.5-sunburst`), organization verification is required. Please complete the verification process as described [here](https://help.openai.com/en/articles/10910291-api-organization-verification).
 
 ## Setup
 
 1. **Clone the repository**.
 2. **Install the required packages**:
    ```bash
-   pip install openai python-dotenv pydantic
+   pip install -r requirements.txt
    ```
 3. **Set up your environment variables** in a `.env` file:
    ```
@@ -30,11 +30,13 @@ This project utilizes the OpenAI API to perform various image-related tasks, inc
 
 ## Scripts
 
+Run each script from this folder (the image paths are relative), e.g. `python image_gen.py`.
+
 ### 1. Image Generation (`image_gen.py`)
 
-Generates a Studio Ghibli style image of a cat in a business suit with ninja cats. :D
+Generates an image from the prompt in the script (the current prompt is a block of CrewAI flow code).
 
-- **Output**: `images_output/cat.png`
+- **Output**: `images_output/image_gen1.png`
 
 ### 2. Image Editing (`image_editing.py`)
 
@@ -58,4 +60,4 @@ Generates pixel art style images with transparent backgrounds based on prompts.
 
 ## Important Note
 
-To access the `gpt-image-1` model, organization verification is required. Please complete the verification process as described [here](https://help.openai.com/en/articles/10910291-api-organization-verification).
+To access the GPT Image models (`gpt-image-2.5-flare` / `gpt-image-2.5-sunburst`), organization verification is required. Please complete the verification process as described [here](https://help.openai.com/en/articles/10910291-api-organization-verification).

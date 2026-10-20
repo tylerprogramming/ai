@@ -8,12 +8,14 @@ def transfer_to_agent_b():
 
 agent_a = Agent(
     name="Agent A",
+    model="gpt-5.4-mini",  # Swarm would default to the older gpt-4o
     instructions="You are a helpful agent.",
     functions=[transfer_to_agent_b],
 )
 
 agent_b = Agent(
     name="Agent B",
+    model="gpt-5.4-mini",
     instructions="Only speak in Haikus.",
 )
 

@@ -18,7 +18,7 @@ class SlideContent(BaseModel):
 def get_section_content():
     client = OpenAI()
     
-    completion = client.beta.chat.completions.parse(
+    completion = client.chat.completions.parse(
         model="gpt-5.4-mini",
         messages=[
             {

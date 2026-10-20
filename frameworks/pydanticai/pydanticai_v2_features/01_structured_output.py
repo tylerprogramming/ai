@@ -25,7 +25,7 @@ class MovieList(BaseModel):
 
 agent = Agent(
     "openai:gpt-5.4-mini",
-    result_type=MovieList,
+    output_type=MovieList,
     system_prompt="You are a movie expert. Recommend movies based on user preferences.",
 )
 
@@ -35,8 +35,8 @@ async def main():
         "Recommend 3 sci-fi movies from the 2020s that explore AI themes"
     )
     
-    print(f"Theme: {result.data.theme}\n")
-    for i, movie in enumerate(result.data.recommendations, 1):
+    print(f"Theme: {result.output.theme}\n")
+    for i, movie in enumerate(result.output.recommendations, 1):
         print(f"{i}. {movie.title} ({movie.year})")
         print(f"   Genre: {movie.genre}")
         print(f"   Rating: {movie.rating}/10")

@@ -33,7 +33,7 @@ def get_ai_content(topic):
     response = client.chat.completions.create(
         model="gpt-5.4-mini",
         messages=[{"role": "user", "content": prompt}],
-        temperature=0.7
+        # temperature removed: gpt-5.4-mini only supports the default temperature
     )
     
     # Extract JSON content from the response

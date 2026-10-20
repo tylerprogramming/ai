@@ -15,7 +15,7 @@ class PixelArtImagePrompt(BaseModel):
 class PixelArtImagePromptList(BaseModel):
     image_prompts: list[PixelArtImagePrompt]
 
-completion = client.beta.chat.completions.parse(
+completion = client.chat.completions.parse(
     model="gpt-5.4-mini",
     messages=[
         {"role": "system", "content": "I need 3 different prompts for images of the code presented.  I need the first image prompt to be an overview of the code.  The second image prompt should be for creating an image of the workflow.  The third image prompt should be a detailed description of the code."},
@@ -206,7 +206,8 @@ image_prompts = completion.choices[0].message.parsed.image_prompts
 for image_prompt in image_prompts:
     try:
         result = client.images.generate(
-            model="gpt-image-1",
+            # gpt-image-1 shuts down 2026-10-23; OpenAI recommends the gpt-image-2.5 models (flare: fast, everyday images)
+            model="gpt-image-2.5-flare",
             prompt=f"generate an illustration with icons of: {image_prompt.image_prompt}",
             size="1024x1024",
             # background="transparent",

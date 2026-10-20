@@ -5,7 +5,7 @@ Advanced examples showcasing PydanticAI v2.x features.
 ## Installation
 
 ```bash
-pip install -U pydantic-ai
+pip install -r requirements.txt
 ```
 
 ## Features Covered
@@ -29,3 +29,5 @@ pip install -U pydantic-ai
 export OPENAI_API_KEY="your-key"
 python 01_structured_output.py
 ```
+
+> **Note:** Updated for pydantic-ai 2.58 (`output_type=` and `result.output` replace `result_type=` and `result.data`); the code may differ slightly from the video.

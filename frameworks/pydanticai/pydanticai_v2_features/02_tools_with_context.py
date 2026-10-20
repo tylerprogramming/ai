@@ -67,7 +67,7 @@ async def main():
         deps=context,
     )
 
-    print(f"Response: {result.data}")
+    print(f"Response: {result.output}")
     print(f"\nUpdated database: {user_database['user_123']}")
 
 

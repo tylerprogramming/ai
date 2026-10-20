@@ -1,6 +1,6 @@
 # Infographic Creation with OpenAI and Airtable
 
-> **Note:** Updated for CrewAI 1.15; the code may differ slightly from the video. Images now use `gpt-image-2` (`gpt-image-1` is deprecated), and the Airtable upload runs after both image steps finish.
+> **Note:** Updated for CrewAI 1.15; the code may differ slightly from the video. Images now use `gpt-image-2.5-flare` (gpt-image-1 shuts down 2026-10-23).
 
 This project is designed to generate infographics based on a given topic using the OpenAI API for image generation and Airtable for storing the generated images. The process is managed through a flow-based architecture using the `crewai.flow` library.
 

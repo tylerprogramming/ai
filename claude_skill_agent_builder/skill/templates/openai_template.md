@@ -1,4 +1,10 @@
-# OpenAI Agents SDK Project Template
+# OpenAI Agents Project Template
+
+Three variants. Pick one main.py:
+
+- **Agents SDK** (`openai-agents`, import `agents`): recommended default. Agent loop runs locally, tools are Python functions.
+- **Simple Agent**: plain Chat Completions tool loop with the `openai` SDK, no framework.
+- **Agents API (hosted)**: OpenAI runs the loop and a sandbox (`client.beta.agents.sessions`, beta).
 
 ## Directory Structure
 
@@ -15,8 +21,11 @@
 ## requirements.txt
 
 ```
-openai>=1.50.0
-python-dotenv>=1.0.0
+# Agents SDK variant
+openai-agents~=0.24
+python-dotenv>=1.0,<2
+# Simple / hosted Agents API variants instead need:
+# openai>=3.35,<4
 ```
 
 ## tools/custom_tools.py
@@ -65,6 +74,57 @@ TOOL_FUNCTIONS = {
 }
 ```
 
+## main.py (Agents SDK)
+
+Tools are plain functions decorated with `@function_tool` (the docstring becomes the description).
+With this variant, `tools/custom_tools.py` only needs the function, decorated, and no `TOOLS`/`TOOL_FUNCTIONS`.
+
+```python
+"""
+{project_name} - OpenAI Agents SDK
+
+{description}
+"""
+
+import asyncio
+import os
+from dotenv import load_dotenv
+from agents import Agent, Runner, function_tool
+
+load_dotenv()
+
+
+@function_tool
+def {tool_name}({param}: {param_type}) -> str:
+    """{tool_description}"""
+    # Implementation
+    return result
+
+
+agent = Agent(
+    name="{agent_name}",
+    model=os.getenv("MODEL", "gpt-5.4-mini"),
+    instructions="{system_prompt}",
+    tools=[{tool_name}],
+)
+
+
+async def main():
+    task = "{default_task}"
+    print(f"Running task: {task}\n")
+
+    result = await Runner.run(agent, task)
+
+    print("\n" + "="*50)
+    print("RESULT:")
+    print("="*50)
+    print(result.final_output)
+
+
+if __name__ == "__main__":
+    asyncio.run(main())
+```
+
 ## main.py (Simple Agent)
 
 ```python
@@ -93,10 +153,12 @@ def run_agent(task: str) -> str:
     ]
 
     while True:
+        # Only send `tools` when there are some (None would be sent as null)
+        extra = {"tools": TOOLS} if TOOLS else {}
         response = client.chat.completions.create(
             model=os.getenv("MODEL", "gpt-5.4-mini"),
             messages=messages,
-            tools=TOOLS if TOOLS else None,
+            **extra,
         )
 
         message = response.choices[0].message
@@ -138,11 +200,13 @@ if __name__ == "__main__":
     main()
 ```
 
-## main.py (Agents SDK - Hosted Environment)
+## main.py (Agents API - Hosted Environment)
+
+Requires `openai>=3.35`. The session streams `agent.session.*` events.
 
 ```python
 """
-{project_name} - OpenAI Agents SDK
+{project_name} - OpenAI Agents API (hosted)
 
 {description}
 """
@@ -156,13 +220,18 @@ load_dotenv()
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
 
-def handle_event(event):
-    """Handle streaming events from the agent."""
-    if hasattr(event, "type"):
-        if event.type == "response.text.delta":
-            print(event.delta, end="", flush=True)
-        elif event.type == "response.completed":
-            return True
+def handle_event(event) -> bool:
+    """Print agent messages and commands. Returns True when the root turn is finished."""
+    t = event.type
+    if t == "agent.session.turn.item.added" and event.item.type == "command_execution":
+        print("$", event.item.command)
+    elif t == "agent.session.turn.item.done" and event.item.type == "message":
+        print("".join(c.text for c in event.item.content if c.type == "output_text"))
+    elif t == "agent.session.turn.completed" and event.turn.subagent_id is None:
+        return True
+    elif t in ("agent.session.turn.failed", "agent.session.failed", "error"):
+        print("FAILED:", event.to_json(indent=None)[:500])
+        return True
     return False
 
 
@@ -206,9 +275,8 @@ __all__ = ["TOOLS", "TOOL_FUNCTIONS", "{tool_name}"]
 
 ## Features
 
-- Uses OpenAI's Chat Completions API
+- Built on the OpenAI Agents SDK (or the Chat Completions / hosted Agents API variant)
 - Tool calling support
-- Streaming responses
 
 ## Setup
 

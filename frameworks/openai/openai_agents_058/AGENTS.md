@@ -31,7 +31,7 @@ follow along. Every file is meant to be read on screen, so keep it short.
 - Prose: short sentences, no em dashes, no hype.
 - Quote shell examples that contain `?` or `*`. zsh globs them.
 
-## API shapes (openai 3.14, verified 2026-09-17)
+## API shapes (openai 3.14, verified 2026-09-17; re-checked on openai 3.35.1, 2026-10-20)
 
 - Create: `client.beta.agents.sessions.create(agent={...}, environment={...}, input=..., stream=True)`
 - Self-hosted env: `{"type": "self_hosted", "workspace_directory": "<abs path>"}`, no `input` at create time

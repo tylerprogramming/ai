@@ -33,7 +33,7 @@ class InfographicState(BaseModel):
     infographic_steps: InfographicStepList = InfographicStepList(steps=[])
     image_resolution: str = "1536x1024"
     image_quality: str = "high"
-    image_model: str = "gpt-image-2"  # gpt-image-1 is deprecated
+    image_model: str = "gpt-image-2.5-flare"  # gpt-image-1 shuts down 2026-10-23; OpenAI recommends the gpt-image-2.5 models
     airtable_api_key: str | None = os.getenv("AIRTABLE_API_KEY")
     airtable_base_id: str | None = os.getenv("AIRTABLE_BASE_ID")
     airtable_table_id: str | None = os.getenv("AIRTABLE_TABLE_ID")
