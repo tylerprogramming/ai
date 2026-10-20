@@ -39,3 +39,6 @@ mini_projects/08_checklistai/migrations/versions/
 
 # git worktrees live here; each is its own checkout
 .worktrees/
+
+# Old Composio SDK lock files
+.composio.lock
