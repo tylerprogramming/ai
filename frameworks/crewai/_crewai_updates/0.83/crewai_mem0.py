@@ -1,9 +1,9 @@
 import os
 from dotenv import load_dotenv
 
-load_dotenv()  # loads MEM0_API_KEY from .env
+load_dotenv()  # loads MEM0_API_KEY and OPENAI_API_KEY from .env
 
-from crewai import Crew, Process, Agent, Task   
+from crewai import Crew, Process, Agent, Task
 from mem0 import MemoryClient
 from search_mem0_tool import SearchMem0Tool
 
@@ -15,6 +15,7 @@ agent = Agent(
     role="About User",
     goal="You know everything about the user.",
     backstory="""You are a master at understanding people and their preferences.""",
+    llm="gpt-5.4-mini",
     verbose=True
 )
 
@@ -37,4 +38,4 @@ while True:
     result = crew.kickoff(inputs={"question": question})
     print(f"Result: {result}")
 
-    client.add(question, user_id="tyler", output_format="v1.1")
+    client.add(question, user_id="tyler")  # mem0ai 2.x: output_format was removed

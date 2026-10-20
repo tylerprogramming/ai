@@ -1,12 +1,14 @@
 # Personalized Workout Plan Generator with crewAI
 
+> **Note:** Updated for CrewAI 1.15; the code may differ slightly from the video. The Gemini preview model from the video was retired, so it now uses `gemini-3.8-flash`.
+
 This project is a simple, interactive AI workflow that generates a personalized daily workout plan using a single LLM (Large Language Model) via the [crewAI](https://crewai.com) framework. The user provides their daily routine and workout habits, and the system creates a tailored workout plan, saving it as a markdown file.
 
 ## How It Works
 
 - **User Input:** The program prompts the user for their wake-up time, bedtime, workout frequency, and running frequency.
 - **Prompt Construction:** These inputs are used to build a prompt for the LLM, asking it to generate a daily workout plan.
-- **LLM Call:** The system uses Google Gemini (or can be configured for OpenAI GPT-4o) to generate the workout plan, expecting a structured response.
+- **LLM Call:** The system uses Google Gemini (`gemini/gemini-3.8-flash`, or can be configured for OpenAI `gpt-5.4-mini`) to generate the workout plan, expecting a structured response.
 - **Output:** The generated plan is saved to a markdown file (`workout_plan_google.md` by default).
 
 ## Project Structure
@@ -35,12 +37,12 @@ single_llm/
 ## Setup
 
 1. **Install Python**  
-   Requires Python >=3.10 and <3.13.
+   Requires Python >=3.10 and <3.14.
 
 2. **Install Dependencies**  
    Use pip or your preferred tool:
    ```bash
-   pip install crewai[tools]>=0.114.0,<1.0.0
+   pip install "crewai[tools,google-genai]>=1.15,<2" python-dotenv
    ```
 
 3. **Set Environment Variables**  
@@ -61,5 +63,5 @@ You will be prompted for your daily routine details. The generated workout plan 
 
 ## Customization
 
-- To use a different LLM (like OpenAI GPT-4o), modify the `main.py` to instantiate the `LLM` class with your desired model and API key.
+- To use a different LLM (like OpenAI `gpt-5.4-mini`), modify the `main.py` to instantiate the `LLM` class with your desired model and API key.
 - You can change the output file path by editing the `output_path` in `SingleLLMState`.

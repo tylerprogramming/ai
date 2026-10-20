@@ -3,15 +3,18 @@ name = "work_out_flow"
 version = "0.1.0"
 description = "work_out_flow using crewAI"
 authors = [{ name = "Your Name", email = "you@example.com" }]
-requires-python = ">=3.10,<3.13"
+requires-python = ">=3.11,<3.14"  # composio-crewai needs 3.11+
 dependencies = [
-    "crewai[tools]>=0.114.0,<1.0.0",
+    "crewai[tools]>=1.15,<2",
+    "composio-crewai~=0.28",
+    # composio 0.28 pins a pre-release composio-client; uv resolves composio 0.22 (same API) unless pre-releases are allowed
+    "composio>=0.22,<1",
+    "python-dotenv>=1.2,<2",
 ]
 
 [project.scripts]
 kickoff = "work_out_flow.main:kickoff"
 run_crew = "work_out_flow.main:kickoff"
-plot = "work_out_flow.main:plot"
 
 [build-system]
 requires = ["hatchling"]

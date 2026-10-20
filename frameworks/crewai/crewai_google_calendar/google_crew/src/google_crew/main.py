@@ -4,7 +4,10 @@ import warnings
 
 from datetime import datetime
 
-from crew import GoogleCrew
+try:
+    from google_crew.crew import GoogleCrew  # `crewai run` (installed package)
+except ImportError:
+    from crew import GoogleCrew  # `python src/google_crew/main.py`
 
 warnings.filterwarnings("ignore", category=SyntaxWarning, module="pysbd")
 

@@ -2,15 +2,19 @@ import os
 
 from crewai import Agent, Crew, Process, Task
 from crewai.project import CrewBase, agent, crew, task
-from composio_crewai import ComposioToolSet, Action, App
+from composio import Composio
+from composio_crewai import CrewAIProvider
 from pydantic import BaseModel
 
 from dotenv import load_dotenv
 
 load_dotenv()
 
-composio_toolset = ComposioToolSet(api_key=os.getenv("COMPOSIO_API_KEY"))
-tools = composio_toolset.get_tools(actions=['FIRECRAWL_SEARCH', 'FIRECRAWL_CRAWL_URLS'])
+composio = Composio(api_key=os.getenv("COMPOSIO_API_KEY"), provider=CrewAIProvider())
+tools = composio.tools.get(
+    user_id=os.getenv("COMPOSIO_USER_ID", "default"),
+    tools=['FIRECRAWL_SEARCH', 'FIRECRAWL_CRAWL_URLS'],
+)
 
 class WorkOutResearch(BaseModel):
     research: str = ""

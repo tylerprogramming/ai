@@ -5,7 +5,8 @@ from pydantic import BaseModel
 
 from crewai.flow import Flow, listen, start, and_
 from crewai import Agent, Task, Crew, LLM
-from composio_crewai import ComposioToolSet, Action, App
+from composio import Composio
+from composio_crewai import CrewAIProvider
 
 from crews.research_crew.research_crew import ResearchCrew
 from crews.summary_crew.summary_crew import SummaryCrew
@@ -14,23 +15,28 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-composio_toolset = ComposioToolSet(api_key=os.getenv("COMPOSIO_API_KEY"))
-google_create_find_folder = composio_toolset.get_tools(
-    actions=[
+# Composio v1 SDK: tools are fetched per user (the user whose Google Drive/Slack you connected)
+composio = Composio(api_key=os.getenv("COMPOSIO_API_KEY"), provider=CrewAIProvider())
+composio_user_id = os.getenv("COMPOSIO_USER_ID", "default")
+google_create_find_folder = composio.tools.get(
+    user_id=composio_user_id,
+    tools=[
         'GOOGLEDRIVE_CREATE_FOLDER', 
         'GOOGLEDRIVE_FIND_FOLDER', 
         'GOOGLEDRIVE_DELETE_FOLDER_OR_FILE'
     ])
-google_upload_file = composio_toolset.get_tools(
-    actions=[
+google_upload_file = composio.tools.get(
+    user_id=composio_user_id,
+    tools=[
         'GOOGLEDRIVE_FIND_FOLDER', 
         'GOOGLEDRIVE_UPLOAD_FILE', 
         'GOOGLEDRIVE_CREATE_FILE_FROM_TEXT'
     ])
-slack_toolset = composio_toolset.get_tools(
-    actions=['SLACK_SENDS_A_MESSAGE_TO_A_SLACK_CHANNEL'])
+slack_toolset = composio.tools.get(
+    user_id=composio_user_id,
+    tools=['SLACK_SENDS_A_MESSAGE_TO_A_SLACK_CHANNEL'])
 
-openai_llm = LLM(model="gpt-5.4-mini", temperature=0)
+openai_llm = LLM(model="gpt-5.4-mini")  # gpt-5 models only accept the default temperature
 
 class WorkOutResearch(BaseModel):
     research: str = ""
@@ -91,6 +97,7 @@ class WorkOutFlow(Flow[WorkOutState]):
         )
 
         self.state.summary = result.raw
+        return self.state.summary  # passed as `workout` to the two plan steps below
 
     @listen(summarize_workouts)
     async def create_doc_workout_plan(self, workout: str):
@@ -109,7 +116,7 @@ class WorkOutFlow(Flow[WorkOutState]):
             expected_output="A workout plan in a format that can be easily read by a human for a word document."
         )
         my_crew = Crew(agents=[crewai_agent], tasks=[task])
-        result = my_crew.kickoff()
+        result = await my_crew.kickoff_async()  # async flow step: use kickoff_async
         
         self.state.workout = result.raw
         
@@ -130,7 +137,7 @@ class WorkOutFlow(Flow[WorkOutState]):
             expected_output="The whole workout plan in a csv format."
         )
         my_crew = Crew(agents=[crewai_agent], tasks=[task])
-        result = my_crew.kickoff()
+        result = await my_crew.kickoff_async()  # async flow step: use kickoff_async
         
         self.state.csv_workout = result.raw
 
@@ -173,11 +180,11 @@ class WorkOutFlow(Flow[WorkOutState]):
             expected_output="The message sent"
         )
         my_crew = Crew(agents=[crewai_agent], tasks=[task])
-        my_crew.kickoff()
+        await my_crew.kickoff_async()  # async flow step: use kickoff_async
         
 def kickoff():
     workout_flow = WorkOutFlow()
-    workout_flow.plot()
+    print(f"Flow diagram saved to {workout_flow.plot(show=False)}")
     workout_flow.kickoff()
 
 if __name__ == "__main__":

@@ -4,7 +4,7 @@ Welcome to the GoogleCrew Crew project, powered by [crewAI](https://crewai.com).
 
 ## Installation
 
-Ensure you have Python >=3.10 <3.13 installed on your system. This project uses [UV](https://docs.astral.sh/uv/) for dependency management and package handling, offering a seamless setup and execution experience.
+Ensure you have Python >=3.11 <3.14 installed on your system. This project uses [UV](https://docs.astral.sh/uv/) for dependency management and package handling, offering a seamless setup and execution experience.
 
 First, if you haven't already, install uv:
 
@@ -20,7 +20,7 @@ crewai install
 ```
 ### Customizing
 
-**Add your `OPENAI_API_KEY` into the `.env` file**
+**Add your `OPENAI_API_KEY`, `COMPOSIO_API_KEY` and `COMPOSIO_USER_ID` (the Composio user with Google Calendar + Gmail connected) into the `.env` file** (optionally also `MODEL=gpt-5.4-mini`; otherwise CrewAI's default model is used)
 
 - Modify `src/google_crew/config/agents.yaml` to define your agents
 - Modify `src/google_crew/config/tasks.yaml` to define your tasks

@@ -1,5 +1,7 @@
 # CrewAI Workout Flow
 
+> **Note:** Updated for CrewAI 1.15 and the Composio v1 SDK (`Composio` + `CrewAIProvider`); the code may differ slightly from the video.
+
 A sophisticated AI-powered workout planning system that leverages CrewAI for orchestrating multiple AI agents to create, research, and deliver personalized workout plans.
 
 ## 🌟 Features
@@ -25,7 +27,7 @@ The project uses a flow-based architecture powered by CrewAI, with multiple spec
 ## 🔧 Technical Stack
 
 - **Core Framework**: CrewAI
-- **AI Model**: GPT-4
+- **AI Model**: `gpt-5.4-mini` (flow agents); the research/summary crews use `MODEL` from `.env` or CrewAI's default
 - **Integrations**:
   - Google Drive API
   - Slack API
@@ -35,7 +37,7 @@ The project uses a flow-based architecture powered by CrewAI, with multiple spec
 
 ## 📋 Prerequisites
 
-- Python 3.x
+- Python 3.11–3.13
 - Composio API Key
 - Google Drive API credentials
 - Slack API credentials
@@ -46,15 +48,18 @@ Create a `.env` file with the following:
 
 ```env
 COMPOSIO_API_KEY=your_composio_api_key
+COMPOSIO_USER_ID=default        # the Composio user whose Google Drive and Slack accounts are connected
+OPENAI_API_KEY=sk-...
+MODEL=gpt-5.4-mini              # optional: model for the research/summary crews
 ```
 
 ## 📦 Dependencies
 
-```python
-crewai
-composio_crewai
-pydantic
-python-dotenv
+Listed in `work_out_flow/pyproject.toml`:
+
+```bash
+cd work_out_flow
+pip install -e .        # or: crewai install
 ```
 
 ## 🚀 Flow Structure
@@ -88,9 +93,13 @@ The system uses Pydantic models for state management:
 
 ## 🏃‍♂️ Running the Project
 
+From the `work_out_flow` folder:
+
 ```bash
 python src/work_out_flow/main.py
 ```
+
+Each run also renders the flow diagram (`plot`) to an HTML file and prints its path.
 
 ## 📊 Output
 

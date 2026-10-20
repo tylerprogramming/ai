@@ -4,7 +4,7 @@ Welcome to the Docker Crew project, powered by [crewAI](https://crewai.com). Thi
 
 ## Installation
 
-Ensure you have Python >=3.10 <=3.13 installed on your system. This project uses [UV](https://docs.astral.sh/uv/) for dependency management and package handling, offering a seamless setup and execution experience.
+Ensure you have Python >=3.10 <3.14 installed on your system. This project uses [UV](https://docs.astral.sh/uv/) for dependency management and package handling, offering a seamless setup and execution experience.
 
 First, if you haven't already, install uv:
 
@@ -20,7 +20,7 @@ crewai install
 ```
 ### Customizing
 
-**Add your `OPENAI_API_KEY` into the `.env` file**
+**Add your `OPENAI_API_KEY` into the `.env` file** (optionally also `MODEL=gpt-5.4-mini`; otherwise CrewAI's default model is used)
 
 - Modify `src/docker/config/agents.yaml` to define your agents
 - Modify `src/docker/config/tasks.yaml` to define your tasks
@@ -36,6 +36,18 @@ $ crewai run
 ```
 
 This command initializes the docker Crew, assembling the agents and assigning them tasks as defined in your configuration.
+
+### Running with Docker
+
+```bash
+docker build -t docker-crew .
+docker run --rm --env-file .env docker-crew
+```
+
+The `.env` file is passed at runtime and is never copied into the image (see `.dockerignore`).
+Without Docker you can also run `pip install -r requirements.txt` and then `python src/docker/main.py`.
+
+> **Note:** Updated for CrewAI 1.15; the code may differ slightly from the video.
 
 This example, unmodified, will run the create a `report.md` file with the output of a research on LLMs in the root folder.
 

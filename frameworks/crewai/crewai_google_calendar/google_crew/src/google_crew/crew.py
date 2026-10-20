@@ -2,15 +2,18 @@ from crewai import Agent, Crew, Process, Task
 from crewai.project import CrewBase, agent, crew, task
 from dotenv import load_dotenv
 
-from crewai import Agent, Task, Crew
-from composio_crewai import ComposioToolSet, Action, App
+from composio import Composio
+from composio_crewai import CrewAIProvider
 
 load_dotenv()
 import os
 
-composio_toolset = ComposioToolSet(api_key=os.getenv("COMPOSIO_API_KEY"))
-tools = composio_toolset.get_tools(
-    actions=[
+# Composio v1 SDK: tools are fetched per user (the user whose Google Calendar/Gmail you connected)
+composio = Composio(api_key=os.getenv("COMPOSIO_API_KEY"), provider=CrewAIProvider())
+composio_user_id = os.getenv("COMPOSIO_USER_ID", "default")
+tools = composio.tools.get(
+    user_id=composio_user_id,
+    tools=[
         'GOOGLECALENDAR_FIND_EVENT',
         'GOOGLECALENDAR_FIND_FREE_SLOTS',
         'GOOGLECALENDAR_CREATE_EVENT',
@@ -19,8 +22,9 @@ tools = composio_toolset.get_tools(
     ]
 )
 
-gmail_tools = composio_toolset.get_tools(
-    actions=[
+gmail_tools = composio.tools.get(
+    user_id=composio_user_id,
+    tools=[
         'GMAIL_SEND_EMAIL'
     ]
 )

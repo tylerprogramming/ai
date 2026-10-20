@@ -4,7 +4,10 @@ from pathlib import Path
 from pydantic import BaseModel, Field
 from crewai.flow import Flow, listen, start
 from crewai import LLM
-from prompts import create_workout_plan_prompt
+try:
+    from single_llm.prompts import create_workout_plan_prompt  # `crewai run` (installed package)
+except ImportError:
+    from prompts import create_workout_plan_prompt  # `python src/single_llm/main.py`
 
 from dotenv import load_dotenv
 
@@ -54,17 +57,20 @@ class SingleLLMFlow(Flow[SingleLLMState]):
         )
         
         # llm = LLM(
-        #     model="openai/gpt-4o", 
+        #     model="openai/gpt-5.4-mini",
         #     response_format=WorkoutPlan
         # )
         google_llm = LLM(
-            model="gemini/gemini-2.5-flash-preview-04-17",
+            model="gemini/gemini-3.8-flash",  # the original preview model was retired
             api_key=os.getenv("GEMINI_API_KEY"),
             response_format=WorkoutPlan
         )
         
         response = google_llm.call(messages=messages)
 
+        # CrewAI 1.x returns a WorkoutPlan instance when response_format is a Pydantic model
+        if isinstance(response, WorkoutPlan):
+            response = response.model_dump_json()
         self.state.workout_plan = response
 
         self.log(f"Here is your workout plan:")
