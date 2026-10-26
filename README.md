@@ -123,13 +123,25 @@ See `frameworks/pydanticai/pydanticai_v2_features/` for examples.
 
 ### Running Examples
 
-Most examples are standalone. Navigate to a project folder and run:
+Most examples are standalone. Each project folder has its own README; check it first. There are two layouts.
+
+Plain script folders ship a `requirements.txt`:
 
 ```bash
-cd frameworks/crewai/crewai_first_crew
+cd frameworks/crewai/crewai_tools_11
 pip install -r requirements.txt
-python main.py
+python csv_file_rag_search.py
 ```
+
+CrewAI crew and flow projects ship a `pyproject.toml` (with `[tool.crewai]`) instead and run through the CrewAI CLI:
+
+```bash
+cd frameworks/crewai/crewai_first_crew/first_crew
+crewai install
+crewai run
+```
+
+Put your `OPENAI_API_KEY` (and any other keys the project README lists) in a `.env` file in the project folder.
 
 ## Related Repositories
 
