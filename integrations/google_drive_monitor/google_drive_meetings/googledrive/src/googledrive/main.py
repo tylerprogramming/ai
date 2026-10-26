@@ -81,7 +81,7 @@ class GoogleDriveFlow(Flow[GoogleDriveState]):
             
             with open(chunk_path, "rb") as audio_file:
                 transcription = client.audio.transcriptions.create(
-                    model="whisper-1", 
+                    model="gpt-transcribe",  # whisper-1 is removed from the API on 2027-02-26
                     file=audio_file
                 )
                 full_transcription += transcription.text + " "
