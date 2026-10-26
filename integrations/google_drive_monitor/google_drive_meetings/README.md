@@ -2,12 +2,12 @@
 
 Watches a Google Drive folder ("company files") for new files. Each new file is downloaded to `downloads/`, then a CrewAI Flow decides what kind of file it is:
 
-- **Meeting recording (.wav)** → transcribed with OpenAI Whisper → meeting-minutes crew (summary, action items, sentiment, written minutes)
+- **Meeting recording (.wav)** → transcribed with OpenAI `gpt-transcribe` in 1-minute chunks → meeting-minutes crew (summary, action items, sentiment, written minutes)
 - **Anything else (e.g. a contract PDF)** → parsed with LlamaParse → contract-management crew (key terms report)
 
 The result is saved to Airtable and a notification is sent to Telegram.
 
-> **Note:** Updated for CrewAI 1.15 and the new `llama-cloud` SDK; the code may differ slightly from the video.
+> **Note:** Updated for CrewAI 1.15 and the new `llama-cloud` SDK; the code may differ slightly from the video. The video uses `whisper-1`, which OpenAI removes from the API on February 26, 2027 ([deprecations](https://developers.openai.com/api/docs/deprecations)); the code now uses its recommended replacement, `gpt-transcribe` ($0.0045 per audio minute).
 
 ## Setup
 
