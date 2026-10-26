@@ -18,13 +18,13 @@ I think a realistic version of an AI Engineer is to also allow it to edit alread
 ---
 
 ### Before:
-![Before](../repo_images/edit_software_before.png)
+![Before](../../../tools/repo_images/edit_software_before.png)
 
 ---
 
 ### After:
-![After](../repo_images/edit_software_after.png)
+![After](../../../tools/repo_images/edit_software_after.png)
 
 ### After With Tests:
-![After](../repo_images/edit_software_after_tests.png)
+![After](../../../tools/repo_images/edit_software_after_tests.png)
 
