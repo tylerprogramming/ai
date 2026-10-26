@@ -12,6 +12,8 @@ Flask API for the React frontend (in the parent folder). `POST /api/recommendati
    cd ../_weaviate-docker && docker compose up -d
    ```
 
+   If you ran an older Weaviate version from this folder before, Weaviate can't skip minor versions on existing data: run `docker compose down -v` first to delete the old volume, then reload the data in step 2.
+
 2. Install and load the movie dataset once (downloads the data and posters):
 
    ```bash
