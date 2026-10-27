@@ -1,57 +1,26 @@
-# {{crew_name}} Crew
+# checklist_flow
 
-Welcome to the {{crew_name}} Crew project, powered by [crewAI](https://crewai.com). This template is designed to help you set up a multi-agent AI system with ease, leveraging the powerful and flexible framework provided by crewAI. Our goal is to enable your agents to collaborate effectively on complex tasks, maximizing their collective intelligence and capabilities.
+The CrewAI Flow behind ChecklistAI. It takes a checklist, has a crew write an email body from it, has a second crew pick a matching quote, and then makes one OpenAI call to merge the two into a styled HTML email.
 
-## Installation
+You don't run this on its own in normal use. `app.py` and `utils/email_utils.py` in the parent folder import it (`from checklist_flow.src.checklist_flow.main import main`) and call `main(checklist_text)` whenever a scheduled email is due. See the [ChecklistAI README](../README.md) for setup.
 
-Ensure you have Python >=3.10 <=3.13 installed on your system. This project uses [Poetry](https://python-poetry.org/) for dependency management and package handling, offering a seamless setup and execution experience.
+## What's inside
 
-First, if you haven't already, install Poetry:
+- `src/checklist_flow/main.py`: `ChecklistFlow` and its steps.
+  1. `generate_email_body_from_checklist` runs `ChecklistCrew` on the checklist.
+  2. `generate_quote_from_email_body` runs `QuoteCrew` on that email body.
+  3. `final_email_body` merges the two with `gpt-5.4-mini` and returns HTML.
+  4. `save_email_body` writes the crew's email body to `email_body.txt`.
+- `src/checklist_flow/crews/checklist_crew/`: one agent and one task. Their prompts are in `config/agents.yaml` and `config/tasks.yaml`.
+- `src/checklist_flow/crews/quote_crew/`: one agent and one task that pick the quote.
+- `src/checklist_flow/tools/custom_tool.py`: an empty example tool from the CrewAI template. Nothing uses it.
 
-```bash
-pip install poetry
-```
+## Try the flow by itself
 
-Next, navigate to your project directory and install the dependencies:
-
-1. First lock the dependencies and then install them:
-
-```bash
-crewai install
-```
-
-### Customizing
-
-**Add your `OPENAI_API_KEY` into the `.env` file**
-
-- Modify `src/checklist_flow/config/agents.yaml` to define your agents
-- Modify `src/checklist_flow/config/tasks.yaml` to define your tasks
-- Modify `src/checklist_flow/crew.py` to add your own logic, tools and specific args
-- Modify `src/checklist_flow/main.py` to add custom inputs for your agents and tasks
-
-## Running the Project
-
-To kickstart your crew of AI agents and begin task execution, run this from the root folder of your project:
+Install the parent folder's requirements and create its `.env` with `OPENAI_API_KEY` (see the [ChecklistAI README](../README.md)). Then, from the `08_checklistai` folder:
 
 ```bash
-crewai run
+python -m checklist_flow.src.checklist_flow.main
 ```
 
-This command initializes the checklist_flow Crew, assembling the agents and assigning them tasks as defined in your configuration.
-
-This example, unmodified, will run the create a `report.md` file with the output of a research on LLMs in the root folder.
-
-## Understanding Your Crew
-
-The checklist_flow Crew is composed of multiple AI agents, each with unique roles, goals, and tools. These agents collaborate on a series of tasks, defined in `config/tasks.yaml`, leveraging their collective skills to achieve complex objectives. The `config/agents.yaml` file outlines the capabilities and configurations of each agent in your crew.
-
-## Support
-
-For support, questions, or feedback regarding the {{crew_name}} Crew or crewAI.
-
-- Visit our [documentation](https://docs.crewai.com)
-- Reach out to us through our [GitHub repository](https://github.com/joaomdmoura/crewai)
-- [Join our Discord](https://discord.com/invite/X4JWnZnxPb)
-- [Chat with our docs](https://chatg.pt/DWjSBZn)
-
-Let's create wonders together with the power and simplicity of crewAI.
+That runs the sample checklist in `main()`. It prints the final HTML, writes `email_body.txt`, and saves a diagram of the flow to `email body flow.html` in the current folder.
