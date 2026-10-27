@@ -3,7 +3,8 @@ autogen-agentchat~=0.7.5
 autogen-ext[openai]~=0.7.5
 python-dotenv
 # Used by the code the agents generate (code/ and feedback/ folders)
-APScheduler
+# code/newsletter.py uses apscheduler.schedulers.background, which APScheduler 4 removes
+APScheduler<4
 beautifulsoup4
 flask
 matplotlib
