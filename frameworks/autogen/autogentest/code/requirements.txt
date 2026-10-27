@@ -1,4 +1,6 @@
-Flask==1.1.2
-requests==2.25.1
-beautifulsoup4==4.9.3
-APScheduler==3.7.0
+# smtplib is part of the Python standard library, so it is not listed.
+Flask>=3.1,<4
+requests>=2.32,<3
+beautifulsoup4>=4.12,<5
+# newsletter.py uses apscheduler.schedulers.background, which APScheduler 4 removes
+APScheduler>=3.11,<4
