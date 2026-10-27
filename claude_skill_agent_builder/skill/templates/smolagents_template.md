@@ -216,7 +216,7 @@ if __name__ == "__main__":
 model = LiteLLMModel(model_id="gpt-5.4-mini")
 
 # Anthropic (any model id LiteLLM knows, with the provider prefix)
-model = LiteLLMModel(model_id="anthropic/claude-sonnet-4-5")
+model = LiteLLMModel(model_id="anthropic/claude-sonnet-5-5")
 
 # Hugging Face Inference Providers (HfApiModel was renamed)
 from smolagents import InferenceClientModel
