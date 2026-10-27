@@ -1,5 +1,10 @@
-Flask==1.1.2
-requests==2.25.1
-beautifulsoup4==4.9.3
-APScheduler==3.7.0
-smtplib==3.9.0
+# Dependencies of the code the agents generated in this folder.
+# ../requirements.txt already installs all of them; use this file to run code/ on its own.
+# smtplib is part of the Python standard library, so it is not listed.
+Flask>=3.1,<4
+requests>=2.32,<3
+beautifulsoup4>=4.12,<5
+# newsletter.py uses apscheduler.schedulers.background, which APScheduler 4 removes
+APScheduler>=3.11,<4
+pandas>=2.2
+matplotlib>=3.9
