@@ -6,6 +6,9 @@ import gradio as gr
 from dotenv import load_dotenv
 import PIL.Image
 
+# The smolagents 1.26 default (Qwen3-Next-80B-A3B-Thinking) is not served by Inference Providers; see README
+HF_MODEL_ID = "Qwen/Qwen3-235B-A22B-Instruct-2507"
+
 load_dotenv()
 
 @tool
@@ -57,7 +60,7 @@ def generate_image(prompt):
     Function to handle the Gradio interface interaction
     """
     image_generator = TextToImageTool()
-    agent = CodeAgent(tools=[image_generator, model_download_tool], model=InferenceClientModel())
+    agent = CodeAgent(tools=[image_generator, model_download_tool], model=InferenceClientModel(model_id=HF_MODEL_ID))
     
     # Run the agent with the provided prompt
     result = agent.run(

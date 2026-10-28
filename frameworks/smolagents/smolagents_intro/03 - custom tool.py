@@ -4,6 +4,9 @@ from huggingface_hub import list_models
 
 from dotenv import load_dotenv
 
+# The smolagents 1.26 default (Qwen3-Next-80B-A3B-Thinking) is not served by Inference Providers; see README
+HF_MODEL_ID = "Qwen/Qwen3-235B-A22B-Instruct-2507"
+
 load_dotenv()
 
 @tool
@@ -20,7 +23,7 @@ def model_download_tool(task: str) -> str:
     return most_downloaded_model.id
 
 
-agent = CodeAgent(tools=[model_download_tool], model=InferenceClientModel())
+agent = CodeAgent(tools=[model_download_tool], model=InferenceClientModel(model_id=HF_MODEL_ID))
 agent.run(
     "Give me the most downloaded model for text-generation on the Hugging Face Hub."
 )

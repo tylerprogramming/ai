@@ -6,6 +6,9 @@ from huggingface_hub import list_models
 
 from dotenv import load_dotenv
 
+# The smolagents 1.26 default (Qwen3-Next-80B-A3B-Thinking) is not served by Inference Providers; see README
+HF_MODEL_ID = "Qwen/Qwen3-235B-A22B-Instruct-2507"
+
 load_dotenv()
 
 @tool
@@ -56,7 +59,7 @@ image_generator = TextToImageTool()
 
 model_id = "Qwen/QwQ-32B-Preview"
 
-agent = CodeAgent(tools=[image_generator, model_download_tool], model=InferenceClientModel())
+agent = CodeAgent(tools=[image_generator, model_download_tool], model=InferenceClientModel(model_id=HF_MODEL_ID))
 agent.run(
     "Improve this prompt, then generate an image of it. Prompt: A cat wearing a hazmat suit in contaminated area.  Get the latest model for text-to-image from the Hugging Face Hub."
 )
