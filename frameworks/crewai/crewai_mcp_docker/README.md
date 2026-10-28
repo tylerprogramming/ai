@@ -34,4 +34,6 @@ The crew connects to the servers through `mcp_server_params` / `self.get_mcp_too
 The code reviewer reviews the generated files in `/projects/app` (the `file_path` input in
 `main.py`). To run the generated app, `cd app` and follow the README the crew writes there.
 `requirements.txt` in this folder lists baseline dependencies for the generated FastAPI app
-(the crew usually writes its own `app/requirements.txt` too), not for the crew.
+(the crew usually writes its own `app/requirements.txt` too), not for the crew. It uses
+`psycopg2-binary`, so `pip install -r requirements.txt` works without a local PostgreSQL
+build toolchain; for production builds against your own libpq, swap it for `psycopg2`.
