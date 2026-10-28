@@ -219,7 +219,10 @@ model = LiteLLMModel(model_id="gpt-5.4-mini")
 model = LiteLLMModel(model_id="anthropic/claude-sonnet-5-5")
 
 # Hugging Face Inference Providers (HfApiModel was renamed)
+# Always pass model_id: the smolagents 1.26 default (Qwen/Qwen3-Next-80B-A3B-Thinking)
+# is not served by Inference Providers. Any chat model at
+# https://router.huggingface.co/v1/models works.
 from smolagents import InferenceClientModel
-model = InferenceClientModel()
+model = InferenceClientModel(model_id="Qwen/Qwen3-235B-A22B-Instruct-2507")
 ```
 ```
