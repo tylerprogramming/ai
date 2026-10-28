@@ -2,6 +2,12 @@
 
 Eight short scripts from the smolagents intro video. Most use `InferenceClientModel` (Hugging Face Inference Providers), so you need a Hugging Face token.
 
+The scripts pass `model_id=HF_MODEL_ID` (`Qwen/Qwen3-235B-A22B-Instruct-2507`) instead of relying on the
+smolagents default. The 1.26 default, `Qwen/Qwen3-Next-80B-A3B-Thinking`, is not in the Inference Providers
+router's model list and its only provider mapping reports an error, so a bare `InferenceClientModel()` is not
+expected to work. To try another model, change `HF_MODEL_ID` at the top of the script
+to any chat model listed at https://router.huggingface.co/v1/models.
+
 | Script | What it shows | Needs |
 |---|---|---|
 | `01 - first project.py` | `CodeAgent` with DuckDuckGo search | `HF_TOKEN` |
