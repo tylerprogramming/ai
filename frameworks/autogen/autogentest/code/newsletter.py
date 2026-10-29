@@ -1,4 +1,5 @@
 # Step 1: Set up a Flask project with necessary dependencies
+import os
 from flask import Flask
 import requests
 from bs4 import BeautifulSoup
@@ -55,10 +56,12 @@ def send_email():
 
     print(email_content)
 
-    # Configure email settings
-    # sender_email = "sharandtyler@gmail.com"
-    # sender_password = "Rcia@0716!"
-    # receiver_email = "tylerreedytlearning@gmail.com"
+    # Configure email settings (to send for real, uncomment this block and
+    # set SENDER_EMAIL, SENDER_APP_PASSWORD and RECEIVER_EMAIL; for Gmail use
+    # an App Password, not the account password)
+    # sender_email = os.environ["SENDER_EMAIL"]
+    # sender_password = os.environ["SENDER_APP_PASSWORD"]
+    # receiver_email = os.environ["RECEIVER_EMAIL"]
     #
     # # Create email message
     # message = MIMEMultipart()
