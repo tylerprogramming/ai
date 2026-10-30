@@ -8,6 +8,8 @@ A collection of AI agent projects, framework tutorials, and integrations. This i
 
 > **Looking for full courses?** Check out [ai-courses](https://github.com/tylerprogramming/ai-courses) for structured learning paths (LangChain, LangGraph, Atomic Agents, etc.)
 
+> **Followed a link from an older video?** The project folders moved on 2026-09-19. [MOVED.md](MOVED.md) maps every old folder name to its new path.
+
 ## Repository Structure
 
 ```
