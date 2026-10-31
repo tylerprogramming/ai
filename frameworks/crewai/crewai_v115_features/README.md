@@ -20,7 +20,7 @@ pip install -r requirements.txt
 ## Examples
 
 - `01_conversational_flow.py` - Interactive conversational agent flow (type `exit` to quit)
-- `02_llm_overlay.py` - Route agents to different models
+- `02_llm_overlay.py` - Route agents to different models (Strategist on `gpt-5.4`, Editor on `gpt-6-luna`, Writer keeps `gpt-5.4-mini`). The Editor used `gpt-5.4-nano`, which OpenAI deprecated with removal on 2027-04-01 ([deprecations](https://developers.openai.com/api/docs/deprecations)); `gpt-6-luna` is the listed replacement.
 - `03_streaming_output.py` - Real-time streaming responses
 - `04_json_crew.py` - Define a crew in JSON and load it
 
