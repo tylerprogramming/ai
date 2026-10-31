@@ -12,7 +12,7 @@ from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain_community.document_loaders import PyMuPDFLoader
 from langchain_community.embeddings import HuggingFaceEmbeddings
 from langchain_community.vectorstores import Chroma
-from langchain_openai import OpenAI
+from langchain_openai import ChatOpenAI
 from typing_extensions import Annotated
 
 dotenv.load_dotenv()  # OPENAI_API_KEY from .env
@@ -135,7 +135,9 @@ if uploaded_file is not None:
         vectorstore.add_documents(docs)
 
         qa = ConversationalRetrievalChain.from_llm(
-            OpenAI(temperature=0),
+            # langchain_openai.OpenAI() is the completions API and defaults to gpt-3.5-turbo-instruct,
+            # which OpenAI shut down on 2026-09-28, so the retrieval chain uses a chat model instead
+            ChatOpenAI(model="gpt-5.4-mini"),
             vectorstore.as_retriever(),
             memory=ConversationBufferMemory(memory_key="chat_history", return_messages=True)
         )
