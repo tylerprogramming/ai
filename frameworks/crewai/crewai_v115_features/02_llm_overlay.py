@@ -73,9 +73,10 @@ def build_crew() -> Crew:
 def main():
     # Strategy needs the most reasoning -> bigger model; editing is simple -> smallest model.
     # The Content Writer is not listed, so it stays on its declared gpt-5.4-mini.
+    # gpt-5.4-nano is deprecated (removed 2027-04-01); OpenAI's replacement is gpt-6-luna.
     overlay = {
         "Content Strategist": "gpt-5.4",
-        "Editor": "gpt-5.4-nano",
+        "Editor": "gpt-6-luna",
     }
 
     # Build AND kick off the crew inside the block
