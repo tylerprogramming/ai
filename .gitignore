@@ -1,48 +1,5 @@
-# Python
-.venv/
-venv/
-__pycache__/
-**/__pycache__/
-*.pyc
-*.egg-info/
-.pytest_cache/
-
-# Secrets — never commit real keys or OAuth tokens
+venv
+dlib-19.24.1-cp311-cp311-win_amd64.whl
 .env
-.env.*
-!.env.example
-# AutoGen 0.2 config files held API keys; keys now come from .env
-OAI_CONFIG_LIST
-OAI_CONFIG_LIST.json
-token.json
-token.pickle
-
-# Caches, logs and run artifacts
-.cache/
-.pyautogen/
-.composio.lock/
-agentops.log
-*.log
-
-# Editors / OS
-.DS_Store
-.idea/
-.vscode/
-*.code-workspace
-
-# Project-specific generated files
-# n8n_crewai appends incoming customer feedback here on every request
-integrations/n8n_crewai/**/log.txt
-integrations/n8n_crewai/log.txt
-frameworks/autogen/autogen_rag_chroma/docs/ag_studio.pdf
-mini_projects/08_checklistai/instance/
-mini_projects/05_pdf/faiss_index_react/
-mini_projects/08_checklistai/migrations/alembic.ini
-mini_projects/08_checklistai/migrations/script.py.mako
-mini_projects/08_checklistai/migrations/versions/
-
-# git worktrees live here; each is its own checkout
-.worktrees/
-
-# Old Composio SDK lock files
-.composio.lock
+Dataset
+deepfake_detection_model.h5
