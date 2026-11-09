@@ -15,3 +15,5 @@ python transcribe.py
 ```
 
 The script asks for the video path, the source language and the target language.
+
+Whisper runs locally (the `openai-whisper` package, `small` model), so transcription costs nothing. Each transcript line is then translated with one Chat Completions call on `gpt-5.4-mini`. Set `model=<id>` in `.env` to use a different model for these translation calls (the AutoGen agent in `transcribe.py` stays on `gpt-5.4-mini`). The call caps output with `max_completion_tokens`, so a replacement must accept that parameter.
