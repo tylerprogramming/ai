@@ -1,6 +1,6 @@
 # Youtube Summarizer
 
-Downloads the audio of a YouTube video with yt-dlp, transcribes it with OpenAI Whisper, then an AutoGen agent summarizes it (title + bullet points) and a second agent translates the summary into Dutch.
+Downloads the audio of a YouTube video with yt-dlp, transcribes it with OpenAI `gpt-transcribe`, then an AutoGen agent summarizes it (title + bullet points) and a second agent translates the summary into Dutch.
 
 Updated to AutoGen v0.7 (the new `autogen_agentchat` API).
 

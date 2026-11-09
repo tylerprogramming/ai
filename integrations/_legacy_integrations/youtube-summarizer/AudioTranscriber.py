@@ -5,7 +5,9 @@ import openai
 
 
 class AudioTranscriber:
-    def __init__(self, api_key, model='whisper-1', chunk_duration=20):
+    # whisper-1 is removed from the API on 2027-02-26; gpt-transcribe is the
+    # replacement (https://developers.openai.com/api/docs/deprecations).
+    def __init__(self, api_key, model='gpt-transcribe', chunk_duration=20):
         self.client = openai.OpenAI(api_key=api_key)
         self.model = model
         self.chunk_duration_ms = chunk_duration * 60 * 1000
