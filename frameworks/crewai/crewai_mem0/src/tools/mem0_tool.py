@@ -6,6 +6,12 @@ import os
 load_dotenv()
 
 config = {
+    # memory.add() runs an LLM to extract facts. With no "llm" block, mem0 2.2.1
+    # falls back to gpt-5-mini, which OpenAI shuts down on 2026-12-11.
+    "llm": {
+        "provider": "openai",
+        "config": {"model": "gpt-5.4-mini"},
+    },
     "vector_store": {
         "provider": "qdrant",
         "config": {
