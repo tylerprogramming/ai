@@ -71,7 +71,8 @@ def translate_text(input_text, source_language, target_language):
              "content": f"Directly translate the following {source_language} text to a pure {target_language} "
                         f"video subtitle text without additional explanation.: '{input_text}'"},
         ],
-        max_tokens=1500
+        # max_tokens is deprecated and not accepted by reasoning models like gpt-5.4-mini
+        max_completion_tokens=1500
     )
 
     # Correctly accessing the response content
