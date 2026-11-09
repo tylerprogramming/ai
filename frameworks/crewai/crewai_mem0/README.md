@@ -3,6 +3,8 @@ A joke-writing CrewAI agent that saves its jokes to [mem0](https://github.com/me
 
 > **Note:** Updated for CrewAI 1.15 and mem0ai 2.2; the code may differ slightly from the video.
 
+Two OpenAI calls happen per run: the joke agent (`llm: openai/gpt-5.4-mini` in `src/config/agents.yaml`) and mem0's fact-extraction pass inside `memory.add()` (the `"llm"` block in `src/tools/mem0_tool.py`, also `gpt-5.4-mini`). If you remove that block, mem0 2.2 falls back to `gpt-5-mini`, which OpenAI shuts down on 2026-12-11.
+
 ~~ Built with AgentStack ~~
 
 ## How to build your Crew
