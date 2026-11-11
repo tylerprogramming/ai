@@ -7,8 +7,8 @@
 
 Requires: pip install "openai>=3.35,<4"   (the Jev side is standard library only)
 Keys: OPENAI_API_KEY and TYPESAFE_API_KEY, from the environment, else ~/.hermes/.env then ~/.claude/.env.
-Jev side goes through the jev-agent.com gateway (field-for-field the TypeSafe API; swap host
-and key when a TypeSafe key arrives). LLM side uses OpenAI structured outputs so the answer
+Jev side calls TypeSafe's API directly (https://api.typesafe.ai/v1/systemone; key from
+https://console.typesafe.ai/keys). LLM side uses OpenAI structured outputs so the answer
 shape matches Jev's and the comparison is fair: one call, JSON out, no retries.
 """
 import json, os, sys, time, urllib.request, urllib.error
@@ -39,8 +39,8 @@ time this has happened. I need this fixed today or I'm cancelling. Order ids 881
 Dana"""
 
 # ---- Jev --------------------------------------------------------------------
-JEV_URL = "https://jev-agent.com/api/v1/systemone"
-JEV_PRICE_PER_MTOK_IN = 0.042  # TypeSafe list price; output free
+JEV_URL = "https://api.typesafe.ai/v1/systemone"  # official TypeSafe endpoint (docs.typesafe.ai/api)
+JEV_PRICE_PER_MTOK_IN = 0.042  # TypeSafe list price (docs.typesafe.ai/models); output free
 
 def ask_jev(state):
     body = {"model": "jev-latest", "state": state, "questions": {
