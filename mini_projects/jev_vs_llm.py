@@ -67,7 +67,7 @@ def ask_jev(state):
 
 # ---- LLM --------------------------------------------------------------------
 LLM_MODEL = os.environ.get("LLM_MODEL", "gpt-6-astra")
-LLM_PRICE = {"gpt-6-astra": (10.00, 50.00), "gpt-5.4-mini": (0.20, 1.60)}  # per Mtok (in, out); update from the pricing page
+LLM_PRICE = {"gpt-6-astra": (10.00, 50.00), "gpt-5.4-mini": (0.75, 4.50)}  # per Mtok (in, out); update from the pricing page
 
 def ask_llm(state):
     from openai import OpenAI
