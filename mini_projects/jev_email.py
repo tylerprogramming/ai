@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Jev smoke test: the docs quickstart shape (one support email, three typed questions).
-Standard library only, no installs. Reads TYPESAFE_API_KEY from the environment, else ~/.hermes/.env (currently a jev-agent.com gateway key, 5 free decisions/month). Prints the raw response, then the read.
+Standard library only, no installs. Reads TYPESAFE_API_KEY (from https://console.typesafe.ai/keys) from the environment, else ~/.hermes/.env. Prints the raw response, then the read.
 Usage: python3 jev_email.py [path-to-email.txt]   (no arg = the built-in sample)"""
 import json, os, sys, time, urllib.request, urllib.error
 
@@ -49,7 +49,7 @@ body = {
 }
 
 req = urllib.request.Request(
-    "https://jev-agent.com/api/v1/systemone",  # jev-agent.com gateway; swap host + key for api.typesafe.ai when a TypeSafe key arrives
+    "https://api.typesafe.ai/v1/systemone",  # official TypeSafe endpoint (docs.typesafe.ai/api)
     data=json.dumps(body).encode(),
     headers={"Authorization": f"Bearer {key()}", "Content-Type": "application/json"},
 )
